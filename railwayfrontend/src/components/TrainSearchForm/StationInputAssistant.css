@@ -1,0 +1,50 @@
+.autocomplete-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.autocomplete-wrapper input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.autocomplete-wrapper label,
+.date-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.autocomplete-wrapper input,
+.date-input input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-top: none;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+.suggestions li:hover {
+    background-color: #f0f0f0;
+}
+  

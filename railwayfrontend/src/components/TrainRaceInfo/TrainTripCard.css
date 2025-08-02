@@ -1,0 +1,85 @@
+
+
+/* Картка */
+.train-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 1200px;
+    font-family: sans-serif;
+}
+
+/* Заголовок */
+.train-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.train-number {
+    color: #003366;
+}
+
+/* Блок часу */
+.train-times {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.time-block {
+    text-align: center;
+    width: 30%;
+}
+
+.time {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.date {
+    font-size: 14px;
+    color: #666;
+}
+
+.station {
+    margin-top: 4px;
+    font-size: 16px;
+}
+
+.duration-block {
+    width: 30%;
+    text-align: center;
+    font-size: 16px;
+    color: #003366;
+}
+
+/* Нижня частина */
+.route-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.full-route {
+    background-color: #f1f1f1;  
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+.wagon-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center; /* або space-between */
+}

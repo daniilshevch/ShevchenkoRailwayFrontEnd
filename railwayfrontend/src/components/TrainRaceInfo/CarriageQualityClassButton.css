@@ -1,0 +1,41 @@
+﻿.class-button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 4px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    width: 110px; /* 🔸 Фіксована ширина */
+    height: 50px; /* 🔸 або max-height, якщо треба */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    white-space: normal; /* 🔸 дозволяє перенос рядків */
+    text-align: center; /* 🔸 для центрованого вигляду */
+    word-wrap: break-word;
+
+}
+    .class-button:hover {
+        opacity: 0.9;
+        transform: scale(1.03);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;  
+    }
+/* Кольори */
+.quality-a {
+    background-color: #d9534f;
+}
+
+.quality-b {
+    background-color: #5cb85c;
+}
+
+.quality-c {
+    background-color: #0275d8;
+}
+
+.quality-default {
+    background-color: #888888;
+}

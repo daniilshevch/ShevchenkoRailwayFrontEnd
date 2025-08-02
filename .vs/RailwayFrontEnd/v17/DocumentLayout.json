@@ -1,0 +1,904 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\RailwayFrontEnd\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\main.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\main.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admincarriageassignmentslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admincarriageassignmentslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admintrainrouteslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admintrainrouteslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admintrainraceslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admintrainraceslist.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admintrainraceslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admintrainraceslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admintrainstopslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admintrainstopslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\adminpanel\\components\\admintrainrouteslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\adminpanel\\components\\admintrainrouteslist.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageinfopanel.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageinfopanel.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriagecard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriagecard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\testdata.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\testdata.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\traintripssearchresults.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\traintripssearchresults.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriagelistlayout.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriagelistlayout.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriagelistlayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriagelistlayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\carriagelistpage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\carriagelistpage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\carriagelistpage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\carriagelistpage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\homepage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\homepage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageinfopanel.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageinfopanel.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriagecard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriagecard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseatgroup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseatgroup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseatgroup.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseatgroup.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseat.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseat.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseat.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseat.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseatlayout.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseatlayout.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\carriagetypebutton.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\carriagetypebutton.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\carriagestructure\\carriageseatlayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\carriagestructure\\carriageseatlayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\carriagequalityclassbutton.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\carriagequalityclassbutton.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\traintripcard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\traintripcard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainsearchform\\tripssearchform.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainsearchform\\tripssearchform.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\carriagequalityclassbutton.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\carriagequalityclassbutton.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainsearchform\\stationinputassistant.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainsearchform\\stationinputassistant.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\carriagetypebutton.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\carriagetypebutton.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainraceinfo\\traintripcard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainraceinfo\\traintripcard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainsearchform\\tripssearchform.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainsearchform\\tripssearchform.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\backgroundcarousel.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\backgroundcarousel.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\backgroundcarousel.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\backgroundcarousel.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\navbar.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\navbar.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\trainsearchform\\stationinputassistant.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\trainsearchform\\stationinputassistant.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\traintripssearchresults.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\traintripssearchresults.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\pages\\homepage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\pages\\homepage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\components\\navbar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\components\\navbar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\public\\background_images\\lviv1day.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\public\\background_images\\lviv1day.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\public\\background_images\\lutsk1day.jpg||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\public\\background_images\\lutsk1day.jpg||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\public\\background_images\\lutsk1night.jpg||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\public\\background_images\\lutsk1night.jpg||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\src\\layouts\\generallayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\src\\layouts\\generallayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\public\\vite.svg||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\public\\vite.svg||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\public\\test.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\public\\test.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\eslint.config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\eslint.config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\vite.config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\vite.config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\railwayfrontend.esproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\railwayfrontend.esproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|d:\\railwayfrontend\\railwayfrontend\\.vscode\\launch.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{19F0E6FC-E1B2-4BDA-B864-FFE8DD51739E}|RailwayFrontEnd\\railwayfrontend.esproj|solutionrelative:railwayfrontend\\.vscode\\launch.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 800,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AdminTrainStopsList.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainStopsList.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainStopsList.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainStopsList.css",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainStopsList.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-08-01T18:02:34.312Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminCarriageAssignmentsList.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminCarriageAssignmentsList.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminCarriageAssignmentsList.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminCarriageAssignmentsList.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminCarriageAssignmentsList.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-08-01T18:01:35.068Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AdminTrainRacesList.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.css",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-08-01T16:45:09.187Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminTrainRacesList.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRacesList.jsx",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAkwPAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-24T14:37:18.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AdminTrainRoutesList.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.jsx",
+              "ViewState": "AgIAAAoBAAAAAAAAAAAAwBwBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-25T11:41:31.985Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\main.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\main.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\main.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\main.jsx",
+              "ViewState": "AgIAACoBAAAAAAAAAAAAAEoBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T06:11:16.361Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CarriageCard.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.jsx",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwCwAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-19T13:08:53.737Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TrainTripsSearchResults.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\TrainTripsSearchResults.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\TrainTripsSearchResults.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\TrainTripsSearchResults.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\TrainTripsSearchResults.jsx",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-15T06:50:03.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AdminTrainRoutesList.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.css",
+              "RelativeToolTip": "railwayfrontend\\src\\AdminPanel\\components\\AdminTrainRoutesList.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-24T19:39:12.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CarriageInfoPanel.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-19T13:31:52.248Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CarriageCard.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageCard.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-19T13:07:57.948Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CarriageInfoPanel.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageInfoPanel.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-19T12:29:09.078Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CarriageListLayout.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-20T16:12:38.194Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TestData.js",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TestData.js",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TestData.js",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TestData.js",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TestData.js",
+              "ViewState": "AgIAANMAAAAAAAAAAAAAAMQAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-20T16:13:44.558Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CarriageListLayout.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageListLayout.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-20T16:09:19.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CarriageListPage.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\CarriageListPage.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\CarriageListPage.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\CarriageListPage.css",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\CarriageListPage.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-21T19:21:52.565Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CarriageListPage.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\CarriageListPage.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\CarriageListPage.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\CarriageListPage.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\CarriageListPage.jsx",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAAwAMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-20T16:55:09.021Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "HomePage.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\HomePage.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\HomePage.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\HomePage.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\HomePage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T06:14:19.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "CarriageSeatGroup.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-19T11:46:46.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "CarriageSeatGroup.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatGroup.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-19T11:50:57.941Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CarriageSeatLayout.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-19T12:52:40.784Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "CarriageSeat.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-19T11:35:38.159Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CarriageSeat.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeat.css",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAADgAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-19T11:39:12.669Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "CarriageTypeButton.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-15T08:21:12.795Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "CarriageSeatLayout.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\CarriageStructure\\CarriageSeatLayout.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-19T12:32:33.749Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "CarriageQualityClassButton.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-15T08:41:21.24Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "TrainTripCard.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-15T07:20:43.62Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "TripsSearchForm.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T12:54:19.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "index.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\index.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\index.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\index.css",
+              "RelativeToolTip": "railwayfrontend\\src\\index.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T07:44:54.698Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "CarriageQualityClassButton.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageQualityClassButton.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-15T08:44:43.401Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "App.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\App.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\App.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\App.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\App.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T06:11:14.565Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "StationInputAssistant.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T12:58:41.009Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "CarriageTypeButton.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\CarriageTypeButton.css",
+              "ViewState": "AgIAADcAAAAAAAAAAAAcwFUAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-15T08:21:48.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "TrainTripCard.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainRaceInfo\\TrainTripCard.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-15T07:20:42.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": ".gitignore",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\.gitignore",
+              "RelativeDocumentMoniker": "railwayfrontend\\.gitignore",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\.gitignore",
+              "RelativeToolTip": "railwayfrontend\\.gitignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-07-19T12:41:13.565Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "TripsSearchForm.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainSearchForm\\TripsSearchForm.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T13:17:35.64Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "BackgroundCarousel.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\BackgroundCarousel.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\BackgroundCarousel.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\BackgroundCarousel.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\BackgroundCarousel.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T15:27:52.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "BackgroundCarousel.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\BackgroundCarousel.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\BackgroundCarousel.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\BackgroundCarousel.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\BackgroundCarousel.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T15:13:44.523Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "App.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\App.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\App.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\App.css",
+              "RelativeToolTip": "railwayfrontend\\src\\App.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T08:16:11.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Navbar.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\Navbar.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\Navbar.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\Navbar.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\Navbar.css",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAFYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T07:48:16.783Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "StationInputAssistant.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.css",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\TrainSearchForm\\StationInputAssistant.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T14:48:07.978Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "TrainTripsSearchResults.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\TrainTripsSearchResults.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\TrainTripsSearchResults.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\TrainTripsSearchResults.css",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\TrainTripsSearchResults.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-15T07:43:39.1Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "HomePage.css",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\HomePage.css",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\pages\\HomePage.css",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\pages\\HomePage.css",
+              "RelativeToolTip": "railwayfrontend\\src\\pages\\HomePage.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-14T06:18:52.345Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "Navbar.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\Navbar.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\components\\Navbar.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\components\\Navbar.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\components\\Navbar.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T07:30:01.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "lviv1day.png",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lviv1day.png",
+              "RelativeDocumentMoniker": "railwayfrontend\\public\\background_images\\lviv1day.png",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lviv1day.png",
+              "RelativeToolTip": "railwayfrontend\\public\\background_images\\lviv1day.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-07-14T16:40:49.127Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "lutsk1day.jpg",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lutsk1day.jpg",
+              "RelativeDocumentMoniker": "railwayfrontend\\public\\background_images\\lutsk1day.jpg",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lutsk1day.jpg",
+              "RelativeToolTip": "railwayfrontend\\public\\background_images\\lutsk1day.jpg",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-07-14T16:41:00.786Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "lutsk1night.jpg",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lutsk1night.jpg",
+              "RelativeDocumentMoniker": "railwayfrontend\\public\\background_images\\lutsk1night.jpg",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\background_images\\lutsk1night.jpg",
+              "RelativeToolTip": "railwayfrontend\\public\\background_images\\lutsk1night.jpg",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-07-14T16:40:55.93Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "GeneralLayout.jsx",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\layouts\\GeneralLayout.jsx",
+              "RelativeDocumentMoniker": "railwayfrontend\\src\\layouts\\GeneralLayout.jsx",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\src\\layouts\\GeneralLayout.jsx",
+              "RelativeToolTip": "railwayfrontend\\src\\layouts\\GeneralLayout.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-07-14T07:39:20.669Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "test.png",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\test.png",
+              "RelativeDocumentMoniker": "railwayfrontend\\public\\test.png",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\test.png",
+              "RelativeToolTip": "railwayfrontend\\public\\test.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-07-14T08:48:08.844Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "vite.svg",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\vite.svg",
+              "RelativeDocumentMoniker": "railwayfrontend\\public\\vite.svg",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\public\\vite.svg",
+              "RelativeToolTip": "railwayfrontend\\public\\vite.svg",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQESURBVDhPrZRdbJNVHMZ/b/u26xfUbqPYbd2wIKxsbGDYpk6joISJCuIHRkyMVxpDNBpjQjDRZFfeaFiI3ojGS00MshgvIEQkYyTAnJMs4yPb2Nqt27p17d5\u002B0L7v23O8WDc28JIneXK\u002B/ufJ\u002BZ/znD88SEgplXvnurq6jjc2Nn5UWkdKuRQLgBCCfD5PNpvtPnr06JFoNBpbrXAPurq6hoQQolgs/i9N0xQDAwOir69PnDhx4tdwOLxl5X7rygFAR0fHkba2tkohwdRTiNw1lMwP6DM/Y0z9AcDwhMHOljacTmfIbrfXTE5OXkskEon7BO2tbyr1za1HbuTKKm9N9rLW/A7nzPeYsbOgbEHIIGb8EtFZqNvcis/nU10u16by8vLg9evXL6bT6fSioKLgfmy/r/bF975cE6h9viVss\u002B9efxzv9BkGRrfzm/YxI2WH2da8DzE7RMZwc7F/jP7\u002BfjRNs/p8vvCFCxd\u002BSaVSMRXA0bjXW3fgw8\u002Be21nz/mvbRlw7xeckbubozR7jVugVorqTSyPTZI0xXvc3UN\u002B8kRr86LqOx\u002BNhcHBwOUsLgL/jg/a28Lq3DzVcXtuS\u002B1RZGMgzqXSSW3cQWxbchknthiquzhbpST6CsqaWysoKAoEAXq8Xq9W67AILQF3Ac/Dl\u002BqGKJuMbZa7PwNX0E9seP8ihHQHeaqokMzWLz16G4nbSl7Axl7eUziNhhbUAVICt61JPP\u002BH90ZkZdfCt8QUTf9kwzH8RUiIR5IsqFaoFm93G6GyBZFqnaq0DKQHlrkcB1KqAan\u002B36UyNLTKinLd8Jd0te5SQtLAYTUlUYtzR0XWDgmliSllalsh7PoBl4kbtgc3i97IrmcNyqGJv8cqlm1KOjiNGxigO36Y4fBsxfBslOk51YZ5ngx78HntJbPUvAlClFntjZry6cL64CyMrVbfTZmkPVSo7qt14HSpa3uDyWJJIMgdSEvS58DjUpQQW73EF1PxEvj2ZLfuzd1rdWqum6taHqpWzUznO3ppB6gaqXaXoqSBZdDEfn\u002BcFi4LNcrcELKW8BIu5oDj3HSscjk3PfX1zaDQxPpWWunsN1G5A2fQoheo64lIhHk8Qcpi81Lgeu3Xple\u002BH9dg7\u002BJ95OBm62nujpy5gMzIpo17LCPdEfIHEXIo7iXls6QUaHlL5ZNdGyt12UJRlyyiKQiQS4fTp0yc1TYtZN1RxOTbN7rB95pnqeM9goKbZtefJp\u002Br9tiJbvCqtVW72N/h5dXsVDpu6eIySXQAUi4VIJEp3d/dJTdPuL2WdnZ09QghhGEaJujD0RerLLCy3hmGIc\u002BfOiWAw2MKSsVdCSvn3qVOn2kt9pJQIIVYV2pUE0DTtH2B\u002BtdIDwn\u002B7nChdLXVvTAAAAABJRU5ErkJggg==",
+              "WhenOpened": "2025-07-14T08:14:58.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "eslint.config.js",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\eslint.config.js",
+              "RelativeDocumentMoniker": "railwayfrontend\\eslint.config.js",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\eslint.config.js",
+              "RelativeToolTip": "railwayfrontend\\eslint.config.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-14T08:41:35.54Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "vite.config.js",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\vite.config.js",
+              "RelativeDocumentMoniker": "railwayfrontend\\vite.config.js",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\vite.config.js",
+              "RelativeToolTip": "railwayfrontend\\vite.config.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-14T08:11:58.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "package.json",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\package.json",
+              "RelativeDocumentMoniker": "railwayfrontend\\package.json",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\package.json",
+              "RelativeToolTip": "railwayfrontend\\package.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-14T08:41:47.782Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "railwayfrontend",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\RailwayFrontEnd\\railwayfrontend.esproj",
+              "RelativeDocumentMoniker": "RailwayFrontEnd\\railwayfrontend.esproj",
+              "ToolTip": "D:\\RailwayFrontEnd\\RailwayFrontEnd\\railwayfrontend.esproj",
+              "RelativeToolTip": "RailwayFrontEnd\\railwayfrontend.esproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-07-14T08:12:32.952Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "launch.json",
+              "DocumentMoniker": "D:\\RailwayFrontEnd\\railwayfrontend\\.vscode\\launch.json",
+              "RelativeDocumentMoniker": "railwayfrontend\\.vscode\\launch.json",
+              "ToolTip": "D:\\RailwayFrontEnd\\railwayfrontend\\.vscode\\launch.json",
+              "RelativeToolTip": "railwayfrontend\\.vscode\\launch.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-14T08:09:49.979Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

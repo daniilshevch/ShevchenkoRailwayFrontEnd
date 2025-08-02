@@ -1,0 +1,32 @@
+# 🔧 Node.js
+node_modules/
+dist/
+build/
+.env*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🔧 Vite
+.vite/
+
+# 🔧 WebStorm
+.idea/
+
+# 🔧 VS Code
+.vscode/
+
+# 📦 OS specific
+.DS_Store
+Thumbs.db
+
+# 📸 Optional cache/coverage tools
+coverage/
+.cache/
+*.tsbuildinfo
+
+# 🔐 SSL/HTTPS dev certs (якщо є)
+*.pem
+*.crt
+*.key

@@ -1,0 +1,64 @@
+.carriage-info-panel {
+    position: relative;
+    display: flex;
+    background-color: beige;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 220px;
+    max-width: 280px;
+    gap: 4px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    padding-bottom: 5px;
+}
+
+    .carriage-info-panel h3 {
+        margin: 0;
+        margin-left: 15px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .carriage-info-panel p {
+        margin: 0;
+        margin-left: 10px;
+        display: flex;
+        font-size: 16px;
+        align-items: center;
+        gap: 20px;
+        font-weight: 550
+    }
+.carriage-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.features-row {
+    display: flex;
+    gap: 2px; /* відстань між іконками */
+    flex-wrap: wrap; /* якщо не вміститься, перенесе нижче */
+    margin: 4px 0;
+}
+.class-icon {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+.crossed-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .crossed-icon::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        height: 2px;
+        background-color: red;
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }

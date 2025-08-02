@@ -1,0 +1,13 @@
+.carriage-seat-layout {
+    display: flex;
+    flex-direction: row; /* –озташовуЇмо групи сид≥нь в один р€д */
+    flex-wrap: wrap; /* ўоб переносились вниз при нестач≥ м≥сц€ */
+    gap: 0px;
+    border-radius: 15px;
+    background-color: white;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 85px;
+    margin-left: 20px;
+    border: 2px solid gray;
+}

@@ -1,0 +1,87 @@
+﻿.carriage-type-wrapper {
+    display: inline-block;
+    margin-right: 15px;
+    margin-top: 10px;
+    flex: 1 1 300px;
+    max-width: 360px;
+}
+.carriage-type-button {
+    background-color: seashell;
+    border-radius: 12px;
+    padding: 0px 0px 2px 0px; /* було 10px зверху */
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 2px solid #ccc;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
+    text-align: left;
+}
+.type-label {
+    display: flex;
+    justify-content: space-between; /* Розкидає контент по краях */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1px;
+}
+.type-name-button {
+    background-color: sandybrown; /* такий самий як у .carriage-type-button */
+    border: 2px solid #ccc;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 2px 2px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    /* Вирівнювання точно по контуру: */
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+.type-name-button:hover {
+    filter: brightness(70%);
+    transition: filter 0.2s ease;
+}
+
+.places-summary {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #444;
+ 
+}
+
+.places-info {
+    font-size: 13px;
+    color: #333;
+    margin-left: 8px;
+}
+
+.price-info {
+    background-color: paleturquoise;
+    border: 2px solid #ccc;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 12px;
+    padding: 2px 2px;
+    font-weight: bold;
+    font-size: 14px;
+    color: black;
+    margin-left: auto;
+    cursor: default;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+/* кнопки підкласів всередині */
+.subclass-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    width: 100%;
+}

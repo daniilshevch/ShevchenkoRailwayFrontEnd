@@ -1,0 +1,59 @@
+.seat {
+    width: 35px;
+    height: 35px;
+    margin: 1px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Стан сидіння */
+.seat-free {
+    color: white;
+}
+
+.seat-taken {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* Додатковий колір залежно від класу якості */
+.seat-A.seat-free {
+    background-color: red; /* синій */
+}
+
+.seat-B.seat-free {
+    background-color: green; /* зелений */
+}
+
+.seat-C.seat-free {
+    background-color: blue; /* жовтий */
+}
+
+/* Hover-ефекти (опціонально) */
+.seat-A.seat-free:hover {
+    background-color: #3399ff;
+}
+
+.seat-B.seat-free:hover {
+    background-color: #45c162;
+}
+
+.seat-C.seat-free:hover {
+    background-color: #ffcf40;
+}
+.seat-type-SV.seat-free {
+    width: 35px;
+    height: 70px 
+}
+.seat-type-SV.seat-taken {
+    width: 35px;
+    height: 70px;
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
