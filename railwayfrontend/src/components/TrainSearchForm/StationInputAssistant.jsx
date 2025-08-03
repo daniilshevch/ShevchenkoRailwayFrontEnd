@@ -1,18 +1,7 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import './StationInputAssistant.css';
-const stationsList = [
-    { ukrainian: "Львів", english: "Lviv" },
-    { ukrainian: "Одеса-Головна", english: "Odesa-Holovna" },
-    { ukrainian: "Тернопіль", english: "Ternopil" },
-    { ukrainian: "Хмельницький", english: "Khmelnytskyi" },
-    { ukrainian: "Івано-Франківськ", english: "Ivano-Frankivsk" },
-    { ukrainian: "Жмеринка", english: "Zhmerynka" },
-    { ukrainian: "Ужгород", english: "Uzhgorod" },
-    { ukrainian: "Яремче", english: "Yaremche" },
-    { ukrainian: "Ясіня", english: "Yasinia" },
-    { ukrainian: "Вапнярка", english: "Vapniarka" }
-    
-];
+import {stationsList} from "../../InterpreterDictionaries/StationsDictionary.js";
+
 function StationInput({ label, initialValue, onChange })
 {
     const [query, setQuery] = useState(stationsList.find(station => station.english == initialValue)?.ukrainian || "");

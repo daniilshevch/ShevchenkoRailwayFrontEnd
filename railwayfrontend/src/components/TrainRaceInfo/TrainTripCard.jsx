@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import './TrainTripCard.css';
 import CarriageTypeButton from './CarriageTypeButton';
+import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });
@@ -21,7 +22,7 @@ function TrainTripCard({ train })
                 <div className="time-block left">
                     <div className="time">{departure.time}</div>
                     <div className="date">{departure.day}</div>
-                    <div className="station">{train.trip_starting_station_title}</div>
+                    <div className="station">{stationTitleIntoUkrainian(train.trip_starting_station_title)}</div>
                 </div>
 
                 <div className="duration-block">
@@ -34,7 +35,7 @@ function TrainTripCard({ train })
                 <div className="time-block right">
                     <div className="time">{arrival.time}</div>
                     <div className="date">{arrival.day}</div>
-                    <div className="station">{train.trip_ending_station_title}</div>
+                    <div className="station">{stationTitleIntoUkrainian(train.trip_ending_station_title)}</div>
                 </div>
             </div>
 

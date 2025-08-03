@@ -12,6 +12,7 @@ import CarriageListPage from './pages/CarriageListPage';
 import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList';
 import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList';
 import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList';
+import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList.jsx";
 
 const testSeats = [
     { place_in_carriage: 1, is_free: true },
@@ -318,6 +319,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
             <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
             <Route path = "/test/carriage-assignments" element = {<AdminCarriageAssignmentsList train_race_id = "38SH_2025_02_14" />} />
+            <Route path = "/test/train-stops" element = {<AdminTrainStopsList train_race_id = "38SH_2025_02_14" />} />
             <Route path="/test-carriage-list" element={<CarriageListLayout carriages={carriage_statistics_list} />} />
             <Route path="/test-carriage-card" element={<CarriageCard carriageData={carriageData} />} />
                 <Route element = {<GeneralLayout />}>

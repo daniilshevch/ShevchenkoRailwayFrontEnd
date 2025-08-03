@@ -50,7 +50,7 @@ function AdminCarriageAssignmentsList({train_race_id}) {
             const row = await updateForm.validateFields();
             const updatedCarriageAssignment = { ...carriageAssignments.find((r) => r.passenger_carriage_id === passenger_carriage_id), ...row };
             const response = await fetch(`https://localhost:7230/Admin-API/update-carriage-assignment/${train_route_on_date_id}/${passenger_carriage_id}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
