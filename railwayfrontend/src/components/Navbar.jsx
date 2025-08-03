@@ -4,7 +4,7 @@ function Navbar()
 {
     return (
         <header className="navbar-wrapper">
-            <img src="/test.png" alt="railway-logo" className="logo-image" />
+            <img src="/background_images/images.png" alt="railway-logo" className="logo-image" />
             <nav className="navbar">
                 <ul>
                     <li><Link className ="nav-button" to="/">ГОЛОВНА</Link></li>
