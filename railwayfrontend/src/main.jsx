@@ -13,16 +13,9 @@ import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList';
 import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList';
 import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList';
 import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList.jsx";
+import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.jsx";
 
-const testSeats = [
-    { place_in_carriage: 1, is_free: true },
-    { place_in_carriage: 2, is_free: false },
-    { place_in_carriage: 3, is_free: true },
-    { place_in_carriage: 4, is_free: true },
-    { place_in_carriage: 53, is_free: true },
-    { place_in_carriage: 54, is_free: false },
 
-];
 const carriage = {
     "carriage_position_in_squad": 4,
     "carriage_type": "Coupe",
@@ -318,6 +311,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
             <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
             <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
+            <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
             <Route path = "/test/carriage-assignments" element = {<AdminCarriageAssignmentsList train_race_id = "38SH_2025_02_14" />} />
             <Route path = "/test/train-stops" element = {<AdminTrainStopsList train_race_id = "38SH_2025_02_14" />} />
             <Route path="/test-carriage-list" element={<CarriageListLayout carriages={carriage_statistics_list} />} />

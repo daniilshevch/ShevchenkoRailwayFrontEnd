@@ -1,0 +1,9 @@
+﻿.trip-row { /* світло-блакитний */
+    color: blue;
+    font-weight: bold;
+}
+
+.non-trip-row {
+    background-color: white;
+    font-weight: 500;/* або інший */
+}

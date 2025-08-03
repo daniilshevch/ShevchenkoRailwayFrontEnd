@@ -1,6 +1,3 @@
-
-
-/* Картка */
 .train-card {
     background: white;
     border-radius: 12px;
@@ -12,7 +9,6 @@
     font-family: sans-serif;
 }
 
-/* Заголовок */
 .train-header {
     display: flex;
     justify-content: space-between;
@@ -26,7 +22,6 @@
     color: #003366;
 }
 
-/* Блок часу */
 .train-times {
     display: flex;
     justify-content: space-between;
@@ -39,30 +34,46 @@
     text-align: center;
     width: 30%;
 }
-
 .time {
+    margin-bottom: 5px;
     font-size: 24px;
     font-weight: bold;
 }
 
 .date {
-    font-size: 14px;
-    color: #666;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 10px;
 }
 
 .station {
     margin-top: 4px;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
 }
-
-.duration-block {
+.center-blocks {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 30%;
     text-align: center;
-    font-size: 16px;
+}
+.duration-block {
+    margin-top: 0;
+    width: 30%;
+    text-align: center;
+    font-size: 17px;
     color: #003366;
 }
+.train-schedule-button
+{
+    margin-top: 10px;
+    font-weight: bold !important;
+}
 
-/* Нижня частина */
+
 .route-footer {
     display: flex;
     justify-content: center;
@@ -81,5 +92,5 @@
     flex-wrap: wrap;
     gap: 15px;
     margin-top: 20px;
-    justify-content: center; /* або space-between */
+    justify-content: center;
 }

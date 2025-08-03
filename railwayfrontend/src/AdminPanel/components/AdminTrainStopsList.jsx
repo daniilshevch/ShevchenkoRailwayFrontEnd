@@ -246,7 +246,7 @@ function AdminTrainStopsList({train_race_id}) {
         <>
             <div className="create-button-wrapper">
                 <Button type="primary" onClick={() => setIsCreateModalVisible(true)} style={{ marginBottom: 16 }}>
-                    + Додати вагон в склад
+                    + Додати зупинку в розклад
                 </Button>
             </div>
 

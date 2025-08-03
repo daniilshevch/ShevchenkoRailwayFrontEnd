@@ -4,7 +4,7 @@
     padding: 8px;
     margin: 4px;
     color: white;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     width: 110px; /* 🔸 Фіксована ширина */
     height: 50px; /* 🔸 або max-height, якщо треба */

@@ -1,7 +1,10 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 import './TrainTripCard.css';
 import CarriageTypeButton from './CarriageTypeButton';
 import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
+import {Button} from 'antd';
+import TrainScheduleModal from './TrainScheduleModal';
+import {useLocation} from "react-router-dom";
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });
@@ -10,6 +13,7 @@ function formatTimeDate(dateStr) {
 }
 function TrainTripCard({ train })
 {
+    const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const departure = formatTimeDate(train.trip_starting_station_departure_time);
     const arrival = formatTimeDate(train.trip_ending_station_arrival_time);
     return (
@@ -24,12 +28,18 @@ function TrainTripCard({ train })
                     <div className="date">{departure.day}</div>
                     <div className="station">{stationTitleIntoUkrainian(train.trip_starting_station_title)}</div>
                 </div>
-
-                <div className="duration-block">
-                    <span className="duration">
-                        {Math.floor(parseInt(train.total_trip_duration.split(":")[0]))} год{" "}
-                        {parseInt(train.total_trip_duration.split(":")[1])} хв
-                    </span>
+                <div className="center-blocks">
+                    <div className="duration-block">
+                        <span className="duration">
+                            {Math.floor(parseInt(train.total_trip_duration.split(":")[0]))} год{" "}
+                            {parseInt(train.total_trip_duration.split(":")[1])} хв
+                        </span>
+                    </div>
+                    <div>
+                        <Button className="train-schedule-button" type="default" onClick={() => setIsScheduleVisible(true)}>
+                            Розклад руху
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="time-block right">
@@ -41,9 +51,10 @@ function TrainTripCard({ train })
 
             <div className="route-footer">
                 <span className="full-route">
-                    🚆 {train.full_route_starting_station_title} → {train.full_route_ending_station_title}
+                    🚆 {stationTitleIntoUkrainian(train.full_route_starting_station_title)} → {stationTitleIntoUkrainian(train.full_route_ending_station_title)}
                 </span>
             </div>
+
             <div className="wagon-buttons">
                 {train.grouped_carriage_statistics_list &&
                     Object.entries(train.grouped_carriage_statistics_list).map(([type, classStats]) => (
@@ -51,6 +62,11 @@ function TrainTripCard({ train })
                             generalTrainRaceInfo={train} />
                     ))}
             </div>
+            <TrainScheduleModal
+                visible={isScheduleVisible}
+                onClose={() => setIsScheduleVisible(false)}
+                trainStops={train.train_schedule}
+            />
         </div>
     );
 }

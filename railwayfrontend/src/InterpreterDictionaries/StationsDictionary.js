@@ -23,7 +23,17 @@
     { ukrainian: "Воловець", english: "Volovets" },
     { ukrainian: "Свалява", english: "Svaliava" },
     { ukrainian: "Карпати", english: "Karpaty" },
-    { ukrainian: "Мукачево", english: "Mukachevo" }
+    { ukrainian: "Мукачево", english: "Mukachevo" },
+    { ukrainian: "Затишшя", english: "Zatyshia" },
+    { ukrainian: "Крижопіль", english: "Kryzhopil" },
+    { ukrainian: "Рахни", english: "Rakhny" },
+    { ukrainian: "Деражня", english: "Derazhnia" },
+    { ukrainian: "Підзамче", english: "Pidzamche" },
+    { ukrainian: "Ходорів", english: "Khodoriv" },
+    { ukrainian: "Галич", english: "Halych" },
+    { ukrainian: "Микуличин", english: "Mykulychyn" },
+    { ukrainian: "Татарів-Буковель", english: "Tatariv-Bukovel" },
+    { ukrainian: "Ворохта", english: "Vorokhta" }
 
 ];
 export function stationTitleIntoUkrainian(station_title)
