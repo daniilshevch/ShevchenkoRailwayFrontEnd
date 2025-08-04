@@ -25,14 +25,30 @@ function formatDate(dateTime)
         minute: '2-digit'
     });
 }
+function parseTrainRaceId(trainRaceId) {
+    const parts = trainRaceId.split('_');
+
+    if (parts.length !== 4) {
+        throw new Error("Невірний формат ідентифікатора рейсу");
+    }
+
+    const [trainRouteId, year, month, day] = parts;
+    const date = `${year}-${month}-${day}`;
+
+    return {
+        trainRouteId,
+        date
+    };
+}
 
 function AdminTrainStopsList({train_race_id}) {
     const [trainStops, setTrainStops] = useState([]);
     const [updateForm] = Form.useForm();
     const [createForm] = Form.useForm();
+    const [copyScheduleForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-
+    const [isCopyScheduleModalVisible, setIsCopyScheduleModalVisible] = useState(false);
 
 
     const fetchTrainStops= async () => {
@@ -112,6 +128,32 @@ function AdminTrainStopsList({train_race_id}) {
         catch (err) {
             console.error(err);
             message.error("Не вдалося видалити маршрут");
+        }
+    }
+    const handleScheduleCopy = async () =>
+    {
+        try
+        {
+            let values = await copyScheduleForm.validateFields();
+            const prototype_train_route_id = values.prototype_train_route_id;
+            const new_train_route_id = parseTrainRaceId(train_race_id).trainRouteId;
+            const prototype_date = values.prototype_date.format("YYYY-MM-DD");
+            const new_date = parseTrainRaceId(train_race_id).date;
+            const response = await fetch(`https://localhost:7230/Admin-API/TrainAssignment/Copy-Train-With-Schedule?prototype_train_route_id=${prototype_train_route_id}&new_train_route_id=${new_train_route_id}&prototype_date=${prototype_date}&new_date=${new_date}&creation_option=false`,
+                {
+                    method: 'POST'
+                });
+            if (!response.ok) throw new Error('Помилка при копіюванні складу поїзду');
+
+            message.success('Склад поїзда скопійовано');
+            setIsCopyScheduleModalVisible(false);
+            copyScheduleForm.resetFields();
+            fetchTrainStops();
+        }
+        catch(err)
+        {
+            console.error(err);
+            message.error('Не вдалося скопіювати склад');
         }
     }
 
@@ -249,6 +291,11 @@ function AdminTrainStopsList({train_race_id}) {
                     + Додати зупинку в розклад
                 </Button>
             </div>
+            <div className="create-button-wrapper">
+                <Button className="copy-squad-button" type="primary" onClick={() => setIsCopyScheduleModalVisible(true)} style={{ marginBottom: 16 }}>
+                    + Скопіювати розклад поїзда з прототипу
+                </Button>
+            </div>
 
             <Form form={updateForm} component={false}>
                 <Table
@@ -286,6 +333,26 @@ function AdminTrainStopsList({train_race_id}) {
                     </Form.Item>
                     <Form.Item label="Коефіцієнт рейсу" name="train_race_coefficient">
                         <Input type="number" />
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <Modal
+                title="Копіювання розкладу з прототипу"
+                open={isCopyScheduleModalVisible}
+                onCancel={() => setIsCopyScheduleModalVisible(false)}
+                onOk={handleScheduleCopy}
+                okText="Скопіювати склад"
+            >
+                <Form form={copyScheduleForm} layout="vertical">
+                    <Form.Item label="ID маршруту-прототипу" name="prototype_train_route_id" rules={[{ required: true, message: 'Вкажіть ID маршруту-прототипу' }]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Дата відправлення рейсу-прототипу"
+                        name="prototype_date"
+                        rules={[{ required: true, message: 'Вкажіть дату відправлення рейсу-прототипу' }]}
+                    >
+                        <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
                     </Form.Item>
                 </Form>
             </Modal>

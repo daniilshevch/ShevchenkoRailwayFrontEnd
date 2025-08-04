@@ -32,6 +32,21 @@ const CARRIAGE_MANUFACTURER = {
     0: "КВБЗ",
     1: "Амендорф"
 };
+function parseTrainRaceId(trainRaceId) {
+    const parts = trainRaceId.split('_');
+
+    if (parts.length !== 4) {
+        throw new Error("Невірний формат ідентифікатора рейсу");
+    }
+
+    const [trainRouteId, year, month, day] = parts;
+    const date = `${year}-${month}-${day}`;
+
+    return {
+        trainRouteId,
+        date
+    };
+}
 function AdminCarriageAssignmentsList({train_race_id}) {
     const [carriageAssignments, setCarriageAssignments] = useState([]);
     const [updateForm] = Form.useForm();
@@ -103,7 +118,7 @@ function AdminCarriageAssignmentsList({train_race_id}) {
             message.success('Рейс створено');
             setIsCreateModalVisible(false);
             createForm.resetFields();
-            //fetchRaces();
+            fetchCarriageAssignments();
         } catch (err) {
             console.error(err);
             message.error('Не вдалося створити маршрут');
@@ -114,16 +129,34 @@ function AdminCarriageAssignmentsList({train_race_id}) {
         try
         {
             let values = await copySquadForm.validateFields();
-            const response = await fetch()
+            const prototype_train_route_id = values.prototype_train_route_id;
+            const new_train_route_id = parseTrainRaceId(train_race_id).trainRouteId;
+            const prototype_date = values.prototype_date.format("YYYY-MM-DD");
+            const new_date = parseTrainRaceId(train_race_id).date;
+            const response = await fetch(`https://localhost:7230/Admin-API/TrainAssignment/Copy-Train-With-Squad?prototype_train_route_id=${prototype_train_route_id}&new_train_route_id=${new_train_route_id}&prototype_date=${prototype_date}&new_date=${new_date}&creation_option=false`,
+                {
+                    method: 'POST'
+                });
+            if (!response.ok) throw new Error('Помилка при копіюванні складу поїзду');
+
+            message.success('Склад поїзда скопійовано');
+            setIsCopySquadModalVisible(false);
+            copySquadForm.resetFields();
+            fetchCarriageAssignments();
+        }
+        catch(err)
+        {
+            console.error(err);
+            message.error('Не вдалося скопіювати склад');
         }
     }
-    const handleDelete = async (id) => {
+    const handleDelete = async (passenger_carriage_id) => {
         try {
-            const response = await fetch(`https://localhost:7230/Admin-API/delete-train-race/${id}`, {
+            const response = await fetch(`https://localhost:7230/Admin-API/delete-carriage-assignment/${train_race_id}/${passenger_carriage_id}`, {
                 method: 'DELETE'
             });
             if (!response.ok) throw new Error("Помилка при видаленні");
-            //fetchRaces();
+            fetchCarriageAssignments();
         }
         catch (err) {
             console.error(err);
@@ -308,7 +341,7 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                         </Button>
                         <Popconfirm
                             title="Ви впевнені, що хочете видалити цей маршрут?"
-                            onConfirm={() => handleDelete(record.id)}
+                            onConfirm={() => handleDelete(record.passenger_carriage_id)}
                             okText="Так"
                             cancelText="Ні"
                         >
@@ -377,16 +410,16 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                 title="Копіювання складу з прототипу"
                 open={isCopySquadModalVisible}
                 onCancel={() => setIsCopySquadModalVisible(false)}
-                onOk={handleCreate}
+                onOk={handleSquadCopy}
                 okText="Скопіювати склад"
             >
                 <Form form={copySquadForm} layout="vertical">
-                    <Form.Item label="ID маршруту-прототипу" name="train_route_id" rules={[{ required: true, message: 'Вкажіть ID маршруту-прототипу' }]}>
+                    <Form.Item label="ID маршруту-прототипу" name="prototype_train_route_id" rules={[{ required: true, message: 'Вкажіть ID маршруту-прототипу' }]}>
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Дата відправлення рейсу-прототипу"
-                        name="prototype_departure_date"
+                        name="prototype_date"
                         rules={[{ required: true, message: 'Вкажіть дату відправлення рейсу-прототипу' }]}
                     >
                         <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />

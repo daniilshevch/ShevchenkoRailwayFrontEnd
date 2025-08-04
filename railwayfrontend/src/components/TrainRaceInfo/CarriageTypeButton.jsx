@@ -1,8 +1,13 @@
 ﻿import React from "react";
 import "./CarriageTypeButton.css";
 import CarriageQualityClassButton from "./CarriageQualityClassButton";
-import { useNavigate } from 'react-router-dom';     
-
+import { useNavigate } from 'react-router-dom';
+const CARRIAGE_TYPES = {
+    "Platskart": "Плацкарт",
+    "Coupe": "Купе",
+    "SV": "СВ",
+    "Sitting": "Сидячий"
+};
 function CarriageTypeButton({trainRaceId, type, classStats, generalTrainRaceInfo }) {
 
     const navigate = useNavigate();
@@ -15,7 +20,7 @@ function CarriageTypeButton({trainRaceId, type, classStats, generalTrainRaceInfo
         <div className="carriage-type-wrapper">
             <div className="carriage-type-button">
                 <div className="type-label">
-                    <button className="type-name-button" onClick={() => handleCarriageTypeClick(type, trainRaceId)}>{type}</button>
+                    <button className="type-name-button" onClick={() => handleCarriageTypeClick(type, trainRaceId)}>{CARRIAGE_TYPES[type]}</button>
                     <div className="places-summary">
                         Місця: {classStats.free_places}/{classStats.total_places}
                     </div>
