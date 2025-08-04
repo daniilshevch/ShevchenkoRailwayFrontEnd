@@ -18,7 +18,7 @@ function StationInput({ label, initialValue, onChange })
             setSuggestions([]);
             return;
         }
-        const appropriateStations = stationsList.filter(station => station.ukrainian.toLowerCase().includes(query.toLowerCase()));
+        const appropriateStations = stationsList.filter(station => station.ukrainian.toLowerCase().includes(query.toLowerCase().trim()));
         if (choiceMade == false && changingStarted == true) {
             setSuggestions(appropriateStations);
         }

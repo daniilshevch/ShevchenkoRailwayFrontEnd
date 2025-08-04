@@ -68,7 +68,7 @@ function AdminTrainRacesList() {
         try {
             let values = await createForm.validateFields();
             const payload = {
-                ...values,
+                train_route_id: train_route_id,
                 departure_date: values.departure_date.format("YYYY-MM-DD"),
                 train_race_coefficient: parseFloat(values.train_race_coefficient),
             };
@@ -211,16 +211,13 @@ function AdminTrainRacesList() {
             </Form>
 
             <Modal
-                title="Новий маршрут"
+                title={`Новий рейс для маршруту ${train_route_id}`}
                 open={isCreateModalVisible}
                 onCancel={() => setIsCreateModalVisible(false)}
                 onOk={handleCreate}
                 okText="Створити"
             >
                 <Form form={createForm} layout="vertical">
-                    <Form.Item label="ID маршруту" name="train_route_id" rules={[{required: true, message: 'Вкажіть ID маршруту' }]}>
-                        <Input />
-                    </Form.Item>
                     <Form.Item
                         label="Дата відправлення"
                         name="departure_date"

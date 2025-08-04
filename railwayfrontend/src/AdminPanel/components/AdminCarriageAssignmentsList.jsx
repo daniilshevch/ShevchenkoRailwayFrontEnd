@@ -12,18 +12,34 @@ import {
     message,
     DatePicker
 } from 'antd';
-import './AdminTrainRoutesList.css';
+import './AdminCarriageAssignmentsList.css';
 
 const { Option } = Select;
 
-
+const CARRIAGE_TYPES = {
+    0: "Платскарт",
+    1: "Купе",
+    2: "СВ",
+    3: "Сидячий"
+};
+const CARRIAGE_QUALITY_CLASS = {
+    0: "S",
+    1: "A",
+    2: "B",
+    3: "C"
+};
+const CARRIAGE_MANUFACTURER = {
+    0: "КВБЗ",
+    1: "Амендорф"
+};
 function AdminCarriageAssignmentsList({train_race_id}) {
     const [carriageAssignments, setCarriageAssignments] = useState([]);
     const [updateForm] = Form.useForm();
     const [createForm] = Form.useForm();
+    const [copySquadForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-    const navigate = useNavigate();
+    const [isCopySquadModalVisible, setIsCopySquadModalVisible] = useState(false);
 
 
     const fetchCarriageAssignments = async () => {
@@ -93,6 +109,14 @@ function AdminCarriageAssignmentsList({train_race_id}) {
             message.error('Не вдалося створити маршрут');
         }
     };
+    const handleSquadCopy = async () =>
+    {
+        try
+        {
+            let values = await copySquadForm.validateFields();
+            const response = await fetch()
+        }
+    }
     const handleDelete = async (id) => {
         try {
             const response = await fetch(`https://localhost:7230/Admin-API/delete-train-race/${id}`, {
@@ -129,6 +153,22 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                 ) : (
                     record.position_in_squad
                 ),
+            width: 100,
+        },
+        {
+            title: 'Тип вагону',
+            dataIndex: 'passenger_carriage_type',
+            render: (_, record) => (
+                    CARRIAGE_TYPES[record.passenger_carriage_info.type_of]
+                ),
+            width: 100,
+        },
+        {
+            title: 'Клас вагону',
+            dataIndex: 'passenger_carriage_quality_class',
+            render: (_, record) => (
+                CARRIAGE_QUALITY_CLASS[record.passenger_carriage_info.quality_class]
+            ),
             width: 100,
         },
         {
@@ -288,6 +328,11 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                     + Додати вагон в склад
                 </Button>
             </div>
+            <div className="create-button-wrapper">
+                <Button className="copy-squad-button" type="primary" onClick={() => setIsCopySquadModalVisible(true)} style={{ marginBottom: 16 }}>
+                    + Скопіювати склад поїзда з прототипу
+                </Button>
+            </div>
 
             <Form form={updateForm} component={false}>
                 <Table
@@ -325,6 +370,26 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                     </Form.Item>
                     <Form.Item label="Коефіцієнт рейсу" name="train_race_coefficient">
                         <Input type="number" />
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <Modal
+                title="Копіювання складу з прототипу"
+                open={isCopySquadModalVisible}
+                onCancel={() => setIsCopySquadModalVisible(false)}
+                onOk={handleCreate}
+                okText="Скопіювати склад"
+            >
+                <Form form={copySquadForm} layout="vertical">
+                    <Form.Item label="ID маршруту-прототипу" name="train_route_id" rules={[{ required: true, message: 'Вкажіть ID маршруту-прототипу' }]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Дата відправлення рейсу-прототипу"
+                        name="prototype_departure_date"
+                        rules={[{ required: true, message: 'Вкажіть дату відправлення рейсу-прототипу' }]}
+                    >
+                        <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
                     </Form.Item>
                 </Form>
             </Modal>
