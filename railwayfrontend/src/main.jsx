@@ -15,6 +15,8 @@ import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageA
 import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList.jsx";
 import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.jsx";
 import QRCodeGenerator from "./InterpreterDictionaries/test.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 
 const carriage = {
@@ -316,6 +318,8 @@ createRoot(document.getElementById('root')).render(
         <BrowserRouter>
         <Routes>
             <Route path = "/test/qr-code" element={<QRCodeGenerator data={data} /> } />
+            <Route path = "/login" element = {<LoginPage />} />
+            <Route path = "/register" element = {<RegisterPage />} />
             <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
             <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
             <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
