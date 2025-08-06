@@ -104,6 +104,13 @@
     text-decoration: none;
     z-index: 1200;
 }
+.profile-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Обрізає та масштабує, щоб зображення заповнило контейнер */
+    border-radius: 50%; /* Робить зображення круглим */
+    display: block;
+}
 .navbar-wrapper {
     position: fixed;
     top: 0;
@@ -119,6 +126,17 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* Важливо: обрізає зайве */
 }
+.profile-popup {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.profile-icon:hover .profile-popup {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 
 /*.navbar-wrapper {*/
 /*    position: fixed;*/

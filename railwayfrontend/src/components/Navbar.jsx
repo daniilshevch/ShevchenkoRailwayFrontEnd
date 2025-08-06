@@ -7,9 +7,38 @@ import {useEffect, useState} from "react";
 function Navbar()
 {
     const [user, setUser] = useState(null);
+    const [profileImageUrl, setProfileImageUrl] = useState(null);
     useEffect(() => {
         const currentUser = getCurrentUser();
         setUser(currentUser);
+
+        const fetchProfileImage = async () =>
+        {
+            if(!localStorage.getItem("token"))
+            {
+                setProfileImageUrl("/unknown.jpg");
+                return;
+            }
+            try
+            {
+                const response = await fetch("https://localhost:7230/Client-API/get-profile-image-for-current-user", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                    }
+                });
+                if(!response.ok) throw new Error("Помилка при завантаженні зображення");
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                setProfileImageUrl(imageUrl);
+            }
+            catch(error)
+            {
+                console.warn("Не вдалося завантажити зображення профілю:", error);
+                setProfileImageUrl("/unknown.jpg");
+            }
+        };
+        fetchProfileImage();
     }, [])
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -58,7 +87,10 @@ function Navbar()
                     </Link>
                 )}
                 <div className="profile-icon">
-                    <img src = "/test.png" alt = "profile" />
+                    <img src = {profileImageUrl} alt = "profile" />
+                    <div className="profile-popup">
+                        <img src={profileImageUrl} alt="profile-large" />
+                    </div>
                 </div>
             </div>
 
