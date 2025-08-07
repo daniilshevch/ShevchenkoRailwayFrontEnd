@@ -4,13 +4,16 @@ import CarriageTypeButton from './CarriageTypeButton';
 import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
 import {Button} from 'antd';
 import TrainScheduleModal from './TrainScheduleModal';
-import {useLocation} from "react-router-dom";
+import SpeedometerComponent from './SpeedometerComponent';
+import changeTrainRouteIdIntoUkrainian from "../../InterpreterDictionaries/TrainRoutesDictionary.js";
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });
     const day = date.toLocaleDateString("uk-UA", { day: "numeric", month: "long" });
     return { time, day };
 }
+
+
 function TrainTripCard({ train })
 {
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
@@ -19,7 +22,7 @@ function TrainTripCard({ train })
     return (
         <div className="train-card">
             <div className="train-header">
-                <span className="train-number">{train.train_route_id}</span>
+                <span className="train-number">{changeTrainRouteIdIntoUkrainian(train.train_route_id)}</span>
             </div>
 
             <div className="train-times">
@@ -28,6 +31,7 @@ function TrainTripCard({ train })
                     <div className="date">{departure.day}</div>
                     <div className="station">{stationTitleIntoUkrainian(train.trip_starting_station_title)}</div>
                 </div>
+                {/*<SpeedometerComponent speed={train.average_speed_on_trip} />*/}
                 <div className="center-blocks">
                     <div className="duration-block">
                         <span className="duration">
@@ -41,7 +45,7 @@ function TrainTripCard({ train })
                         </Button>
                     </div>
                 </div>
-
+                {/*<SpeedometerComponent speed={train.average_speed_on_trip} />*/}
                 <div className="time-block right">
                     <div className="time">{arrival.time}</div>
                     <div className="date">{arrival.day}</div>

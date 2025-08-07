@@ -1,0 +1,16 @@
+﻿const lettersDictionary =
+    {
+        "SH": "Ш",
+        "K": "K"
+    }
+    function changeTrainRouteIdIntoUkrainian(trainRouteId)
+    {
+        for (const key of Object.keys(lettersDictionary).sort((a, b) => b.length - a.length)) {
+            if (trainRouteId.endsWith(key)) {
+                const baseNumber = trainRouteId.slice(0, -key.length);
+                return baseNumber + lettersDictionary[key];
+            }
+        }
+        return trainRouteId; // якщо нічого не замінено
+    }
+    export default changeTrainRouteIdIntoUkrainian;

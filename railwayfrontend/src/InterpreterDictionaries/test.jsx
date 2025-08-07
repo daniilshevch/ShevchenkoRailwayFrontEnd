@@ -1,35 +1,30 @@
-﻿import React, { useEffect, useState } from 'react';
-import QRCode from 'qrcode';
+﻿import ReactSpeedometer from "react-d3-speedometer";
+import React from "react";
 
-const QRCodeGenerator = ({ data }) => {
-    const [qrCodeUrl, setQrCodeUrl] = useState('');
-
-    useEffect(() => {
-        const generateQRCode = async () => {
-            try {
-                const jsonString = JSON.stringify(data);
-                const url = await QRCode.toDataURL(jsonString);
-                setQrCodeUrl(url);
-            } catch (err) {
-                console.error('Помилка генерації QR-коду:', err);
-            }
-        };
-
-        if (data) {
-            generateQRCode();
-        }
-    }, [data]);
-
-    return (
-        <div style={{ textAlign: 'center' }}>
-            <h3>QR-код для ваших даних</h3>
-            {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code" />
-            ) : (
-                <p>Генерація QR-коду...</p>
-            )}
-        </div>
-    );
-};
-
-export default QRCodeGenerator;
+const SpeedometerComponent = () => (
+    <div style={{ width: 300, height: 200 }}>
+        <ReactSpeedometer
+            maxValue={140}
+            value={65}
+            needleColor="red"
+            segments={14}
+            segmentColors={[
+                "#000000",
+                "#7e1b0a",
+                "#ff3300",
+                "#ff5e00",
+                "#ff9900",
+                "#ffc000",
+                "#ffee00",
+                "#d9ff00",
+                "#b2ff00",
+                "#8cff00",
+                "#00cc44",
+                "#00b38f",
+                "#19a2d5",
+                "#3366ff",
+            ]}
+        />
+    </div>
+);
+export default SpeedometerComponent;

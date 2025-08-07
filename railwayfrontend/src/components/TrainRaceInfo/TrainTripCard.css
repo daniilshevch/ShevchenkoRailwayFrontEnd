@@ -2,6 +2,7 @@
     background: white;
     border-radius: 12px;
     padding: 20px 30px;
+    position: relative;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 30px;
     width: 100%;
@@ -15,7 +16,7 @@
     align-items: center;
     font-weight: bold;
     font-size: 18px;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
 }
 
 .train-number {
@@ -27,7 +28,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
 }
 
 .time-block {
@@ -35,7 +36,7 @@
     width: 30%;
 }
 .time {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     font-size: 24px;
     font-weight: bold;
 }
@@ -52,7 +53,8 @@
     font-weight: bold;
 }
 .center-blocks {
-    margin-top: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,11 +67,13 @@
     width: 30%;
     text-align: center;
     font-size: 17px;
+    font-weight: bold;
     color: #003366;
 }
 .train-schedule-button
 {
     margin-top: 10px;
+    margin-bottom: 0px;
     font-weight: bold !important;
 }
 
@@ -79,11 +83,11 @@
     justify-content: center;
     align-items: center;
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 .full-route {
-    background-color: #f1f1f1;  
+    background-color: #f1f1f1;
     padding: 6px 16px;
     border-radius: 20px;
 }
@@ -91,6 +95,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 10px;
     justify-content: center;
 }

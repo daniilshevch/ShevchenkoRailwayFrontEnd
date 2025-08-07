@@ -1,9 +1,73 @@
-﻿.trip-row { /* світло-блакитний */
-    color: blue;
-    font-weight: bold;
+﻿/*.train-schedule-modal .ant-timeline-item-tail {*/
+/*    background-color: #1890ff !important;*/
+/*}*/
+
+/*!* Для версії, яка використовує псевдоелементи *!*/
+/*.train-schedule-modal .ant-timeline-item-tail::before {*/
+/*    background-color: #1890ff !important;*/
+/*}*/
+
+
+.trip-segment .ant-timeline-item-tail {
+    border-left: 3px solid #52c41a; /* або #1890ff — синя, або будь-який інший */
+}
+.non-trip-segment .ant-timeline-item-tail {
+    border-left: 3px dashed grey; /* або: lightgray, або 0px */
+}
+.final-trip-stop .ant-timeline-item-tail {
+    border-left: 3px dashed grey; /* або: lightgray, або 0px */
+}
+.ant-timeline-item:first-child {
+    padding-top: 1px;
+}
+.final-trip-stop .ant-timeline-item-head {
+    background-color: #52c41a;
+    border: #52c41a;
+    border-radius: 50%;
 }
 
-.non-trip-row {
-    background-color: white;
-    font-weight: 500;/* або інший */
+
+
+.train-schedule-modal .ant-modal-content {
+    max-height: 90vh;      /* або конкретно: 600px */
+    overflow-y: auto;       /* дозволити прокрутку */
+    overflow-x: hidden;
+}
+
+.train-schedule-modal .ant-modal-body {
+    max-height: 70vh;       /* або конкретно: 500px */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.timeline-stop-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 4px;
+}
+
+.timeline-times {
+    color: #555;
+    font-weight: normal;
+    font-size: 9px;
+}
+
+.timeline-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 16px;
+    min-height: 36px; /* або більше, якщо часів два */
+    justify-content: center;
+    position: relative;
+    font-size: 13px;
+    color: #555;
+}
+
+.arrival-time {
+    margin-bottom: -10px;
+    position: relative;
+    top: -12px; /* трохи вище точки */
 }

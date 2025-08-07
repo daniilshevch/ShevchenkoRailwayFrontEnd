@@ -1,53 +1,69 @@
 ﻿import React from 'react';
-import { Modal, Button, Table } from 'antd';
-import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
-import "./TrainScheduleModal.css"
-const TrainScheduleModal = ({visible, onClose, trainStops}) =>
-{
-    const columns = [
-        {
-            title: "Станція",
-            dataIndex: "station_title",
-            key: "station_title",
-            render: (value) => stationTitleIntoUkrainian(value),
-        },
-        {
-            title: "Час прибуття",
-            dataIndex: "arrival_time",
-            key: "arrival_time",
-            render: (value) => value ? new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'
-        },
-        {
-            title: "Час відправленння",
-            dataIndex: "departure_time",
-            key: "departure_time",
-            render: (value) => value ? new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'
-        },
-        {
-            title: "Тривалість зупинки",
-            dataIndex: "stop_duration",
-            key: "stop_duration",
-            render: (_, record) => (record.departure_time && record.arrival_time) ?
-                `${((new Date(record.departure_time) - new Date(record.arrival_time)))/60000} хв` : "—"
-        }
-    ];
+import { Modal, Timeline, Typography } from 'antd';
+import { stationTitleIntoUkrainian } from "../../InterpreterDictionaries/StationsDictionary.js";
+import './TrainScheduleModal.css';
+
+const { Text } = Typography;
+const defineTripStopType = (train_stop) => {
+    if(train_stop.is_final_trip_stop)
+    {
+        return "final-trip-stop";
+    }
+    else if(train_stop.is_part_of_trip && !train_stop.is_final_trip_stop)
+    {
+        return "trip-segment";
+    }
+    else
+    {
+        return "non-trip-segment"
+    }
+}
+const TrainScheduleModal = ({ visible, onClose, trainStops }) => {
     return (
-        <Modal
-            title = "Розклад руху"
+        <Modal className="train-schedule-modal" onClose={onClose}
+            title="Розклад руху"
             open={visible}
             onCancel={onClose}
             footer={null}
-            width={800}
+            width={550}
+
         >
-            <Table
-            dataSource={trainStops}
-            columns={columns}
-            rowKey="station_title"
-            pagination={false}
-            bordered
-            rowClassName={(record) => record.is_part_of_trip ? 'trip-row' : 'non-trip-row'}
-            />
+            <Timeline mode="left">
+                {trainStops.map((stop, index) => {
+                    const arrival = stop.arrival_time
+                        ? new Date(stop.arrival_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        : '—';
+                    const departure = stop.departure_time
+                        ? new Date(stop.departure_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        : '—';
+                    const stopDuration = (stop.departure_time && stop.arrival_time)
+                        ? `${(new Date(stop.departure_time) - new Date(stop.arrival_time)) / 60000} хв`
+                        : '—';
+
+                    return (
+                        <Timeline.Item
+                            key={index}
+                            color={stop.is_part_of_trip && !stop.is_final_trip_stop ? 'green' : 'gray'}
+                            //label={departure !== '—' ? `${departure}` : arrival}
+                            label={
+                                <div className="timeline-label">
+                                    {arrival !== '—' && <div className="arrival-time">{arrival}</div>}
+                                    {departure !== '—' && <div className="departure-time">{departure}</div>}
+                                </div>
+                            }
+                            className={defineTripStopType(stop)}
+                        >
+                            <div className="timeline-stop-inline">
+                                <div>
+                                    <Text strong>{stationTitleIntoUkrainian(stop.station_title)}</Text><br />
+                                </div>
+                            </div>
+                        </Timeline.Item>
+                    );
+                })}
+            </Timeline>
         </Modal>
     );
 };
+
 export default TrainScheduleModal;
