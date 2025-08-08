@@ -2,7 +2,7 @@
 import './TrainTripCard.css';
 import CarriageTypeButton from './CarriageTypeButton';
 import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
-import {Button} from 'antd';
+import {Button, Tag} from 'antd';
 import TrainScheduleModal from './TrainScheduleModal';
 import SpeedometerComponent from './SpeedometerComponent';
 import changeTrainRouteIdIntoUkrainian from "../../InterpreterDictionaries/TrainRoutesDictionary.js";
@@ -24,14 +24,12 @@ function TrainTripCard({ train })
             <div className="train-header">
                 <span className="train-number">{changeTrainRouteIdIntoUkrainian(train.train_route_id)}</span>
             </div>
-
             <div className="train-times">
                 <div className="time-block left">
                     <div className="time">{departure.time}</div>
                     <div className="date">{departure.day}</div>
                     <div className="station">{stationTitleIntoUkrainian(train.trip_starting_station_title)}</div>
                 </div>
-                {/*<SpeedometerComponent speed={train.average_speed_on_trip} />*/}
                 <div className="center-blocks">
                     <div className="duration-block">
                         <span className="duration">
@@ -39,24 +37,32 @@ function TrainTripCard({ train })
                             {parseInt(train.total_trip_duration.split(":")[1])} хв
                         </span>
                     </div>
-                    <div>
-                        <Button className="train-schedule-button" type="default" onClick={() => setIsScheduleVisible(true)}>
-                            Розклад руху
-                        </Button>
-                    </div>
+                    <SpeedometerComponent speed = {train.average_speed_on_trip} />
                 </div>
-                {/*<SpeedometerComponent speed={train.average_speed_on_trip} />*/}
+                {/*<SpeedometerComponent speed = {train.average_speed_on_trip} />*/}
                 <div className="time-block right">
                     <div className="time">{arrival.time}</div>
                     <div className="date">{arrival.day}</div>
                     <div className="station">{stationTitleIntoUkrainian(train.trip_ending_station_title)}</div>
                 </div>
+
             </div>
 
             <div className="route-footer">
-                <span className="full-route">
-                    🚆 {stationTitleIntoUkrainian(train.full_route_starting_station_title)} → {stationTitleIntoUkrainian(train.full_route_ending_station_title)}
-                </span>
+                <div>
+                    <Button className="train-schedule-button" type="default" onClick={() => setIsScheduleVisible(true)}>
+                        Розклад руху
+                    </Button>
+                </div>
+                <div className="full-route">
+                    {changeTrainRouteIdIntoUkrainian(train.train_route_id)} {stationTitleIntoUkrainian(train.full_route_starting_station_title)} → {stationTitleIntoUkrainian(train.full_route_ending_station_title)}
+                </div>
+                <div>
+                    <Button className="train-trip-map-button" type="default" onClick={() => setIsScheduleVisible(true)}>
+                        Карта маршруту
+                    </Button>
+                </div>
+
             </div>
 
             <div className="wagon-buttons">

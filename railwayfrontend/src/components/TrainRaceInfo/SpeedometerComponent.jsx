@@ -7,14 +7,16 @@ const SpeedometerComponent = ({speed}) => {
         speed = 140;
     }
     return (
-        <div>
+        <div style = {{width: 120, height: 70, overflow: "hidden"}}>
+            <div style={{ transform: "scale(0.4)", transformOrigin: "top left" }}>
             <ReactSpeedometer
                 maxValue={140}
                 value={speed}
                 needleColor="red"
                 segments={14}
-                width={150}
-                height={80}
+                //width={150}
+                // height={80}
+                currentValueText=""
                 segmentColors={[
                     "#000000",
                     "#7e1b0a",
@@ -32,6 +34,7 @@ const SpeedometerComponent = ({speed}) => {
                     "#3366ff",
                 ]}
             />
+            </div>
         </div>
 );
 }

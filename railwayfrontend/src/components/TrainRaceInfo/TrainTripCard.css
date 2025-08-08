@@ -63,7 +63,8 @@
     text-align: center;
 }
 .duration-block {
-    margin-top: 0;
+    margin-top: -2px;
+    margin-bottom: 2px;
     width: 30%;
     text-align: center;
     font-size: 17px;
@@ -72,18 +73,24 @@
 }
 .train-schedule-button
 {
-    margin-top: 10px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
     font-weight: bold !important;
+    margin-right: 220px;
 }
-
-
+.train-trip-map-button
+{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold !important;
+    margin-left: 220px;
+}
 .route-footer {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 15px;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .full-route {

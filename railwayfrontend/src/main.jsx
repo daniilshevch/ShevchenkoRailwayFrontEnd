@@ -17,7 +17,7 @@ import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.js
 import QRCodeGenerator from "./InterpreterDictionaries/test.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
-import SpeedometerComponent from "./InterpreterDictionaries/test.jsx";
+import SpeedometerComponent from "./components/TrainRaceInfo/SpeedometerComponent.jsx";
 
 
 const carriage = {
@@ -318,7 +318,7 @@ createRoot(document.getElementById('root')).render(
     //<StrictMode>
         <BrowserRouter>
         <Routes>
-            <Route path = "/test/speedometer" element={<SpeedometerComponent /> } />
+            <Route path = "/test/speedometer" element={<SpeedometerComponent speed = {50}/> } />
             <Route path = "/login" element = {<LoginPage />} />
             <Route path = "/register" element = {<RegisterPage />} />
             <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
