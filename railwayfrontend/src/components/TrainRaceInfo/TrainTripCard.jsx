@@ -13,7 +13,56 @@ function formatTimeDate(dateStr) {
     return { time, day };
 }
 
-
+function trainNumberTag(train_route_id)
+{
+    return (
+        <Tag color="#2f54eb" style={{
+            color: 'white',
+            fontWeight: 'bold',
+            borderRadius: '12px 0 0',
+            padding: '6px 12px',
+            borderTop: '2px solid #2f54eb',
+            borderBottom: '2px solid #2f54eb',
+            borderLeft: '2px solid #2f54eb',
+            borderRight: 'none'
+        }}>
+            {changeTrainRouteIdIntoUkrainian(train_route_id)}
+        </Tag>
+    )
+}
+function trainQualityClassTag(quality_class)
+{
+    const defineQualityClassColor = (quality_class) =>
+    {
+        switch (quality_class) {
+            case "A":
+                return "red";
+            case "B":
+                return "green";
+            case "C":
+                return "blue";
+        }
+    }
+    return (
+        <Tag color={defineQualityClassColor(quality_class)} style={{
+            color: 'white',
+            backgroundColor: defineQualityClassColor(quality_class),
+            fontWeight: 'bold',
+            borderRadius: '0',
+            padding: '6px 12px',
+            borderTop: `2px solid ${defineQualityClassColor(quality_class)}`,
+            borderBottom: `2px solid ${defineQualityClassColor(quality_class)}`,
+            borderLeft: 'none',
+            borderRight: 'none'
+        }}>
+            {quality_class}
+        </Tag>
+    )
+}
+function isCheapestTag(is_cheapest)
+{
+    
+}
 function TrainTripCard({ train })
 {
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
@@ -22,7 +71,8 @@ function TrainTripCard({ train })
     return (
         <div className="train-card">
             <div className="train-header">
-                <span className="train-number">{changeTrainRouteIdIntoUkrainian(train.train_route_id)}</span>
+                <span className="train-number">{trainNumberTag(train.train_route_id)}</span>
+                <span className="train-quality-class">{trainQualityClassTag(train.train_route_class)}</span>
             </div>
             <div className="train-times">
                 <div className="time-block left">
@@ -55,7 +105,7 @@ function TrainTripCard({ train })
                     </Button>
                 </div>
                 <div className="full-route">
-                    {changeTrainRouteIdIntoUkrainian(train.train_route_id)} {stationTitleIntoUkrainian(train.full_route_starting_station_title)} → {stationTitleIntoUkrainian(train.full_route_ending_station_title)}
+                    <strong>{changeTrainRouteIdIntoUkrainian(train.train_route_id)}</strong> {stationTitleIntoUkrainian(train.full_route_starting_station_title)} → {stationTitleIntoUkrainian(train.full_route_ending_station_title)}
                 </div>
                 <div>
                     <Button className="train-trip-map-button" type="default" onClick={() => setIsScheduleVisible(true)}>
