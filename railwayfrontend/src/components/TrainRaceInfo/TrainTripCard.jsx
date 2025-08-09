@@ -49,7 +49,7 @@ function trainQualityClassTag(quality_class)
             backgroundColor: defineQualityClassColor(quality_class),
             fontWeight: 'bold',
             borderRadius: '0',
-            padding: '6px 12px',
+            padding: '6px 15px',
             borderTop: `2px solid ${defineQualityClassColor(quality_class)}`,
             borderBottom: `2px solid ${defineQualityClassColor(quality_class)}`,
             borderLeft: 'none',
@@ -59,9 +59,62 @@ function trainQualityClassTag(quality_class)
         </Tag>
     )
 }
-function isCheapestTag(is_cheapest)
+function isFastestTag(is_fastest)
 {
-    
+    if(is_fastest === true)
+    {
+        return (
+            <Tag color='yellow' style={{
+                color: 'white',
+                backgroundColor: 'orange',
+                fontWeight: 'bold',
+                borderRadius: '0',
+                padding: '6px 12px',
+                borderTop: `2px solid orange`,
+                borderBottom: `2px solid orange`,
+                borderLeft: 'none',
+                borderRight: 'none'
+            }}>
+                Найшвидший
+            </Tag>
+        );
+    }
+    else
+    {
+        return null;
+    }
+}
+function isCheapestTag(is_fastest, is_cheapest)
+{
+    let marginLeft = 0;
+    if(!is_fastest)
+    {
+        marginLeft = 8;
+    }
+
+    if(is_cheapest === true)
+    {
+        return (
+            <Tag color='light-blue' style={{
+                color: 'white',
+                backgroundColor: 'purple',
+                fontWeight: 'bold',
+                borderRadius: '0',
+                padding: '6px 12px',
+                borderTop: `2px solid purple`,
+                borderBottom: `2px solid purple`,
+                borderLeft: 'none',
+                borderRight: 'none',
+                marginLeft: `${marginLeft}px`
+            }}>
+                Найдешевший
+            </Tag>
+        );
+    }
+    else
+    {
+        return null;
+    }
 }
 function TrainTripCard({ train })
 {
@@ -73,6 +126,8 @@ function TrainTripCard({ train })
             <div className="train-header">
                 <span className="train-number">{trainNumberTag(train.train_route_id)}</span>
                 <span className="train-quality-class">{trainQualityClassTag(train.train_route_class)}</span>
+                <span className="is-fastest">{isFastestTag(train.is_fastest)}</span>
+                <span className="is-cheapest">{isCheapestTag(train.is_fastest, train.is_cheapest)}</span>
             </div>
             <div className="train-times">
                 <div className="time-block left">

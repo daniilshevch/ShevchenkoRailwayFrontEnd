@@ -27,6 +27,16 @@
     margin-left: -8px;
     margin-top: -20px;
 }
+.is-fastest {
+    color: #003366;
+    margin-left: -8px;
+    margin-top: -20px;
+}
+.is-cheapest {
+    color: #003366;
+    margin-left: -8px;
+    margin-top: -20px;
+}
 
 .train-times {
     display: flex;
