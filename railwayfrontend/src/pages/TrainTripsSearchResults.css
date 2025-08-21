@@ -1,7 +1,7 @@
-/* Контейнер карток (додай до компонента, який виводить список карток) */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ) */
 .train-trips-page {
     min-height: 100vh;
-    background-image: url('/public/background_images/trips_search3.png');
+    background-image: url('/public/background_images/tickets.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.8); /* білий з прозорістю 80% */
+    background-color: rgba(255, 255, 255, 0.8); /* пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 80% */
     border-radius: 15px;
     padding: 20px;
     margin: 20px auto;

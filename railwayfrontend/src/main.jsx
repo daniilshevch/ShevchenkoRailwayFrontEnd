@@ -18,6 +18,8 @@ import QRCodeGenerator from "./InterpreterDictionaries/test.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import SpeedometerComponent from "./components/TrainRaceInfo/SpeedometerComponent.jsx";
+import BackgroundImageCarousel from "./components/HomePageComponents/BackgroundImageCarousel.jsx";
+import TripSearchForm from "./components/TrainSearchForm/TripsSearchForm.jsx";
 
 
 const carriage = {
@@ -319,6 +321,8 @@ createRoot(document.getElementById('root')).render(
         <BrowserRouter>
         <Routes>
             <Route path = "/test/speedometer" element={<SpeedometerComponent speed = {50}/> } />
+            <Route path = "/test/carousel" element = {<BackgroundImageCarousel />} />
+            <Route path = "/test/form" element = {<TripSearchForm />} />
             <Route path = "/login" element = {<LoginPage />} />
             <Route path = "/register" element = {<RegisterPage />} />
             <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />

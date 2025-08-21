@@ -2,7 +2,8 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
-import TripsSearchForm from '../components/TrainSearchForm/TripsSearchForm';
+import TripsSearchForm2 from '../components/TrainSearchForm/TripsSearchForm2.jsx';
+import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
 function TrainTripsSearchResults()
 {
     const { start, end } = useParams();

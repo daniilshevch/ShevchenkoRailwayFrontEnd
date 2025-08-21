@@ -12,20 +12,35 @@
 
 .train-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     font-weight: bold;
     font-size: 10px;
 }
 
+.left-train-header-block{
+    margin-top: -20px;
+    margin-left: -30px
+}
+
 .train-number {
     color: #003366;
-    margin-left: -30px;
-    margin-top: -20px;
 }
 .train-quality-class {
     color: #003366;
     margin-left: -8px;
     margin-top: -20px;
+}
+.train-branded-name
+{
+    margin-left: -8px;
+    margin-top: -20px;
+}
+
+
+.right-train-header-block{
+    margin-top: -20px;
+    margin-right: -38px
 }
 .is-fastest {
     color: #003366;

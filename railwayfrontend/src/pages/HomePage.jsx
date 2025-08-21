@@ -1,15 +1,15 @@
 ﻿import React from 'react';
 import './HomePage.css';
-import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
+import TripsSearchForm2 from "../components/TrainSearchForm/TripsSearchForm2.jsx";
 import BackgroundCarousel from '../components/BackgroundCarousel';
+import BackgroundImageCarousel from "../components/HomePageComponents/BackgroundImageCarousel.jsx";
+import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
 function HomePage()
 {
     return (
         <div className="home-container">
-            <BackgroundCarousel />
-            <div className="overlay">
-                <TripsSearchForm />
-            </div>
+            <BackgroundImageCarousel />
+            <TripsSearchForm />
         </div>
     )
 }

@@ -6,6 +6,7 @@ import {Button, Tag} from 'antd';
 import TrainScheduleModal from './TrainScheduleModal';
 import SpeedometerComponent from './SpeedometerComponent';
 import changeTrainRouteIdIntoUkrainian from "../../InterpreterDictionaries/TrainRoutesDictionary.js";
+import changeTrainRouteBrandedNameIntoUkrainian from "../../InterpreterDictionaries/TrainBrandedNamesDictionary.js";
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });
@@ -20,7 +21,7 @@ function trainNumberTag(train_route_id)
             color: 'white',
             fontWeight: 'bold',
             borderRadius: '12px 0 0',
-            padding: '6px 12px',
+            padding: '2px 12px',
             borderTop: '2px solid #2f54eb',
             borderBottom: '2px solid #2f54eb',
             borderLeft: '2px solid #2f54eb',
@@ -48,14 +49,33 @@ function trainQualityClassTag(quality_class)
             color: 'white',
             backgroundColor: defineQualityClassColor(quality_class),
             fontWeight: 'bold',
-            borderRadius: '0',
-            padding: '6px 15px',
+            borderRadius: '0 0',
+            padding: '2px 15px',
             borderTop: `2px solid ${defineQualityClassColor(quality_class)}`,
             borderBottom: `2px solid ${defineQualityClassColor(quality_class)}`,
             borderLeft: 'none',
             borderRight: 'none'
         }}>
             {quality_class}
+        </Tag>
+    )
+}
+function trainBrandedNameTag(branded_name)
+{
+    const ukrainian_branded_name = changeTrainRouteBrandedNameIntoUkrainian(branded_name);
+    return (
+        <Tag color="orange" style={{
+            backgroundColor: "orange",
+            color: 'white',
+            fontWeight: 'bold',
+            borderRadius: '0px 0 12px 0',
+            padding: '2px 12px',
+            borderTop: '2px solid orange',
+            borderBottom: '2px solid orange',
+            borderLeft: '2px solid orange',
+            borderRight: 'none'
+        }}>
+            {ukrainian_branded_name}
         </Tag>
     )
 }
@@ -69,7 +89,7 @@ function isFastestTag(is_fastest)
                 backgroundColor: 'orange',
                 fontWeight: 'bold',
                 borderRadius: '0',
-                padding: '6px 12px',
+                padding: '2px 12px',
                 borderTop: `2px solid orange`,
                 borderBottom: `2px solid orange`,
                 borderLeft: 'none',
@@ -99,8 +119,8 @@ function isCheapestTag(is_fastest, is_cheapest)
                 color: 'white',
                 backgroundColor: 'purple',
                 fontWeight: 'bold',
-                borderRadius: '0',
-                padding: '6px 12px',
+                borderRadius: '0 12px 0 0',
+                padding: '2px 12px',
                 borderTop: `2px solid purple`,
                 borderBottom: `2px solid purple`,
                 borderLeft: 'none',
@@ -124,10 +144,15 @@ function TrainTripCard({ train })
     return (
         <div className="train-card">
             <div className="train-header">
-                <span className="train-number">{trainNumberTag(train.train_route_id)}</span>
-                <span className="train-quality-class">{trainQualityClassTag(train.train_route_class)}</span>
-                <span className="is-fastest">{isFastestTag(train.is_fastest)}</span>
-                <span className="is-cheapest">{isCheapestTag(train.is_fastest, train.is_cheapest)}</span>
+                <div className="left-train-header-block">
+                    <span className="train-number">{trainNumberTag(train.train_route_id)}</span>
+                    <span className="train-quality-class">{trainQualityClassTag(train.train_route_class)}</span>
+                    <span className="train-branded-name">{trainBrandedNameTag(train.train_route_branded_name)}</span>
+                </div>
+                <div className="right-train-header-block">
+                    <span className="is-fastest">{isFastestTag(train.is_fastest)}</span>
+                    <span className="is-cheapest">{isCheapestTag(train.is_fastest, train.is_cheapest)}</span>
+                </div>
             </div>
             <div className="train-times">
                 <div className="time-block left">
