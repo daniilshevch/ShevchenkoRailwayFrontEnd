@@ -3,14 +3,15 @@
     margin: 0 auto;
 }
 .create-button-wrapper {
+    margin-top: 10px;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 6px;
+    margin-bottom: 0px;
 }
 .light-blue-row {
-    background-color: #e6f7ff; /* світло-блакитний */
+    background-color: #e6f7ff; /* пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 }
 
 .dark-blue-row {
-    background-color: #bae7ff; /* трохи темніший блакитний */
+    background-color: #bae7ff; /* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 }

@@ -1,7 +1,12 @@
 .light-blue-row {
     background-color: #e6f7ff;
 }
-
+.create-button-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0px;
+}
 .dark-blue-row {
     background-color: #bae7ff;
 }

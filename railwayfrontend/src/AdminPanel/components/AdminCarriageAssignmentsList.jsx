@@ -357,7 +357,7 @@ function AdminCarriageAssignmentsList({train_race_id}) {
     return (
         <>
             <div className="create-button-wrapper">
-                <Button type="primary" onClick={() => setIsCreateModalVisible(true)} style={{ marginBottom: 16 }}>
+                <Button type="primary" className="create-carriage-assignment-button" onClick={() => setIsCreateModalVisible(true)} style={{ marginBottom: 16 }}>
                     + Додати вагон в склад
                 </Button>
             </div>

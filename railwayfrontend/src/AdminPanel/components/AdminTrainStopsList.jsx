@@ -9,12 +9,14 @@ import {
     Form,
     Modal,
     message,
-    DatePicker
+    DatePicker, AutoComplete
 } from 'antd';
-import './AdminTrainRoutesList.css';
-import {stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
+import './AdminTrainStopsList.css';
+import {stationsList, stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
 
 const { Option } = Select;
+
+const options = stationsList.map((station) => ({value: station.ukrainian, label: station.ukrainian}));
 function formatDate(dateTime)
 {
     return dateTime.toLocaleString('uk-UA', {
@@ -94,12 +96,14 @@ function AdminTrainStopsList({train_race_id}) {
     const handleCreate = async () => {
         try {
             let values = await createForm.validateFields();
+            let stationTitle = stationsList.find(station => station.ukrainian === values.station_title)?.english;
             const payload = {
                 ...values,
-                departure_date: values.departure_date.format("YYYY-MM-DD"),
-                train_race_coefficient: parseFloat(values.train_race_coefficient),
+                train_route_on_date_id: train_race_id,
+                station_title: stationTitle,
+                stop_type: 0
             };
-            const response = await fetch(`https://localhost:7230/Admin-API/add-train-race`, {
+            const response = await fetch(`https://localhost:7230/Admin-API/add-train-stop-for-train-race`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -117,13 +121,13 @@ function AdminTrainStopsList({train_race_id}) {
             message.error('Не вдалося створити маршрут');
         }
     };
-    const handleDelete = async (id) => {
+    const handleDelete = async (train_route_on_date_id, station_title) => {
         try {
-            const response = await fetch(`https://localhost:7230/Admin-API/delete-train-race/${id}`, {
+            const response = await fetch(`https://localhost:7230/Admin-API/delete-train-stop/${train_race_id}/${station_title}`, {
                 method: 'DELETE'
             });
             if (!response.ok) throw new Error("Помилка при видаленні");
-            //fetchRaces();
+            fetchTrainStops();
         }
         catch (err) {
             console.error(err);
@@ -271,7 +275,7 @@ function AdminTrainStopsList({train_race_id}) {
                         </Button>
                         <Popconfirm
                             title="Ви впевнені, що хочете видалити цю станцію?"
-                            onConfirm={() => handleDelete(record.id)}
+                            onConfirm={() => handleDelete(train_race_id, record.station_title)}
                             okText="Так"
                             cancelText="Ні"
                         >
@@ -287,12 +291,12 @@ function AdminTrainStopsList({train_race_id}) {
     return (
         <>
             <div className="create-button-wrapper">
-                <Button type="primary" onClick={() => setIsCreateModalVisible(true)} style={{ marginBottom: 16 }}>
+                <Button type="primary" className = "create-train-stop-button" onClick={() => setIsCreateModalVisible(true)} style={{ marginBottom: 16 }}>
                     + Додати зупинку в розклад
                 </Button>
             </div>
             <div className="create-button-wrapper">
-                <Button className="copy-squad-button" type="primary" onClick={() => setIsCopyScheduleModalVisible(true)} style={{ marginBottom: 16 }}>
+                <Button className="copy-schedule-button" type="primary" onClick={() => setIsCopyScheduleModalVisible(true)} style={{ marginBottom: 16 }}>
                     + Скопіювати розклад поїзда з прототипу
                 </Button>
             </div>
@@ -321,17 +325,33 @@ function AdminTrainStopsList({train_race_id}) {
                 okText="Створити"
             >
                 <Form form={createForm} layout="vertical">
-                    <Form.Item label="ID маршруту" name="train_route_id" rules={[{ required: true, message: 'Вкажіть ID маршруту' }]}>
-                        <Input />
+                    <Form.Item label="Назва зупинки" name="station_title" rules={[{ required: true, message: 'Вкажіть назву зупинки' }]}>
+                        <AutoComplete
+                            options={options}
+                            placeholder="Почніть вводити станцію"
+                            filterOption={(inputValue, option) =>
+                                option?.value?.toLowerCase().includes(inputValue.toLowerCase())
+                            }
+                        />
                     </Form.Item>
-                    <Form.Item
-                        label="Дата відправлення"
-                        name="departure_date"
-                        rules={[{ required: true, message: 'Вкажіть дату відправлення' }]}
-                    >
-                        <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+                    <Form.Item label="Час прибуття" name="arrival_time">
+                        <DatePicker
+                            showTime
+                            format="YYYY-MM-DD HH:mm"
+                            style={{ width: "100%" }}
+                        />
                     </Form.Item>
-                    <Form.Item label="Коефіцієнт рейсу" name="train_race_coefficient">
+                    <Form.Item label="Час відправлення" name="departure_time">
+                        <DatePicker
+                            showTime
+                            format="YYYY-MM-DD HH:mm"
+                            style={{ width: "100%" }}
+                        />
+                    </Form.Item>
+                    <Form.Item label="Відстань від початкової станції" name="distance_from_starting_station">
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item label="Швидкість на перегоні" name="speed_on_section">
                         <Input type="number" />
                     </Form.Item>
                 </Form>
