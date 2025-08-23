@@ -12,7 +12,7 @@ import {
     message,
     DatePicker
 } from 'antd';
-import './AdminTrainRoutesList.css';
+import './AdminTrainRoutesList/AdminTrainRoutesList.css';
 
 const { Option } = Select;
 

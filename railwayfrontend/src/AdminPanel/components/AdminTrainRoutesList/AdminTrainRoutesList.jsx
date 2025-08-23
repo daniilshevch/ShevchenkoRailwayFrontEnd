@@ -11,72 +11,20 @@ import {
     Modal,
     message,
 } from 'antd';
+import {enumOptions, enumOptionsForStrings} from "../GeneralComponents/EnumOptionConvertion.jsx"
+import {SPEED_TYPE_OPTIONS, TRIP_TYPE_OPTIONS, FREQUENCY_TYPE_OPTIONS,
+    ASSIGNMENT_TYPE_OPTIONS, TRAIN_QUALITY_CLASS_OPTIONS, RAILWAY_BRANCH_OPTIONS} from "./AdminTrainRoutesEnums.js"
 import './AdminTrainRoutesList.css';
 
 const { Option } = Select;
 
-const SPEED_TYPE_OPTIONS = {
-    0: 'Експрес',
-    1: 'Швидкий',
-    2: 'Звичайного курсування',
-};
 
-const TRIP_TYPE_OPTIONS = {
-    0: 'Нічний далекого сполучення',
-    1: 'Денний далекого сполучення',
-    2: 'Нічний Інтерсіті',
-    3: 'Денний Інтерсіті',
-    4: 'Нічний регіональний',
-    5: 'Денний регіональний',
-    6: 'Місцевий',
-};
 
-const FREQUENCY_TYPE_OPTIONS = {
-    0: 'Щоденний',
-    1: 'Через день',
-    2: 'По особливим датам',
-};
-
-const ASSIGNEMENT_TYPE_OPTIONS = {
-    0: 'Цілорічний',
-    1: 'Сезонний',
-    2: 'Додатковий',
-    3: 'Спеціальний',
-};
-
-const TRAIN_QUALITY_CLASS = {
-    0: 'S',
-    1: 'A',
-    2: 'B',
-    3: 'C',
-};
-const RAILWAY_BRANCHES = {
-    "Lviv Railway": "Львівська Залізниця",
-    "Odesa Railway": "Одеська Залізниця",
-    "South-Western Railway": "Південно-Західна Залізниця",
-    "South Railway": "Південна Залізниця",
-    "Dnipro Railway": "Дніпровська Залізниця",
-    "Donetsk Railway": "Донецька Залізниця",
-}
-
-const enumOptions = (enumObj) =>
-    Object.entries(enumObj).map(([key, value]) => (
-        <Option key={key} value={parseInt(key)}>
-            {value}
-        </Option>
-    ));
-
-const enumOptionsForStrings = (enumObj) =>
-    Object.entries(enumObj).map(([key, value]) => (
-        <Option key={key} value={key}>
-            {value}
-        </Option>
-    ));
 
 function AdminTrainRoutesList() {
     const [routes, setRoutes] = useState([]);
-    const [updateForm] = Form.useForm();
     const [createForm] = Form.useForm();
+    const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const navigate = useNavigate();
@@ -189,10 +137,10 @@ function AdminTrainRoutesList() {
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="railway_branch_title" style={{ margin: 0 }}>
-                        <Select>{enumOptionsForStrings(RAILWAY_BRANCHES)}</Select>
+                        <Select>{enumOptionsForStrings(RAILWAY_BRANCH_OPTIONS)}</Select>
                     </Form.Item>
                 ) : (
-                    RAILWAY_BRANCHES[record.railway_branch_title]
+                    RAILWAY_BRANCH_OPTIONS[record.railway_branch_title]
                 ),
             width: 50,
         },
@@ -203,10 +151,10 @@ function AdminTrainRoutesList() {
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="quality_class" style={{ margin: 0 }}>
-                        <Select>{enumOptions(TRAIN_QUALITY_CLASS)}</Select>
+                        <Select>{enumOptions(TRAIN_QUALITY_CLASS_OPTIONS)}</Select>
                     </Form.Item>
                 ) : (
-                    TRAIN_QUALITY_CLASS[record.quality_class]
+                    TRAIN_QUALITY_CLASS_OPTIONS[record.quality_class]
                 ),
         },
         {
@@ -272,10 +220,10 @@ function AdminTrainRoutesList() {
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="assignment_type" style={{ margin: 0 }}>
-                        <Select>{enumOptions(ASSIGNEMENT_TYPE_OPTIONS)}</Select>
+                        <Select>{enumOptions(ASSIGNMENT_TYPE_OPTIONS)}</Select>
                     </Form.Item>
                 ) : (
-                    ASSIGNEMENT_TYPE_OPTIONS[record.assignment_type]
+                    ASSIGNMENT_TYPE_OPTIONS[record.assignment_type]
                 ),
             width: 100,
         },
@@ -386,10 +334,10 @@ function AdminTrainRoutesList() {
                         <Input />
                     </Form.Item>
                     <Form.Item label="Філія" name="railway_branch_title" rules={[{ required: true }]}>
-                        <Select>{enumOptionsForStrings(RAILWAY_BRANCHES)}</Select>
+                        <Select>{enumOptionsForStrings(RAILWAY_BRANCH_OPTIONS)}</Select>
                     </Form.Item>
                     <Form.Item label="Клас якості" name="quality_class" rules={[{required:true}]}>
-                        <Select>{enumOptions(TRAIN_QUALITY_CLASS)}</Select>
+                        <Select>{enumOptions(TRAIN_QUALITY_CLASS_OPTIONS)}</Select>
                     </Form.Item>
                     <Form.Item label="Коефіцієнт маршруту" name="train_route_coefficient">
                         <Input type="number" />
@@ -404,7 +352,7 @@ function AdminTrainRoutesList() {
                         <Select>{enumOptions(FREQUENCY_TYPE_OPTIONS)}</Select>
                     </Form.Item>
                     <Form.Item label="Тип призначення" name="assignment_type">
-                        <Select>{enumOptions(ASSIGNEMENT_TYPE_OPTIONS)}</Select>
+                        <Select>{enumOptions(ASSIGNMENT_TYPE_OPTIONS)}</Select>
                     </Form.Item>
                     <Form.Item label="Фірмовий" name="is_branded" valuePropName="checked">
                         <Switch />

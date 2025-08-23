@@ -9,7 +9,7 @@ import CarriageCard from './components/CarriageStructure/CarriageCard';
 import CarriageListLayout from './components/CarriageStructure/CarriageListLayout';
 import carriage_statistics_list from './components/TestData';
 import CarriageListPage from './pages/CarriageListPage';
-import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList';
+import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList/AdminTrainRoutesList.jsx';
 import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList';
 import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList';
 import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList.jsx";

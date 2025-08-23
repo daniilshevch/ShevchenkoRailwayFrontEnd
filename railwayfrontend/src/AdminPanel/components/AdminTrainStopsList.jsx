@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import './AdminTrainStopsList.css';
 import {stationsList, stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
-
+import dayjs from 'dayjs';
 const { Option } = Select;
 
 const options = stationsList.map((station) => ({value: station.ukrainian, label: station.ukrainian}));
@@ -51,7 +51,8 @@ function AdminTrainStopsList({train_race_id}) {
     const [editingKey, setEditingKey] = useState('');
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const [isCopyScheduleModalVisible, setIsCopyScheduleModalVisible] = useState(false);
-
+    const isStartStop = Form.useWatch("is_starting_stop", createForm) ?? false;
+    const isEndStop = Form.useWatch("is_ending_stop", createForm) ?? false;
 
     const fetchTrainStops= async () => {
         const res = await fetch(`https://localhost:7230/Admin-API/get-train-stops-for-train-race/${train_race_id}`);
@@ -62,6 +63,16 @@ function AdminTrainStopsList({train_race_id}) {
     useEffect(() => {
         fetchTrainStops();
     }, []);
+    useEffect(() => {
+        if(isStartStop)
+        {
+            createForm.setFieldsValue({arrival_time: null});
+        }
+        if(isEndStop)
+        {
+            createForm.setFieldsValue({departure_time: null});
+        }
+    })
 
     const isEdited = (record) => record.station_title === editingKey;
 
@@ -96,12 +107,26 @@ function AdminTrainStopsList({train_race_id}) {
     const handleCreate = async () => {
         try {
             let values = await createForm.validateFields();
+            console.log(values.arrival_time);
+            console.log(values.departure_time);
+            const toLocalTimeFormat = (time) => {
+              if(time == null)
+              {
+                  return null;
+              }
+              else
+              {
+                  return time.format("YYYY-MM-DDTHH:mm:ss")
+              }
+            };
             let stationTitle = stationsList.find(station => station.ukrainian === values.station_title)?.english;
             const payload = {
                 ...values,
                 train_route_on_date_id: train_race_id,
                 station_title: stationTitle,
-                stop_type: 0
+                arrival_time: toLocalTimeFormat(values.arrival_time),
+                departure_time: toLocalTimeFormat(values.departure_time),
+                stop_type: 0,
             };
             const response = await fetch(`https://localhost:7230/Admin-API/add-train-stop-for-train-race`, {
                 method: 'POST',
@@ -115,7 +140,7 @@ function AdminTrainStopsList({train_race_id}) {
             message.success('Рейс створено');
             setIsCreateModalVisible(false);
             createForm.resetFields();
-            //fetchRaces();
+            fetchTrainStops();
         } catch (err) {
             console.error(err);
             message.error('Не вдалося створити маршрут');
@@ -324,7 +349,11 @@ function AdminTrainStopsList({train_race_id}) {
                 onOk={handleCreate}
                 okText="Створити"
             >
-                <Form form={createForm} layout="vertical">
+                <Form form={createForm} layout="vertical"
+                      initialValues={{
+                    arrival_time: dayjs(`${parseTrainRaceId(train_race_id).date} 00:00`, 'YYYY-MM-DD HH:mm'),
+                    departure_time: dayjs(`${parseTrainRaceId(train_race_id).date} 00:00`, 'YYYY-MM-DD HH:mm')
+                }}>
                     <Form.Item label="Назва зупинки" name="station_title" rules={[{ required: true, message: 'Вкажіть назву зупинки' }]}>
                         <AutoComplete
                             options={options}
@@ -334,18 +363,28 @@ function AdminTrainStopsList({train_race_id}) {
                             }
                         />
                     </Form.Item>
+                    <Form.Item label="Початкова зупинка" name="is_starting_stop" valuePropName="checked">
+                        <Switch></Switch>
+                    </Form.Item>
                     <Form.Item label="Час прибуття" name="arrival_time">
                         <DatePicker
                             showTime
                             format="YYYY-MM-DD HH:mm"
+                            valueFormat="YYYY-MM-DDTHH:mm:ss"
                             style={{ width: "100%" }}
+                            disabled={isStartStop}
                         />
+                    </Form.Item>
+                    <Form.Item label="Кінцева зупинка" name="is_ending_stop" valuePropName="checked">
+                        <Switch></Switch>
                     </Form.Item>
                     <Form.Item label="Час відправлення" name="departure_time">
                         <DatePicker
                             showTime
                             format="YYYY-MM-DD HH:mm"
+                            valueFormat="YYYY-MM-DDTHH:mm:ss"
                             style={{ width: "100%" }}
+                            disabled={isEndStop}
                         />
                     </Form.Item>
                     <Form.Item label="Відстань від початкової станції" name="distance_from_starting_station">
