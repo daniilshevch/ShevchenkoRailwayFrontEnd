@@ -10,9 +10,11 @@ import {
     TRAIN_QUALITY_CLASS_OPTIONS,
     TRIP_TYPE_OPTIONS
 } from "./AdminTrainRoutesEnums.js";
+import 'antd/dist/reset.css';
 
 function AdminTrainRoutesTable({routes, fetchRoutes})
 {
+    const [messageApi, contextHolder] = message.useMessage();
     const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const navigate = useNavigate();
@@ -29,22 +31,18 @@ function AdminTrainRoutesTable({routes, fetchRoutes})
     const saveUpdate = async (id) => {
         try {
             const row = await updateForm.validateFields();
-            const updatedRoute = { ...routes.find((r) => r.id === id), ...row };
-
+            const updatedRoute = { ...routes.find(route => route.id === id), ...row };
             const response = await fetch(`https://localhost:7230/Admin-API/update-train-route/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedRoute),
             });
-
-            if (!response.ok) throw new Error('Помилка при оновленні');
-
-            message.success('Оновлено');
+            if (!response.ok) throw new Error(`Помилка при оновленні`);
+            messageApi.success(`Маршрут ${id} успішно оновлено`);
             setEditingKey('');
             fetchRoutes();
         } catch (err) {
-            console.error(err);
-            message.error('Помилка при збереженні');
+            messageApi.error(err.message);
         }
     };
     const cancelUpdate = () => setEditingKey('');
@@ -57,12 +55,13 @@ function AdminTrainRoutesTable({routes, fetchRoutes})
                 method: 'DELETE'
             });
             if (!response.ok) throw new Error("Помилка при видаленні");
+            messageApi.success(`Маршрут ${id}  успішно видалено`);
             fetchRoutes();
         }
         catch (err)
         {
             console.error(err);
-            message.error("Не вдалося видалити маршрут");
+            messageApi.error(err);
         }
     }
     const showTrainRaces = async (train_route_id) =>
@@ -123,7 +122,7 @@ function AdminTrainRoutesTable({routes, fetchRoutes})
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="train_route_coefficient" style={{ margin: 0 }}>
-                        <Input />
+                        <Input type="number" />
                     </Form.Item>
                 ) : (
                     record.train_route_coefficient
@@ -254,21 +253,24 @@ function AdminTrainRoutesTable({routes, fetchRoutes})
         },
     ];
     return (
-        <Form form={updateForm} component={false}>
-            <Table
-                dataSource={routes}
-                columns={columns}
-                rowKey="id"
-                bordered
-                pagination={false}
-                components={{
-                    body: {
-                        cell: ({ children }) => <td>{children}</td>,
-                    },
-                }}
-                rowClassName={(_, index) => (index % 2 === 0 ? 'light-blue-row' : 'dark-blue-row')}
-            />
-        </Form>
+        <>
+            {contextHolder}
+            <Form form={updateForm} component={false}>
+                <Table
+                    dataSource={routes}
+                    columns={columns}
+                    rowKey="id"
+                    bordered
+                    pagination={false}
+                    components={{
+                        body: {
+                            cell: ({ children }) => <td>{children}</td>,
+                        },
+                    }}
+                    rowClassName={(_, index) => (index % 2 === 0 ? 'light-blue-row' : 'dark-blue-row')}
+                />
+            </Form>
+        </>
     )
 }
 export default AdminTrainRoutesTable;

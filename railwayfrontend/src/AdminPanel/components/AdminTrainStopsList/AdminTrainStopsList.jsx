@@ -12,7 +12,7 @@ import {
     DatePicker, AutoComplete
 } from 'antd';
 import './AdminTrainStopsList.css';
-import {stationsList, stationTitleIntoUkrainian} from "../../InterpreterDictionaries/StationsDictionary.js";
+import {stationsList, stationTitleIntoUkrainian} from "../../../InterpreterDictionaries/StationsDictionary.js";
 import dayjs from 'dayjs';
 const { Option } = Select;
 

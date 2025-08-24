@@ -10,9 +10,9 @@ import CarriageListLayout from './components/CarriageStructure/CarriageListLayou
 import carriage_statistics_list from './components/TestData';
 import CarriageListPage from './pages/CarriageListPage';
 import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList/AdminTrainRoutesList.jsx';
-import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList';
-import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList';
-import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList.jsx";
+import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList/AdminTrainRacesList.jsx';
+import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList/AdminCarriageAssignmentsList.jsx';
+import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList/AdminTrainStopsList.jsx";
 import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.jsx";
 import QRCodeGenerator from "./InterpreterDictionaries/test.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
