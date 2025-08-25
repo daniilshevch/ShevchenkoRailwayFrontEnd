@@ -2,7 +2,7 @@
 import React, {useEffect} from "react";
 import {stationsList, stationTitleIntoUkrainian} from "../../../InterpreterDictionaries/StationsDictionary.js";
 import dayjs from 'dayjs';
-import {parseTrainRaceId} from "./AdminTrainStopsEnums.js";
+import {parseTrainRaceId} from "../GeneralComponents/TrainRaceIdParser.js";
 
 const options = stationsList.map((station) => ({value: station.ukrainian, label: station.ukrainian}));
 function AdminTrainStopsCreateForm({train_race_id, fetchTrainStops, isCreateModalVisible, setIsCreateModalVisible})
