@@ -39,8 +39,13 @@ function AdminCarriageAssignmentsList({train_race_id}) {
                     + Скопіювати склад поїзда з прототипу
                 </Button>
             </div>
-           <AdminCarriageAssignmentsTable carriageAssignments={carriageAssignments} fetchCarriageAssignments={fetchCarriageAssignments} />
+           <AdminCarriageAssignmentsTable
+               train_race_id={train_race_id}
+               carriageAssignments={carriageAssignments}
+               fetchCarriageAssignments={fetchCarriageAssignments}
+           />
             <AdminCarriageAssignmentsCreateForm
+                train_race_id={train_race_id}
                 fetchCarriageAssignments={fetchCarriageAssignments}
                 isCreateModalVisible={isCreateModalVisible}
                 setIsCreateModalVisible={setIsCreateModalVisible}

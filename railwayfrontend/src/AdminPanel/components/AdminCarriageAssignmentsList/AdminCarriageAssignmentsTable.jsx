@@ -2,7 +2,7 @@
 import {Button, Form, Input, message, Popconfirm, Switch, Table} from "antd";
 import {CARRIAGE_TYPE_OPTIONS, CARRIAGE_QUALITY_CLASS_OPTIONS, CARRIAGE_MANUFACTURER_OPTIONS} from "./AdminCarriageAssignmentsEnums.js";
 
-function AdminCarriageAssignmentsTable({carriageAssignments, fetchCarriageAssignments})
+function AdminCarriageAssignmentsTable({train_race_id, carriageAssignments, fetchCarriageAssignments})
 {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateForm] = Form.useForm();
@@ -41,11 +41,11 @@ function AdminCarriageAssignmentsTable({carriageAssignments, fetchCarriageAssign
                 method: 'DELETE'
             });
             if (!response.ok) throw new Error("Помилка при видаленні");
+            messageApi.success(`Вагон  ${passenger_carriage_id} успішно видалено`);
             fetchCarriageAssignments();
         }
         catch (err) {
-            console.error(err);
-            message.error("Не вдалося видалити маршрут");
+            messageApi.error(err.message);
         }
     }
 
