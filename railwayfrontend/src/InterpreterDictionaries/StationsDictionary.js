@@ -33,7 +33,25 @@
     { ukrainian: "Галич", english: "Halych" },
     { ukrainian: "Микуличин", english: "Mykulychyn" },
     { ukrainian: "Татарів-Буковель", english: "Tatariv-Bukovel" },
-    { ukrainian: "Ворохта", english: "Vorokhta" }
+    { ukrainian: "Ворохта", english: "Vorokhta" },
+    { ukrainian: "Чернівці", english: "Chernivtsi" },
+    { ukrainian: "Заболотів", english: "Zabolotiv" },
+    { ukrainian: "Снятин", english: "Sniatyn" },
+    { ukrainian: "Коломия", english: "Kolomyia" },
+    { ukrainian: "Славута-1", english: "Slavuta-1" },
+    { ukrainian: "Полонне", english: "Polonne" },
+    { ukrainian: "Шепетівка", english: "Shepetivka" },
+    { ukrainian: "Слобідка", english: "Slobidka" },
+    { ukrainian: "Ізмаїл", english: "Izmail" },
+    { ukrainian: "Арциз", english: "Artsyz" },
+    { ukrainian: "Рахів", english: "Rakhiv" },
+    { ukrainian: "Печанівка", english: "Pechanivka" },
+    { ukrainian: "Бердичів", english: "Berdychiv" },
+    { ukrainian: "Чуднів-Волинський", english: "Chudniv-Volynskyi" },
+    { ukrainian: "Вінниця", english: "Vinnytsia" },
+    { ukrainian: "Ярошенка", english: "Yaroshenka" },
+    { ukrainian: "Калинівка-1", english: "Kalynivka-1" },
+    { ukrainian: "Казатин-1", english: "Koziatyn-1" },
 
 ];
 export function stationTitleIntoUkrainian(station_title)

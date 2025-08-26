@@ -1,6 +1,9 @@
-﻿import {Button, Form, Input, message, Popconfirm, Switch, Table} from "antd";
+﻿import {Button, Form, Input, message, Popconfirm, Select, Switch, Table} from "antd";
 import React, {useState} from "react";
 import {stationTitleIntoUkrainian} from "../../../InterpreterDictionaries/StationsDictionary.js";
+import {enumOptions, enumOptionsForStrings} from "../GeneralComponents/EnumOptionConvertion.jsx";
+import {RAILWAY_BRANCH_OPTIONS} from "../AdminTrainRoutesList/AdminTrainRoutesEnums.js";
+import {TRAIN_STOP_TYPE_OPTIONS} from "./AdminTrainStopsEnums.js";
 function formatDate(dateTime)
 {
     return dateTime.toLocaleString('uk-UA', {
@@ -102,19 +105,18 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
                 `${(new Date(record.departure_time) - new Date(record.arrival_time))/ 60000} хв` : "✖️"
         },
         {
-            title: "Тип зупинки",
-            dataIndex: "stop_type",
+            title: 'Тип зупинки',
+            dataIndex: 'stop_type',
             editable: true,
             render: (_, record) =>
                 isEdited(record) ? (
-                    <Form.Item name="factual_wi_fi" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
+                    <Form.Item name="stop_type" style={{ margin: 0 }}>
+                        <Select>{enumOptions(TRAIN_STOP_TYPE_OPTIONS)}</Select>
                     </Form.Item>
-                ) : record.factual_wi_fi ? (
-                    '✅'
                 ) : (
-                    '❌'
+                    TRAIN_STOP_TYPE_OPTIONS[record.stop_type]
                 ),
+            width: 50,
         },
         {
             title: "Відстань від початкової станції",

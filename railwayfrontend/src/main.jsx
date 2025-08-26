@@ -14,7 +14,6 @@ import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList/Adm
 import AdminCarriageAssignmentsList from './AdminPanel/components/AdminCarriageAssignmentsList/AdminCarriageAssignmentsList.jsx';
 import AdminTrainStopsList from "./AdminPanel/components/AdminTrainStopsList/AdminTrainStopsList.jsx";
 import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.jsx";
-import QRCodeGenerator from "./InterpreterDictionaries/test.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import SpeedometerComponent from "./components/TrainRaceInfo/SpeedometerComponent.jsx";
