@@ -60,7 +60,7 @@ function AdminTrainStopsCreateForm({train_race_id, fetchTrainStops, isCreateModa
             createForm.resetFields();
             fetchTrainStops();
         } catch (err) {
-            message.error(err.message);
+            messageApi.error(err.message);
         }
     };
     return (

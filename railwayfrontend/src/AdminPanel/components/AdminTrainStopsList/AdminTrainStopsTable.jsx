@@ -1,9 +1,9 @@
-﻿import {Button, Form, Input, message, Popconfirm, Select, Switch, Table} from "antd";
+﻿import {Button, DatePicker, Form, Input, message, Popconfirm, Select, Switch, Table} from "antd";
 import React, {useState} from "react";
 import {stationTitleIntoUkrainian} from "../../../InterpreterDictionaries/StationsDictionary.js";
-import {enumOptions, enumOptionsForStrings} from "../GeneralComponents/EnumOptionConvertion.jsx";
-import {RAILWAY_BRANCH_OPTIONS} from "../AdminTrainRoutesList/AdminTrainRoutesEnums.js";
+import {enumOptions} from "../GeneralComponents/EnumOptionConvertion.jsx";
 import {TRAIN_STOP_TYPE_OPTIONS} from "./AdminTrainStopsEnums.js";
+import dayjs from 'dayjs';
 function formatDate(dateTime)
 {
     return dateTime.toLocaleString('uk-UA', {
@@ -20,9 +20,22 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
     const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const isEdited = (record) => record.station_title === editingKey;
-
+    const toLocalTimeFormat = (time) => {
+        if(time == null)
+        {
+            return null;
+        }
+        else
+        {
+            return time.format("YYYY-MM-DDTHH:mm:ss")
+        }
+    };
     const update = (record) => {
-        updateForm.setFieldsValue({ ...record });
+        updateForm.setFieldsValue({
+            ...record,
+            arrival_time: record.arrival_time ? dayjs(record.arrival_time) : null,
+            departure_time: record.departure_time ? dayjs(record.departure_time) : null,
+        });
         setEditingKey(record.station_title);
     };
 
@@ -31,7 +44,12 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
     const saveUpdate = async (station_title, train_route_on_date_id) => {
         try {
             const row = await updateForm.validateFields();
-            const updatedTrainStop = { ...trainStops.find(train_stop => train_stop.station_title === station_title), ...row };
+            const updatedTrainStop = {
+                ...trainStops.find(train_stop => train_stop.station_title === station_title),
+                ...row,
+                arrival_time: toLocalTimeFormat(row.arrival_time),
+                departure_time: toLocalTimeFormat(row.departure_time)
+            };
             const response = await fetch(`https://localhost:7230/Admin-API/update-train-stop/${train_route_on_date_id}/${station_title}`, {
                 method: 'PUT',
                 headers: {
@@ -80,10 +98,16 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="arrival_time" style={{ margin: 0 }}>
-                        <Input />
+                        <DatePicker
+                            showTime={{ format: 'HH:mm' }}
+                            format="DD.MM.YYYY HH:mm"
+                            minuteStep={1}
+                            allowClear
+                            style={{ width: '100%' }}
+                        />
                     </Form.Item>
                 ) : (
-                    record.arrival_time ? formatDate(new Date(record.arrival_time)) : "✖️"
+                    record.arrival_time ? dayjs(record.arrival_time).format("DD.MM.YYYY HH:mm") : "✖️"
                 ),
 
         },
@@ -94,9 +118,15 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
             render: (_, record) =>
                 isEdited(record) ? (
                     <Form.Item name="departure_time" style={{ margin: 0 }}>
-                        <Input />
+                        <DatePicker
+                            showTime={{ format: 'HH:mm' }}
+                            format="DD.MM.YYYY HH:mm"
+                            minuteStep={1}
+                            allowClear
+                            style={{ width: '100%' }}
+                        />
                     </Form.Item>
-                ) : record.departure_time ? formatDate(new Date(record.departure_time)) : "✖️"
+                ) : record.departure_time ? dayjs(record.departure_time).format("DD.MM.YYYY HH:mm") : "✖️"
         },
         {
             title: 'Тривалість зупинки',
@@ -134,12 +164,7 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
             title: "Швидкість на перегоні",
             dataIndex: "speed_on_section",
             editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="speed_on_section" valuePropName="checked" style={{ margin: 0 }}>
-                        <Input />
-                    </Form.Item>
-                ) : record.speed_on_section
+            render: (_, record) => record.speed_on_section
         },
         {
             title: 'Дії',

@@ -194,6 +194,15 @@ function AdminCarriageAssignmentsTable({train_race_id, carriageAssignments, fetc
                 ),
         },
         {
+            title: "Інформація про пасажирів",
+            dataIndex: "ticket_bookings_for_passenger_carriage",
+            render: (_, record) => (
+                <Button onClick={() => {}} type="link">
+                    Квитки
+                </Button>
+            )
+        },
+        {
             title: 'Дії',
             dataIndex: 'actions',
             render: (_, record) =>
