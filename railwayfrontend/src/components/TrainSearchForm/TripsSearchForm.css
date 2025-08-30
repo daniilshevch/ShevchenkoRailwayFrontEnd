@@ -10,3 +10,55 @@
     max-width: 500px;
     width: 100%;
 }
+.trips-search-form .ant-select.ant-select-auto-complete,
+.ant-select-selector,
+.ant-select-selection-search-input {
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333 !important;
+}
+.trips-search-form .ant-form-item-label > label {
+    font-weight: 620;
+    font-size: 15px;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+.trips-search-form .ant-select-selection-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: #999;
+    font-family: 'Segoe UI', sans-serif;
+}
+.trips-search-form .ant-input,
+.trips-search-form .ant-select-selector {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #999;
+}
+
+
+.trips-search-form .ant-picker-input > input::placeholder {
+    font-weight: 500;
+    font-size: 15px;
+    color: #999;
+    letter-spacing: 0.3px;
+}
+
+.trips-search-form .ant-btn-primary {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.trips-search-form .ant-select-item-option-content {
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Segoe UI', sans-serif;
+}
+.trips-search-form .ant-select-selection-placeholder {
+    font-weight: 500;
+    font-size: 15px;
+    color: #999;
+}

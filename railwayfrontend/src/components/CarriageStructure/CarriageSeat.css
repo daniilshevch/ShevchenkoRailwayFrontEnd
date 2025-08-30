@@ -3,13 +3,12 @@
     height: 35px;
     margin: 1px;
     border-radius: 5px;
-    font-weight: bold;
+    font-weight: 700;
     border: none;
     cursor: pointer;
     transition: 0.2s;
 }
 
-/* Стан сидіння */
 .seat-free {
     color: white;
 }
@@ -20,20 +19,19 @@
     cursor: not-allowed;
 }
 
-/* Додатковий колір залежно від класу якості */
 .seat-A.seat-free {
-    background-color: red; /* синій */
+    background-color: red;
 }
 
 .seat-B.seat-free {
-    background-color: green; /* зелений */
+    background-color: green;
 }
 
 .seat-C.seat-free {
-    background-color: blue; /* жовтий */
+    background-color: blue;
 }
 
-/* Hover-ефекти (опціонально) */
+/* Hover-пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) */
 .seat-A.seat-free:hover {
     background-color: #3399ff;
 }

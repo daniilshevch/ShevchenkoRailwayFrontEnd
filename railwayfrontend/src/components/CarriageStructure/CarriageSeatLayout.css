@@ -1,7 +1,7 @@
 .carriage-seat-layout {
     display: flex;
-    flex-direction: row; /* –озташовуЇмо групи сид≥нь в один р€д */
-    flex-wrap: wrap; /* ўоб переносились вниз при нестач≥ м≥сц€ */
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0px;
     border-radius: 15px;
     background-color: white;

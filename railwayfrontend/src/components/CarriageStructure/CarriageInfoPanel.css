@@ -6,7 +6,7 @@
     align-items: flex-start;
     padding: 1px;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
     min-width: 220px;
     max-width: 280px;
     gap: 4px;
@@ -39,8 +39,8 @@
 }
 .features-row {
     display: flex;
-    gap: 2px; /* відстань між іконками */
-    flex-wrap: wrap; /* якщо не вміститься, перенесе нижче */
+    gap: 2px;
+    flex-wrap: wrap;
     margin: 4px 0;
 }
 .class-icon {

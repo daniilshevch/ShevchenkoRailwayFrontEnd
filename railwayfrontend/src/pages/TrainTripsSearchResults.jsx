@@ -2,7 +2,6 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
-import TripsSearchForm2 from '../components/TrainSearchForm/TripsSearchForm2.jsx';
 import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
 function TrainTripsSearchResults()
 {
@@ -34,7 +33,7 @@ function TrainTripsSearchResults()
     }, [start, end, departureDate]);
     return (
         <div className="train-trips-page">
-            <TripsSearchForm compact="true" initialStart={start} initialEnd={end} initialDate={departureDate} />
+            <TripsSearchForm compact="true" initialStartStation={start} initialEndStation={end} initialTripDate={departureDate} />
              <div className = "train-cards-container">
                 <h2>Знайдені поїзди</h2>
                 {trainTripsList.map(train => (
