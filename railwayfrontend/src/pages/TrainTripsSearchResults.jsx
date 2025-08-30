@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
 import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
+import CompactTripSearchForm from "../components/TrainSearchForm/CompactTripsSearchForm.jsx";
 function TrainTripsSearchResults()
 {
     const { start, end } = useParams();
@@ -33,8 +34,10 @@ function TrainTripsSearchResults()
     }, [start, end, departureDate]);
     return (
         <div className="train-trips-page">
-            <TripsSearchForm compact="true" initialStartStation={start} initialEndStation={end} initialTripDate={departureDate} />
-             <div className = "train-cards-container">
+            <div className = "search-form-wrapper">
+                <CompactTripSearchForm compact="true" initialStartStation={start} initialEndStation={end} initialTripDate={departureDate} />
+            </div>
+            <div className = "train-cards-container">
                 <h2>Знайдені поїзди</h2>
                 {trainTripsList.map(train => (
                 <TrainTripCard key={train.train_race_id} train={train} />

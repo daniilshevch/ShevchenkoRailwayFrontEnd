@@ -1,0 +1,18 @@
+﻿/* контейнер форми */
+.compact-trip-search-bar.ant-form-inline{ display:flex; flex-wrap:wrap; gap:8px; }
+.compact-trip-search-bar.ant-form-inline .ant-form-item{ margin-bottom:0; }
+
+/* самі айтеми */
+.compact-trip-search-bar .ant-form-item.cts-item{
+    flex: 1 1 150px;   /* базова ширина ~280px (під свою сітку підбери) */
+    min-width: 200px;  /* не роби 360px, інакше двоє не помістяться */
+}
+
+.compact-trip-search-bar.ant-form-inline{
+    display: flex;
+    flex-wrap: wrap;
+
+    /* горизонтальний і вертикальний відступи */
+    column-gap: 90px;   /* між елементами в рядку */
+    row-gap: 8px;       /* між рядками при переносі */
+}
