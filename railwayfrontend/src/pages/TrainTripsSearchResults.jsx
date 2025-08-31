@@ -2,17 +2,19 @@
 import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
-import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
 import CompactTripSearchForm from "../components/TrainSearchForm/CompactTripsSearchForm.jsx";
 import DateSlider from "../TrainTripsSearchResults/DateSlider.jsx";
 import dayjs from 'dayjs';
+
+
 function TrainTripsSearchResults()
 {
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
     const departureDate = searchParams.get("departure-date");
-    const [currentDate, setCurrentDate] = useState(departureDate);
+    const [initialDate, setInitialDate] = useState(departureDate);
     const [trainTripsList, setTrainTripsList] = useState([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchTrainTripsData = async () => {
@@ -35,29 +37,8 @@ function TrainTripsSearchResults()
         fetchTrainTripsData();
 
     }, [start, end, departureDate]);
-    const handleDateSliderChange = async (value) => {
-        const fetchTrainTripsDataForDate = async (date) => {
-            setLoading(true);
-            try
-            {
-                const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${date}`);
-                const data = await response.json();
-                setTrainTripsList(data);
-            }
-            catch (error)
-            {
-                console.error(error);
-            }
-            finally
-            {
-                setLoading(false);
-            }
-        }
-        fetchTrainTripsDataForDate(value);
-        setCurrentDate(value);
-        const url = new URL(window.location.href);
-        url.searchParams.set("departure-date", value);
-        window.history.replaceState(null, '', url);
+    const handleDateSliderChange = async (new_date) => {
+        navigate(`/search-trips/${start}/${end}?departure-date=${new_date}`);
     };
     return (
         <div className="train-trips-page">
@@ -66,12 +47,12 @@ function TrainTripsSearchResults()
                     compact="true"
                     initialStartStation={start}
                     initialEndStation={end}
-                    initialTripDate={currentDate}
+                    initialTripDate={departureDate}
                 />
             </div>
             <div className = "date-slider">
                 <DateSlider
-                    start={dayjs(departureDate)}
+                    start={dayjs(initialDate)}
                     onChange={handleDateSliderChange}
                 />
             </div>

@@ -13,7 +13,12 @@ import './CompactTripsSearchForm.css';
 
 const options = stationsList.map((station) => ({value: station.ukrainian, label: station.ukrainian}));
 
-const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = "", initialTripDate = ""}) =>
+const CompactTripSearchForm = (
+    {
+        initialStartStation = "",
+        initialEndStation = "",
+        initialTripDate = "",
+    }) =>
 {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -48,6 +53,7 @@ const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = ""
         const departureDate = dayjs(date).format('YYYY-MM-DD');
         const url = `/search-trips/${encodeURIComponent(startStation)}/${encodeURIComponent(endStation)}?departure-date=${departureDate}`;
         navigate(url);
+
     }
     return (
         <>
