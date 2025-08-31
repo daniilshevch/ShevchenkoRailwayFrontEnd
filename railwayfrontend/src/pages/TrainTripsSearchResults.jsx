@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useRef } from 'react';
+﻿import React, { useEffect, useState} from 'react';
 import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
@@ -12,7 +12,7 @@ function TrainTripsSearchResults()
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
     const departureDate = searchParams.get("departure-date");
-    const [initialDate, setInitialDate] = useState(departureDate);
+    const [initialDate] = useState(departureDate);
     const [trainTripsList, setTrainTripsList] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -53,6 +53,7 @@ function TrainTripsSearchResults()
             <div className = "date-slider">
                 <DateSlider
                     start={dayjs(initialDate)}
+                    value={departureDate}
                     onChange={handleDateSliderChange}
                 />
             </div>

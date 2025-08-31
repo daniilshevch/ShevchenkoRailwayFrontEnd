@@ -1,5 +1,5 @@
 ﻿import dayjs from 'dayjs';
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Segmented, Button, Space } from "antd";
 import {DoubleLeftOutlined, DoubleRightOutlined} from "@ant-design/icons";
 import "./DateSlider.css";
@@ -17,6 +17,20 @@ function DateSlider({start = dayjs(), value, onChange})
     const [offset, setOffset] = useState(0);
     const [innerValue, setInnerValue] = useState(start.format("YYYY-MM-DD"));
     const center = start.add(offset, "day");
+
+    const anchorStart = useRef(dayjs.isDayjs(start) ? start : dayjs(start));
+    useEffect(() => {
+        if (value == null) return;
+        const v = dayjs(value).startOf('day');
+        if (!v.isValid()) return;
+
+        setOffset(prev => {
+            const currentCenter = anchorStart.current.add(prev, "day");
+            const delta = v.diff(currentCenter, "day");
+            if (Math.abs(delta) <= 2) return prev;
+            return prev + delta;
+        });
+    }, [value]);
     const options = [];
     for(let current_offset = -2; current_offset <= 2; current_offset++)
     {
