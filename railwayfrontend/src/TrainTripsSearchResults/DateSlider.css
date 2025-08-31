@@ -1,0 +1,71 @@
+﻿/* Контейнер стрічки */
+.date-strip {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2px 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Кнопки навігації (◀ ▶) */
+.date-strip .ant-btn {
+    border-radius: 999px;
+    width: 32px;
+    height: 16px;
+    line-height: 16px;
+}
+
+
+
+/* Сам Segmented */
+.date-strip__segmented {
+    /* змінні для зручної підгонки відступів/ширини “пігулок” */
+    --pill-pad-v: 0px;
+    --pill-pad-h: 0px;
+    --pill-minw: 100px;
+}
+
+
+/* “Пігулка” з двома рядками */
+.date_pill {
+    user-select: none;
+    min-width: var(--pill-minw);
+    text-align: center;
+    border-radius: 10px;
+}
+/* Верхній рядок — дата */
+.date_pill_day_number {
+    font-weight: 700;
+    font-size: 16px;
+    color: #222;
+    position: relative;
+}
+.date_pill_weekday {
+    margin-top: -10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+.date-strip__segmented .ant-segmented-thumb {
+    background: #e6f7ff !important;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(22,119,255,.15);
+    transition: all .25s ease;
+}
+.date-strip__segmented .ant-segmented-item-selected
+{
+    background: #e6f7ff !important;
+}
+.date-strip__segmented .ant-segmented-item-selected .date_pill_day_number {
+    color: #1677ff; /* Ant primary */
+}
+.date-strip__segmented .ant-segmented-item-selected .date_pill_weekday {
+    color: #1677ff;
+    opacity: .9;    /* трохи легше */
+}
+
+
+

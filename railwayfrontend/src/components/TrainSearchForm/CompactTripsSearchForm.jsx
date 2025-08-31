@@ -50,7 +50,7 @@ const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = ""
                     form={form}
                     layout="inline"
                     onFinish={onFinish}
-                    className="compact-trip-search-bar"
+                    className="compact-trips-search-form"
                     initialValues={{
                         startStationUkrainian: stationsList.find(s => s.english === initialStartStation)?.ukrainian || '',
                         endStationUkrainian:   stationsList.find(s => s.english === initialEndStation)?.ukrainian   || '',
@@ -120,7 +120,7 @@ const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = ""
                             onOpenChange={(o) => setDateOpen(o)}
                             placeholder="Дата"
                             format="dddd, DD MMMM YYYY"
-                            style={{ width: 180 }}
+                            style={{ width: 220 }}
                         />
                     </Form.Item>
 

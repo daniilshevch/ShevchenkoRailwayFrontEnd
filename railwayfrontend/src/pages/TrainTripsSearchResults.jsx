@@ -1,15 +1,17 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
 import TripsSearchForm from "../components/TrainSearchForm/TripsSearchForm.jsx";
 import CompactTripSearchForm from "../components/TrainSearchForm/CompactTripsSearchForm.jsx";
+import DateSlider from "../TrainTripsSearchResults/DateSlider.jsx";
+import dayjs from 'dayjs';
 function TrainTripsSearchResults()
 {
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
     const departureDate = searchParams.get("departure-date");
-
+    const navigate = useNavigate();
     const [trainTripsList, setTrainTripsList] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -32,16 +34,39 @@ function TrainTripsSearchResults()
         fetchTrainTripsData();
 
     }, [start, end, departureDate]);
+    const handleDateSliderChange = async (value) => {
+        try
+        {
+            const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${value}`);
+            const data = await response.json();
+            setTrainTripsList(data);
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+        finally
+        {
+            setLoading(false);
+        }
+
+    };
     return (
         <div className="train-trips-page">
             <div className = "search-form-wrapper">
                 <CompactTripSearchForm compact="true" initialStartStation={start} initialEndStation={end} initialTripDate={departureDate} />
             </div>
+            <div className = "date-slider">
+                <DateSlider
+                    start={dayjs(departureDate)}
+                    onChange={handleDateSliderChange}
+                />
+            </div>
             <div className = "train-cards-container">
                 <h2>Знайдені поїзди</h2>
                 {trainTripsList.map(train => (
-                <TrainTripCard key={train.train_race_id} train={train} />
-            ))}
+                    <TrainTripCard key={train.train_race_id} train={train} />
+                ))}
             </div>
         </div>
     );

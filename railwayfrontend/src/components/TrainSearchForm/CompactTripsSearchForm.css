@@ -1,18 +1,133 @@
 ﻿/* контейнер форми */
-.compact-trip-search-bar.ant-form-inline{ display:flex; flex-wrap:wrap; gap:8px; }
-.compact-trip-search-bar.ant-form-inline .ant-form-item{ margin-bottom:0; }
+.compact-trips-search-form.ant-form-inline{ display:flex; flex-wrap:wrap; gap:8px; }
+.compact-trips-search-form.ant-form-inline .ant-form-item{ margin-bottom:0; }
 
 /* самі айтеми */
-.compact-trip-search-bar .ant-form-item.cts-item{
+.compact-trips-search-form .ant-form-item.cts-item{
     flex: 1 1 150px;   /* базова ширина ~280px (під свою сітку підбери) */
     min-width: 200px;  /* не роби 360px, інакше двоє не помістяться */
 }
 
-.compact-trip-search-bar.ant-form-inline{
+.compact-trips-search-form.ant-form-inline{
     display: flex;
     flex-wrap: wrap;
 
     /* горизонтальний і вертикальний відступи */
     column-gap: 90px;   /* між елементами в рядку */
     row-gap: 8px;       /* між рядками при переносі */
+}
+
+
+
+
+.compact-trips-search-form .ant-select.ant-select-auto-complete,
+.ant-select-selector,
+.ant-select-selection-search-input {
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333 !important;
+}
+.compact-trips-search-form .ant-form-item-label > label {
+    font-weight: 620;
+    font-size: 15px;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+.compact-trips-search-form .ant-select-selection-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: #999;
+    font-family: 'Segoe UI', sans-serif;
+}
+.compact-trips-search-form .ant-input,
+.compact-trips-search-form .ant-select-selector {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #999;
+}
+.compact-trips-search-form .ant-picker-input > input::placeholder {
+    font-weight: 500;
+    font-size: 15px;
+    color: #999;
+    letter-spacing: 0.3px;
+}
+.compact-trips-search-form .ant-btn-primary {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.compact-trips-search-form .ant-select-item-option-content {
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Segoe UI', sans-serif;
+}
+.compact-trips-search-form .ant-select-selection-placeholder {
+    font-weight: 500;
+    font-size: 15px;
+    color: #999;
+}
+.trips-autocomplete-dropdown {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 5px 0;
+}
+.trips-autocomplete-dropdown .ant-select-item-option {
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-family: 'Segoe UI', sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.trips-autocomplete-dropdown .ant-select-item-option-active {
+    background-color: #e6f7ff !important;
+    color: #1890ff !important;
+    font-weight: 600;
+}
+.trips-autocomplete-dropdown .ant-select-item-option-selected {
+    background-color: #f0f8ff !important;
+    color: #096dd9 !important;
+    font-weight: 600;
+}
+
+.stations-container {
+    position: relative;
+}
+
+.stations-container .swap-button {
+    position: absolute;
+    right: 0px;
+    top: 60%;
+    transform: translateY(-50%);
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    transition: all .2s ease;
+    z-index: 5;
+}
+.swap-button .anticon {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+
+.stations-container .swap-button:hover {
+    border-color: #1677ff;
+    color: #1677ff;
+    box-shadow: 0 2px 8px rgba(22,119,255,0.15);
+}
+
+.compact-trips-search-form .ant-picker-input > input {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+}
+
+.compact-trips-search-form .ant-picker-input > input::placeholder {
+    font-weight: 500;
+    font-size: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #999;
 }
