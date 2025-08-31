@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import TrainTripCard from '../components/TrainRaceInfo/TrainTripCard';
 import './TrainTripsSearchResults.css'
@@ -11,11 +11,12 @@ function TrainTripsSearchResults()
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
     const departureDate = searchParams.get("departure-date");
-    const navigate = useNavigate();
+    const [currentDate, setCurrentDate] = useState(departureDate);
     const [trainTripsList, setTrainTripsList] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchTrainTripsData = async () => {
+            setLoading(true);
             try
             {
                 const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${departureDate}`);
@@ -35,26 +36,38 @@ function TrainTripsSearchResults()
 
     }, [start, end, departureDate]);
     const handleDateSliderChange = async (value) => {
-        try
-        {
-            const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${value}`);
-            const data = await response.json();
-            setTrainTripsList(data);
+        const fetchTrainTripsDataForDate = async (date) => {
+            setLoading(true);
+            try
+            {
+                const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${date}`);
+                const data = await response.json();
+                setTrainTripsList(data);
+            }
+            catch (error)
+            {
+                console.error(error);
+            }
+            finally
+            {
+                setLoading(false);
+            }
         }
-        catch (error)
-        {
-            console.error(error);
-        }
-        finally
-        {
-            setLoading(false);
-        }
-
+        fetchTrainTripsDataForDate(value);
+        setCurrentDate(value);
+        const url = new URL(window.location.href);
+        url.searchParams.set("departure-date", value);
+        window.history.replaceState(null, '', url);
     };
     return (
         <div className="train-trips-page">
             <div className = "search-form-wrapper">
-                <CompactTripSearchForm compact="true" initialStartStation={start} initialEndStation={end} initialTripDate={departureDate} />
+                <CompactTripSearchForm
+                    compact="true"
+                    initialStartStation={start}
+                    initialEndStation={end}
+                    initialTripDate={currentDate}
+                />
             </div>
             <div className = "date-slider">
                 <DateSlider

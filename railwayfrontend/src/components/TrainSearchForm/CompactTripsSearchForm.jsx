@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {Form, AutoComplete, DatePicker, Button, message} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -18,6 +18,13 @@ const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = ""
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
+    useEffect(() => {
+        form.setFieldsValue({
+            startStationUkrainian: stationsList.find(s => s.english === initialStartStation)?.ukrainian || '',
+            endStationUkrainian:   stationsList.find(s => s.english === initialEndStation)?.ukrainian   || '',
+            date: initialTripDate ? dayjs(initialTripDate) : null
+        });
+    }, [initialStartStation, initialEndStation, initialTripDate, form]);
 
     const startRef = useRef(null);
     const endRef = useRef(null);
@@ -120,7 +127,7 @@ const CompactTripSearchForm = ({initialStartStation = "", initialEndStation = ""
                             onOpenChange={(o) => setDateOpen(o)}
                             placeholder="Дата"
                             format="dddd, DD MMMM YYYY"
-                            style={{ width: 220 }}
+                            style={{ width: 240 }}
                         />
                     </Form.Item>
 
