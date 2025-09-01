@@ -1,14 +1,16 @@
 ﻿import React from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import "./RegisterPage.css"
+import "./RegisterPage.css";
+import {SERVER_URL} from "../utils/ConnectionConfiguration.js";
+
 const LoginPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const handleRegister = async () => {
         try {
             const values = await form.validateFields();
-            const response = await fetch('https://localhost:7230/Client-API/register', {
+            const response = await fetch(`${SERVER_URL}/Client-API/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,10 +5,12 @@ import './TrainTripsSearchResults.css'
 import CompactTripSearchForm from "../components/TrainSearchForm/CompactTripsSearchForm.jsx";
 import DateSlider from "../TrainTripsSearchResults/DateSlider.jsx";
 import dayjs from 'dayjs';
-
+import {SERVER_URL} from "../utils/ConnectionConfiguration.js";
+import {message} from "antd";
 
 function TrainTripsSearchResults()
 {
+    const [messageApi, contextHolder] = message.useMessage();
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
     const departureDate = searchParams.get("departure-date");
@@ -21,7 +23,7 @@ function TrainTripsSearchResults()
             setLoading(true);
             try
             {
-                const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${departureDate}`);
+                const response = await fetch(`${SERVER_URL}/Client-API/TrainSearch/Search-Train-Routes-Between-Stations-With-Bookings/${start}/${end}?departure_date=${departureDate}`);
                 const data = await response.json();
                 setTrainTripsList(data);
             }
@@ -41,29 +43,37 @@ function TrainTripsSearchResults()
         navigate(`/search-trips/${start}/${end}?departure-date=${new_date}`);
     };
     return (
-        <div className="train-trips-page">
-            <div className = "search-form-wrapper">
-                <CompactTripSearchForm
-                    compact="true"
-                    initialStartStation={start}
-                    initialEndStation={end}
-                    initialTripDate={departureDate}
-                />
+        <>
+            {contextHolder}
+            <div className="train-trips-page">
+                <div className = "search-form-wrapper">
+                    <CompactTripSearchForm
+                        compact="true"
+                        initialStartStation={start}
+                        initialEndStation={end}
+                        initialTripDate={departureDate}
+                    />
+                </div>
+                <div className = "date-slider">
+                    <DateSlider
+                        start={dayjs(initialDate)}
+                        value={departureDate}
+                        onChange={handleDateSliderChange}
+                    />
+                </div>
+                <div className = "train-cards-container">
+                    <h2 className="train-cards-container-header">Знайдені поїзди</h2>
+                    {trainTripsList.length > 0 ? trainTripsList.map(train => (
+                        <TrainTripCard key={train.train_race_id} train={train} />
+                    )): (
+                        <>
+                            <h3 className="no-available-trains-info">Не вдалося знайти доступні місця між заданими станціями</h3>
+                            <h4 className="no-available-trains-details"><strong>Можливі причини</strong>: поїзди між станціями не курсують, продаж квитків ще не відкрито або всі місця в наявних потягах розкуплені</h4>
+                        </>
+                    )}
+                </div>
             </div>
-            <div className = "date-slider">
-                <DateSlider
-                    start={dayjs(initialDate)}
-                    value={departureDate}
-                    onChange={handleDateSliderChange}
-                />
-            </div>
-            <div className = "train-cards-container">
-                <h2>Знайдені поїзди</h2>
-                {trainTripsList.map(train => (
-                    <TrainTripCard key={train.train_race_id} train={train} />
-                ))}
-            </div>
-        </div>
+        </>
     );
 }
 export default TrainTripsSearchResults;

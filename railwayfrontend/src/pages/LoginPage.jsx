@@ -2,13 +2,14 @@
 import { Form, Input, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import "./LoginPage.css"
+import {SERVER_URL} from "../utils/ConnectionConfiguration.js";
 const LoginPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const handleLogin = async () => {
         try {
             const values = await form.validateFields();
-            const response = await fetch('https://localhost:7230/Client-API/login', {
+            const response = await fetch(`${SERVER_URL}/Client-API/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
