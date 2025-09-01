@@ -2,16 +2,16 @@ import { StrictMode } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import HomePage from './pages/HomePage';
-import GeneralLayout from './layouts/GeneralLayout';
-import TrainTripsSearchResults from './pages/TrainTripsSearchResults';
-import CarriageListPage from './pages/CarriageListPage';
-import AdminTrainRoutesList from './AdminPanel/components/AdminTrainRoutesList/AdminTrainRoutesList.jsx';
-import AdminTrainRacesList from './AdminPanel/components/AdminTrainRacesList/AdminTrainRacesList.jsx';
-import AdminTrainRaceInfoPage from "./AdminPanel/pages/AdminTrainRaceInfoPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
-import DateSlider from "./TrainTripsSearchResults/DateSlider.jsx";
+import HomePage from './HomePage/pages/HomePage.jsx';
+import GeneralLayout from './GeneralWebsiteElements/GeneralLayout/GeneralLayout.jsx';
+import TrainTripsSearchResultsPage from './TrainTripsSearchResults/TrainRacesInfoSection/pages/TrainTripsSearchResultsPage.jsx';
+import CarriageListPage from './TrainTripsSearchResults/CarriageAssignmentsInfoSection/pages/CarriageListPage/CarriageListPage.jsx';
+import AdminTrainRoutesList from './AdminPanel/AdminTrainRoutesManagement/components/AdminTrainRoutesList.jsx';
+import AdminTrainRacesList from './AdminPanel/AdminTrainRacesManagement/components/AdminTrainRacesList.jsx';
+import AdminTrainRaceInfoPage from "./AdminPanel/AdminTrainRacesManagement/pages/AdminTrainRaceInfoPage.jsx";
+import LoginPage from "./RegistrationAndLogin/pages/LoginPage/LoginPage.jsx";
+import RegisterPage from "./RegistrationAndLogin/pages/RegisterPage/RegisterPage.jsx";
+import DateSlider from "./TrainTripsSearchResults/TrainRacesInfoSection/components/DateSlider/DateSlider.jsx";
 
 
       
@@ -31,7 +31,7 @@ createRoot(document.getElementById('root')).render(
                 <Route element = {<GeneralLayout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/:train-race-id/carriages" element={<CarriageListPage />} />
-                    <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResults />} />
+                    <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
