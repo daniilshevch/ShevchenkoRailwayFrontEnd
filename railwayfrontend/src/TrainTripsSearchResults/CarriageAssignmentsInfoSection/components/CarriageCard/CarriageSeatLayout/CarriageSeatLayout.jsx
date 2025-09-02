@@ -1,6 +1,7 @@
 import React from 'react';
 import CarriageSeatGroup from '../CarriageSeatGroup/CarriageSeatGroup.jsx';
 import "./CarriageSeatLayout.css";
+import {MdWc} from 'react-icons/md';
 function CarriageSeatLayout({ seats, type, qualityClass, onSeatClick })
 {
     const groupedSeats = [];
@@ -30,6 +31,9 @@ function CarriageSeatLayout({ seats, type, qualityClass, onSeatClick })
     }
     return (
         <div className="carriage-seat-layout">
+            <div className = "left-wc-block">
+                <MdWc className = "wc-icon"></MdWc>
+            </div>
             {groupedSeats.map((group, index) => (
                 <CarriageSeatGroup
                     key={index}
@@ -38,8 +42,10 @@ function CarriageSeatLayout({ seats, type, qualityClass, onSeatClick })
                     qualityClass={qualityClass}
                     onSeatClick={onSeatClick}
                 />
-
             ))}
+            <div className = "right-wc-block">
+                <MdWc className = "wc-icon"></MdWc>
+            </div>
         </div>
     );
 }

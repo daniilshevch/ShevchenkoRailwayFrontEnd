@@ -85,8 +85,8 @@ const CompactTripSearchForm = (
                             filterOption={(input, option) =>
                                 option?.value?.toLowerCase().includes(input.trim().toLowerCase())
                             }
-                            onSelect={() => endRef.current?.focus()}
-                            onKeyDown={(e) => { if (e.key === 'Enter') endRef.current?.focus(); }}
+                            // onSelect={() => endRef.current?.focus()}
+                            // onKeyDown={(e) => { if (e.key === 'Enter') endRef.current?.focus(); }}
                         />
                     </Form.Item>
 
@@ -115,10 +115,10 @@ const CompactTripSearchForm = (
                             filterOption={(input, option) =>
                                 option?.value?.toLowerCase().includes(input.trim().toLowerCase())
                             }
-                            onSelect={() => { setDateOpen(true); dateRef.current?.focus(); }}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') { setDateOpen(true); dateRef.current?.focus(); }
-                            }}
+                            // onSelect={() => { setDateOpen(true); dateRef.current?.focus(); }}
+                            // onKeyDown={(e) => {
+                            //     if (e.key === 'Enter') { setDateOpen(true); dateRef.current?.focus(); }
+                            // }}
                         />
                     </Form.Item>
 

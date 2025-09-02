@@ -1,5 +1,4 @@
 ﻿.carriage-list-page {
-    background-image: url('/public/background_images/1.jpeg'); /* або шлях через import */
     background-size: cover; /* 🔹 масштабує без витягування */
     background-repeat: no-repeat;
     background-position: center center; /* 🔹 центрує зображення */

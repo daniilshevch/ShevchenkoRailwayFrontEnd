@@ -6,7 +6,9 @@ import CompactTripSearchForm from "../components/CompactTripsSearchForm/CompactT
 import DateSlider from "../components/DateSlider/DateSlider.jsx";
 import dayjs from 'dayjs';
 import {SERVER_URL} from "../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
-import {message} from "antd";
+import {message, Spin} from "antd";
+import {SyncOutlined} from "@ant-design/icons"
+const circle = <SyncOutlined spin style={{ fontSize: 40 }} />;
 
 function TrainTripsSearchResultsPage()
 {
@@ -42,6 +44,28 @@ function TrainTripsSearchResultsPage()
     const handleDateSliderChange = async (new_date) => {
         navigate(`/search-trips/${start}/${end}?departure-date=${new_date}`);
     };
+    const displayTrainTripsList = () => {
+        if(trainTripsList.length > 0)
+        {
+            return trainTripsList.map(train => (
+                <>
+                    <TrainTripCard key={train.train_race_id} train={train} />
+                </>
+            ));
+        }
+        else if(trainTripsList.length === 0 && loading === true)
+        {
+            return <Spin spinning={loading} indicator={circle}/>;
+        }
+        else
+        {
+            return (
+                <>
+                    <h3 className="no-available-trains-info">Не вдалося знайти доступні місця між заданими станціями</h3>
+                    <h4 className="no-available-trains-details"><strong>Можливі причини</strong>: поїзди між станціями не курсують, продаж квитків ще не відкрито або всі місця в наявних потягах розкуплені</h4>
+                </>);
+        }
+    };
     return (
         <>
             {contextHolder}
@@ -63,14 +87,9 @@ function TrainTripsSearchResultsPage()
                 </div>
                 <div className = "train-cards-container">
                     <h2 className="train-cards-container-header">Знайдені поїзди</h2>
-                    {trainTripsList.length > 0 ? trainTripsList.map(train => (
-                        <TrainTripCard key={train.train_race_id} train={train} />
-                    )): (
-                        <>
-                            <h3 className="no-available-trains-info">Не вдалося знайти доступні місця між заданими станціями</h3>
-                            <h4 className="no-available-trains-details"><strong>Можливі причини</strong>: поїзди між станціями не курсують, продаж квитків ще не відкрито або всі місця в наявних потягах розкуплені</h4>
-                        </>
-                    )}
+                    {
+                        displayTrainTripsList()
+                    }
                 </div>
             </div>
         </>

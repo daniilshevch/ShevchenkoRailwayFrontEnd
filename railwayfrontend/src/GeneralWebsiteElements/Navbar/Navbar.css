@@ -28,8 +28,8 @@
     border: none;
     padding: 0;
     margin: 0 15px;
-    font-weight: 1000;
-    color: black;
+    font-weight: 750;
+    color: #444444;
     font-size: 16px;
     z-index: 1000;
     text-decoration: none;
@@ -38,8 +38,7 @@
 }
 
 .nav-button:hover {
-    background-color: darkgoldenrod;
-    text-decoration: underline;
+    color: #1677ff;
 }
 .navbar ul{
     list-style: none;

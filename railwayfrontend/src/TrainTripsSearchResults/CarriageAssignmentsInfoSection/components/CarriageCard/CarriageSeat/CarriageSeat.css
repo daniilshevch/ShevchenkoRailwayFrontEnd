@@ -33,15 +33,15 @@
 
 /* Hover-������ (�����������) */
 .seat-A.seat-free:hover {
-    background-color: #3399ff;
+    background-color: deeppink;
 }
 
 .seat-B.seat-free:hover {
-    background-color: #45c162;
+    background-color: lawngreen;
 }
 
 .seat-C.seat-free:hover {
-    background-color: #ffcf40;
+    background-color: deepskyblue;
 }
 .seat-type-SV.seat-free {
     width: 35px;
