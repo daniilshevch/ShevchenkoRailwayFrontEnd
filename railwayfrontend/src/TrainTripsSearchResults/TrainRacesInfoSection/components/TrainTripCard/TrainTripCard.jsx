@@ -198,7 +198,13 @@ function TrainTripCard({ train })
             <div className="wagon-buttons">
                 {train.grouped_carriage_statistics_list &&
                     Object.entries(train.grouped_carriage_statistics_list).map(([type, classStats]) => (
-                        <CarriageTypeButton key={type} trainRaceId={train.train_race_id} type={type} classStats={classStats}
+                        <CarriageTypeButton
+                            key={type}
+                            trainRaceId={train.train_race_id}
+                            startStation={train.trip_starting_station_title}
+                            endStation={train.trip_ending_station_title}
+                            type={type}
+                            classStats={classStats}
                             generalTrainRaceInfo={train} />
                     ))}
             </div>

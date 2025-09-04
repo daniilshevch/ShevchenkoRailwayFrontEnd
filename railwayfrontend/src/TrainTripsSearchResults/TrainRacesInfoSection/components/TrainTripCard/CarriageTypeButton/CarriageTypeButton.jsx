@@ -8,13 +8,13 @@ const CARRIAGE_TYPES = {
     "SV": "СВ",
     "Sitting": "Сидячий"
 };
-function CarriageTypeButton({trainRaceId, type, classStats, generalTrainRaceInfo }) {
+function CarriageTypeButton({trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo }) {
 
     const navigate = useNavigate();
     const handleCarriageTypeClick = (carriageType, trainRaceId) =>
     {
         localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
-        navigate(`/${trainRaceId}/carriages?type=${carriageType}`);
+        navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}`);
     }
     return (
         <div className="carriage-type-wrapper">
@@ -34,6 +34,8 @@ function CarriageTypeButton({trainRaceId, type, classStats, generalTrainRaceInfo
                         <CarriageQualityClassButton
                             key={qualityClass}
                             trainRaceId={trainRaceId}
+                            startStation={startStation}
+                            endStation={endStation}
                             carriageType = {type}
                             qualityClass={qualityClass}
                             data={data}

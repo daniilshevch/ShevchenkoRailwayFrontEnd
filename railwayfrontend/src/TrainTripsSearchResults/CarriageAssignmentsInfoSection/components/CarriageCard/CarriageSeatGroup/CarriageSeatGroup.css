@@ -4,10 +4,9 @@
     gap: 10px;
     padding: 10px;
     background-color: #f5f5f5;
-    border: 1px dashed #999;
-    border-radius: 10px;
+    border: 1px solid #999;
     align-items: flex-start;
-    margin: 10px;
+    margin: 0;
     position: relative;
     width: fit-content;
 }
@@ -19,7 +18,7 @@
 .platskart-row-side {
     display: flex;
     gap: 6px;
-    margin-top: 20px; 
+    margin-top: 30px;
 }
 
 

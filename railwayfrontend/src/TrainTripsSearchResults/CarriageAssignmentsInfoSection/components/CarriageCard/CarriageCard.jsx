@@ -41,9 +41,11 @@ function CarriageCard({ carriageData, onSeatClick }) {
             <div className="carriage-seats-side">
                 <CarriageSeatLayout
                     seats={places_availability_list}
-                    type={carriage_type}
-                    qualityClass={carriage_quality_class}
+                    carriageType={carriage_type}
+                    carriageQualityClass={carriage_quality_class}
+                    carriageNumber={carriage_position_in_squad}
                     onSeatClick={onSeatClick}
+                    price={ticket_price}
                  />
             </div>
         </div>

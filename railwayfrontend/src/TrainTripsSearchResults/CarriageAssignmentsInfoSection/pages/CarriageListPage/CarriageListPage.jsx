@@ -1,11 +1,64 @@
-﻿import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+﻿import React, {useEffect, useReducer, useState} from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import CarriageListLayout from '../../components/CarriageListLayout/CarriageListLayout.jsx';
+import {Button, Divider, Space, Drawer, Typography} from 'antd';
 import './CarriageListPage.css';
+import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
+import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer.jsx";
 function CarriageListPage()
 {
     const [searchParams] = useSearchParams();
     const [carriages, setCarriages] = useState(null);
+    const {train_race_id} = useParams();
+
+    const [cartState, cartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
+
+    useEffect(() => {
+        try
+        {
+            const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+            if (potentialTicketsCart)
+            {
+                cartDispatch({type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: JSON.parse(potentialTicketsCart)});
+            }
+        }
+        catch(error)
+        {
+            console.error(error);
+        }
+    }, []);
+    useEffect(() => {
+        try
+        {
+            localStorage.setItem("potentialTicketsCart", JSON.stringify({
+                potentialTicketsList: cartState.potentialTicketsList}));
+        }
+        catch(error)
+        {
+            console.error(error);
+        }
+    }, [cartState.potentialTicketsList]);
+
+    const onSeatClickAction = (carriageNumber, seatNumber, price) => {
+        const potentialTicket = {
+            train_race_id: train_race_id,
+            carriage_position_in_squad: carriageNumber,
+            place_in_carriage: seatNumber,
+            price: price ?? 0
+        };
+        console.log(carriageNumber);
+        console.log(seatNumber);
+        console.log(price);
+        cartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
+    }
+    const removePotentialTicketFromCart = (potentialTicket) =>
+    {
+        cartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+    }
+
+
+
+
     useEffect(() => {
         const typeParams = searchParams.getAll("type");
         const qualityParams = searchParams.getAll("quality");
@@ -62,10 +115,16 @@ function CarriageListPage()
     return (
         <div className="carriage-list-page">
             {carriages ? (
-                <CarriageListLayout
-                    carriages={carriages}
-                    onSeatClick={(seat) => console.log("Клік по місцю:", seat)}
-                />
+                <>
+                    <CarriageListLayout
+                        carriages={carriages}
+                        onSeatClick={onSeatClickAction}
+                    />
+                    <UserPotentialTicketCartDrawer
+                        cartState={cartState}
+                        removePotentialTicketFromCart={removePotentialTicketFromCart}
+                    />
+                </>
             ) : (
             <p>Завантаження...</p>
         )}

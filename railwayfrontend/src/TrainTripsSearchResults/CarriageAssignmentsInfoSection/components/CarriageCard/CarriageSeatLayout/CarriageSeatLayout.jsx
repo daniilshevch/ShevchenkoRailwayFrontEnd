@@ -2,48 +2,72 @@ import React from 'react';
 import CarriageSeatGroup from '../CarriageSeatGroup/CarriageSeatGroup.jsx';
 import "./CarriageSeatLayout.css";
 import {MdWc} from 'react-icons/md';
-function CarriageSeatLayout({ seats, type, qualityClass, onSeatClick })
+function getWcComponentClassName(side, carriageType, seatsAmount)
+{
+    if(seatsAmount === 18 || seatsAmount === 20 || seatsAmount === 36 || seatsAmount === 40)
+    {
+        return `${side}-wc-block-${carriageType}-${seatsAmount}`;
+    }
+    else
+    {
+        return `${side}-wc-block`;
+    }
+}
+function getCarriageSeatLayoutClassName(carriageType, seatsAmount)
+{
+    if(seatsAmount === 18 || seatsAmount === 20 || seatsAmount === 36 || seatsAmount === 40)
+    {
+        return `carriage-seat-layout-${carriageType}-${seatsAmount}`;
+    }
+    else
+    {
+        return `carriage-seat-layout`;
+    }
+}
+function CarriageSeatLayout({ seats, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price })
 {
     const groupedSeats = [];
 
-    if (type.toLowerCase() === "platskart")
+    if (carriageType.toLowerCase() === "platskart")
     {
-        const seatBlock = [];
-        for (let i = 0; i < 36; i += 4) {
-            seatBlock.push(...seats.slice(i, i + 4));
-        }
-        for (let i = 53; i > 36; i -= 2)
+        for(let i = 0; i < 9; i++)
         {
-            seatBlock.push(...seats.slice(i, i + 2));
+            const seatBlock = [];
+            seatBlock.push(...seats.slice(4 * i, 4 * i + 4));
+            seatBlock.push(seats[53 - i * 2]);
+            seatBlock.push(seats[53 - i * 2 - 1]);
+            groupedSeats.push(seatBlock);
         }
     }
-    else if (type.toLowerCase() === "coupe")
+    else if (carriageType.toLowerCase() === "coupe")
     {
         for (let i = 0; i < seats.length; i += 4)
         {
             groupedSeats.push(seats.slice(i, i + 4));
         }
     }
-    else if (type.toLowerCase() === "sv") {
+    else if (carriageType.toLowerCase() === "sv") {
         for (let i = 0; i < seats.length; i += 2) {
             groupedSeats.push(seats.slice(i, i + 2));
         }
     }
     return (
-        <div className="carriage-seat-layout">
-            <div className = "left-wc-block">
+        <div className={getCarriageSeatLayoutClassName(carriageType.toLowerCase(), seats.length)}>
+            <div className = {getWcComponentClassName("left", carriageType.toLowerCase(),  seats.length)}>
                 <MdWc className = "wc-icon"></MdWc>
             </div>
-            {groupedSeats.map((group, index) => (
+            {groupedSeats.map((groupOfSeats, index) => (
                 <CarriageSeatGroup
                     key={index}
-                    type={type}
-                    seats={group}
-                    qualityClass={qualityClass}
+                    carriageType={carriageType}
+                    seatsInGroup={groupOfSeats}
+                    carriageQualityClass={carriageQualityClass}
+                    carriageNumber={carriageNumber}
                     onSeatClick={onSeatClick}
+                    price={price}
                 />
             ))}
-            <div className = "right-wc-block">
+            <div className = {getWcComponentClassName("right", carriageType.toLowerCase(), seats.length)}>
                 <MdWc className = "wc-icon"></MdWc>
             </div>
         </div>

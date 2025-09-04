@@ -4,5 +4,5 @@
     background-position: center center; /* 🔹 центрує зображення */
     background-attachment: fixed; /* 🔹 фон "прикріплений", не рухається при скролі */
     min-height: 100vh;
-    padding: 40px 0;
+    padding: 40px 0 190px;
 }

@@ -1,24 +1,26 @@
 import React from 'react';
 import CarriageSeat from '../CarriageSeat/CarriageSeat.jsx';
 import './CarriageSeatGroup.css';
-function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
+function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price })
 {
     const renderPlatskartSeats = () =>
     {
-        const topRow = [seats[1], seats[3]];
-        const bottomRow = [seats[0], seats[2]];
-        const sideRow = [seats[4], seats[5]];
+        const topRow = [seatsInGroup[1], seatsInGroup[3]];
+        const bottomRow = [seatsInGroup[0], seatsInGroup[2]];
+        const sideRow = [seatsInGroup[4], seatsInGroup[5]];
         return (
             <div className="platskart-container">
                 <div className="platskart-row">
                     {topRow.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -26,11 +28,13 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
                     {bottomRow.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -38,11 +42,13 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
                     {sideRow.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -54,19 +60,21 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
     }
     const renderCoupeSeats = () =>
     {
-        const topRow = [seats[1], seats[3]];
-        const bottomRow = [seats[0], seats[2]];
+        const topRow = [seatsInGroup[1], seatsInGroup[3]];
+        const bottomRow = [seatsInGroup[0], seatsInGroup[2]];
         return (
             <div className="coupe-container">
                 <div className="coupe-row">
                     {topRow.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -74,11 +82,13 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
                     {bottomRow.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -88,18 +98,20 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
     }
     const renderSvSeats = () =>
     {
-        const row = [seats[0], seats[1]];
+        const row = [seatsInGroup[0], seatsInGroup[1]];
         return (
             <div className="sv-container">
                 <div className="sv-row">
                     {row.map(seat => (
                         <CarriageSeat
                             key={seat.place_in_carriage}
-                            number={seat.place_in_carriage}
+                            seatNumber={seat.place_in_carriage}
                             isFree={seat.is_free}
-                            type={type}
-                            qualityClass={qualityClass}
+                            carriageType={carriageType}
+                            carriageQualityClass={carriageQualityClass}
+                            carriageNumber={carriageNumber}
                             onClick={onSeatClick}
+                            price={price}
                         />
                     ))}
                 </div>
@@ -108,7 +120,7 @@ function CarriageSeatGroup({ seats, type, qualityClass, onSeatClick })
 
     }
 
-    switch (type.toLowerCase())
+    switch (carriageType.toLowerCase())
     {
         case "platskart":
             return renderPlatskartSeats();

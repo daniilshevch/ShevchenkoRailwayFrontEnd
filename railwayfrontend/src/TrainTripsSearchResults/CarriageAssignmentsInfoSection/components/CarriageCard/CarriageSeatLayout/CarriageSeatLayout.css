@@ -9,13 +9,75 @@
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 0;
+    padding-bottom: 10px;
+    margin-left: 20px;
+    border: 3px solid gray;
+}
+.carriage-seat-layout-coupe-36 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+    border-radius: 15px;
+    background-color: white;
+    justify-content: center;
+    padding-left: 55px;
+    padding-right: 55px;
+    padding-top: 0;
+    padding-bottom: 85px;
+    margin-left: 20px;
+    border: 3px solid gray;
+}
+.carriage-seat-layout-coupe-40 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+    border-radius: 15px;
+    background-color: white;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0;
+    padding-bottom: 85px;
+    margin-left: 20px;
+    border: 3px solid gray;
+}
+.carriage-seat-layout-sv-18 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+    border-radius: 15px;
+    background-color: white;
+    justify-content: center;
+    padding-left: 55px;
+    padding-right: 55px;
+    padding-top: 0;
+    padding-bottom: 85px;
+    margin-left: 20px;
+    border: 3px solid gray;
+}
+.carriage-seat-layout-sv-20 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+    border-radius: 15px;
+    background-color: white;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0;
     padding-bottom: 85px;
     margin-left: 20px;
     border: 3px solid gray;
 }
 
+
+
 .left-wc-block {
-    flex: 0 0 56px;             /* фіксована ширина колонки WC */
+    flex: 0 0 60px;
     border: 3px solid #d9d9d9;
     border-top: 0;
     border-radius: 0px 0 0 15px;
@@ -24,11 +86,10 @@
     margin-right: 3px;
     align-items: center;
     justify-content: center;
-    color: #b9bec7;            /* колір іконки через currentColor */
+    color: #b9bec7;
 }
-
 .right-wc-block {
-    flex: 0 0 56px;             /* фіксована ширина колонки WC */
+    flex: 0 0 60px;
     border: 3px solid #d9d9d9;
     border-top: 0;
     border-radius: 0px 0px 15px 0px;
@@ -37,7 +98,104 @@
     margin-left: 3px;
     align-items: center;
     justify-content: center;
-    color: #b9bec7;            /* колір іконки через currentColor */
+    color: #b9bec7;
+}
+.left-wc-block-coupe-36 {
+    flex: 0 0 60px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0 0 15px;
+    background: #f5f6f8;
+    display: flex;
+    margin-right: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+.left-wc-block-coupe-40 {
+    flex: 0 0 50px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0 0 15px;
+    background: #f5f6f8;
+    display: flex;
+    margin-right: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
 }
 
+.right-wc-block-coupe-36 {
+    flex: 0 0 60px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0px 15px 0px;
+    background: #f5f6f8;
+    display: flex;
+    margin-left: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+.right-wc-block-coupe-40 {
+    flex: 0 0 50px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0px 15px 0px;
+    background: #f5f6f8;
+    display: flex;
+    margin-left: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+.left-wc-block-sv-18 {
+    flex: 0 0 60px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0 0 15px;
+    background: #f5f6f8;
+    display: flex;
+    margin-right: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+.left-wc-block-sv-20 {
+    flex: 0 0 50px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0 0 15px;
+    background: #f5f6f8;
+    display: flex;
+    margin-right: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+
+.right-wc-block-sv-18 {
+    flex: 0 0 60px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0px 15px 0px;
+    background: #f5f6f8;
+    display: flex;
+    margin-left: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
+.right-wc-block-sv-20 {
+    flex: 0 0 50px;
+    border: 3px solid #d9d9d9;
+    border-top: 0;
+    border-radius: 0px 0px 15px 0px;
+    background: #f5f6f8;
+    display: flex;
+    margin-left: 3px;
+    align-items: center;
+    justify-content: center;
+    color: #b9bec7;
+}
 .wc-icon { font-size: 30px; }
