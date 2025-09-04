@@ -12,7 +12,11 @@
 .seat-free {
     color: white;
 }
-
+.seat-selected-in-potential-cart {
+    background-color:  #faad14;
+    border-color: #faad14;
+    color: #000;
+}
 .seat-taken {
     background-color: #ccc;
     color: #666;
@@ -53,5 +57,12 @@
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
+}
+.seat-type-SV.seat-selected-in-potential-cart {
+    width: 35px;
+    height: 70px;
+    background-color:  #faad14;
+    border-color: #faad14;
+    color: #000;
 }
 

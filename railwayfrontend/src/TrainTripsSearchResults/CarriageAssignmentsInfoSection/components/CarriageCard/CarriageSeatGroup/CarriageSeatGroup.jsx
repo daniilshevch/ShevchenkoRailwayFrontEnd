@@ -1,7 +1,7 @@
 import React from 'react';
 import CarriageSeat from '../CarriageSeat/CarriageSeat.jsx';
 import './CarriageSeatGroup.css';
-function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price })
+function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart  })
 {
     const renderPlatskartSeats = () =>
     {
@@ -21,6 +21,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>
@@ -35,6 +38,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>
@@ -49,6 +55,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>
@@ -75,6 +84,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>
@@ -89,6 +101,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>
@@ -112,6 +127,9 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             carriageNumber={carriageNumber}
                             onClick={onSeatClick}
                             price={price}
+                            startStation={startStation}
+                            endStation={endStation}
+                            isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                         />
                     ))}
                 </div>

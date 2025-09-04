@@ -1,8 +1,12 @@
 ﻿import {Button, Divider, Drawer, Space, Typography} from "antd";
 import React from "react";
 const { Text } = Typography;
+import {stationTitleIntoUkrainian} from "../InterpreterDictionaries/StationsDictionary.js";
+import "./UserPotentialTicketCartDrawer.css";
+
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
 {
+    const tickets = cartState.potentialTicketsList;
     return (
         <Drawer
             open={cartState.potentialTicketsList.length > 0}
@@ -12,55 +16,59 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
             maskClosable={false}
             closable={true}
             bodyStyle={{
-                padding: "16px",
+                padding: "1px",
                 overflowY: "auto",
             }}
             headerStyle={{
+                padding: "4px 12px",
+                minHeight: "40px",
                 borderTopLeftRadius: "12px",
                 borderTopRightRadius: "12px",
             }}
         >
-            {cartState.potentialTicketsList.length === 0 ? (
+            {tickets.length === 0 ? (
                 <Text type="secondary">Кошик порожній</Text>
             ) : (
-                <>
-                    <div style={{ display: 'grid', gap: 8 }}>
-                        {cartState.potentialTicketsList.map((t, i) => (
+                <div className="cart-wrapper">
+                    <div className="cart-tickets-grid">
+                        {tickets.map((potential_ticket, index) => (
                             <div
-                                key={`${t.train_race_id}-${t.carriage_position_in_squad}-${t.place_in_carriage}-${i}`}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    padding: '8px 12px',
-                                    border: '1px solid #eee',
-                                    borderRadius: 8
-                                }}
+                                key={`${potential_ticket.train_race_id}-${potential_ticket.carriage_position_in_squad}-${potential_ticket.place_in_carriage}-${potential_ticket.trip_starting_station}-${potential_ticket.trip_ending_station}-${index}`}
+                                className="cart-ticket"
                             >
-                                <div>
-                                    <div>
-                                        <b>Поїзд:</b> {t.train_race_id} &nbsp;
-                                        <b>Вагон:</b> {t.carriage_position_in_squad} &nbsp;
-                                        <b>Місце:</b> {t.place_in_carriage}
+                                <div className="cart-ticket-info">
+                                    <div className="cart-ticket-header">
+                                        <b>Поїзд:</b> {potential_ticket.train_race_id}&nbsp;
+                                        <b>Вагон:</b> {potential_ticket.carriage_position_in_squad}&nbsp;
+                                        <b>Місце:</b> {potential_ticket.place_in_carriage}
                                     </div>
-                                    <Text type="secondary">Ціна: {t.price ?? 0} ₴</Text>
+                                    <div className="cart-ticket-route">
+                                        <b>Маршрут:</b> {stationTitleIntoUkrainian(potential_ticket.trip_starting_station)} - {stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}
+                                    </div>
+                                    <Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>
                                 </div>
-                                <Button danger size="small" onClick={() => removePotentialTicketFromCart(t)}>
+                                <Button danger size="small" onClick={() => removePotentialTicketFromCart(potential_ticket)}>
                                     Видалити
                                 </Button>
                             </div>
                         ))}
                     </div>
 
-                    <Divider style={{ margin: '12px 0' }} />
-                    <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                        <Text strong>До сплати: {cartState.totalSum} ₴</Text>
-                        <Space>
-
-                            <Button type="primary">Оформити</Button>
-                        </Space>
-                    </Space>
-                </>
+                    {/* Права частина */}
+                    <div className="cart-sidebar">
+                        <div className="cart-total">
+                            <Text strong>До сплати:</Text>
+                            <Text strong className="cart-total-price">{cartState.totalSum} ₴</Text>
+                        </div>
+                        <Divider style={{ margin: "12px 0" }} />
+                        <Button type="primary" block size="large" onClick={()=> {}}>
+                            Оформити
+                        </Button>
+                        <Text type="secondary" className="cart-limit">
+                            Обмеження: максимум 4 квитки в кошику.
+                        </Text>
+                    </div>
+                </div>
             )}
         </Drawer>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import CarriageInfoPanel from './CarriageInfoPanel/CarriageInfoPanel.jsx';
 import CarriageSeatLayout from './CarriageSeatLayout/CarriageSeatLayout.jsx';
 import './CarriageCard.css';
-function CarriageCard({ carriageData, onSeatClick }) {
+function CarriageCard({ carriageData, onSeatClick, startStation, endStation, isSeatSelectedInPotentialTicketCart }) {
     const {
         carriage_position_in_squad,
         carriage_type,
@@ -46,6 +46,9 @@ function CarriageCard({ carriageData, onSeatClick }) {
                     carriageNumber={carriage_position_in_squad}
                     onSeatClick={onSeatClick}
                     price={ticket_price}
+                    startStation={startStation}
+                    endStation={endStation}
+                    isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                  />
             </div>
         </div>

@@ -24,7 +24,7 @@ function getCarriageSeatLayoutClassName(carriageType, seatsAmount)
         return `carriage-seat-layout`;
     }
 }
-function CarriageSeatLayout({ seats, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price })
+function CarriageSeatLayout({ seats, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart })
 {
     const groupedSeats = [];
 
@@ -65,6 +65,9 @@ function CarriageSeatLayout({ seats, carriageType, carriageQualityClass, carriag
                     carriageNumber={carriageNumber}
                     onSeatClick={onSeatClick}
                     price={price}
+                    startStation={startStation}
+                    endStation={endStation}
+                    isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
                 />
             ))}
             <div className = {getWcComponentClassName("right", carriageType.toLowerCase(), seats.length)}>

@@ -22,9 +22,13 @@ function potentialTicketCartReducer(state, action)
             return {...state, isOpen: false};
         case "ADD_TICKET": {
             const ticketExistance = state.potentialTicketsList.
-            some(potential_ticket => potential_ticket.train_race_id === action.ticket.train_race_id
+            some(potential_ticket =>
+                potential_ticket.train_race_id === action.ticket.train_race_id
             && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
-            && potential_ticket.place_in_carriage === action.ticket.place_in_carriage);
+            && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
+            && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
+            && potential_ticket.trip_ending_station === action.ticket.trip_ending_station
+            );
             const updatedTicketsList = ticketExistance ? state.potentialTicketsList : [...state.potentialTicketsList, action.ticket];
             let newTotalSum = state.totalSum;
             if(ticketExistance === false)
@@ -37,7 +41,9 @@ function potentialTicketCartReducer(state, action)
             const updatedTicketsList = state.potentialTicketsList.
             filter(potential_ticket => !(potential_ticket.train_race_id === action.ticket.train_race_id
                 && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
-                && potential_ticket.place_in_carriage === action.ticket.place_in_carriage));
+                && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
+                && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
+                && potential_ticket.trip_ending_station === action.ticket.trip_ending_station));
 
             const newTotalSum = updatedTicketsList.reduce(
                 (sum, ticket) => sum + (ticket.price || 0),
