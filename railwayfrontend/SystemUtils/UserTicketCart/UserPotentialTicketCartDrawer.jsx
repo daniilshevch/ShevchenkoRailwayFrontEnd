@@ -3,8 +3,16 @@ import React from "react";
 const { Text } = Typography;
 import {stationTitleIntoUkrainian} from "../InterpreterDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterDictionaries/TrainRoutesDictionary.js";
+import {changeCarriageTypeIntoUkrainian} from "../InterpreterDictionaries/CarriagesDictionaries.js";
 import "./UserPotentialTicketCartDrawer.css";
+const formatDM_HM = (value) => {
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
 
+    const dm = new Intl.DateTimeFormat('uk-UA', { day: 'numeric', month: 'long' }).format(d);
+    const hm = new Intl.DateTimeFormat('uk-UA', { hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+    return `${dm}, ${hm}`; // "14 лютого, 18:36"
+};
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
 {
     const tickets = cartState.potentialTicketsList;
@@ -39,12 +47,12 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                             >
                                 <div className="cart-ticket-info">
                                     <div className="cart-ticket-header">
-                                        <b>Поїзд:</b>  {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}&nbsp;
-                                        <b>Вагон:</b> {potential_ticket.carriage_position_in_squad}&nbsp;
+                                        <b>Поїзд:</b>  {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}(клас {potential_ticket.train_route_quality_class})&nbsp;
+                                        <b>Вагон:</b> {potential_ticket.carriage_position_in_squad}({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, {potential_ticket.carriage_quality_class})&nbsp;
                                         <b>Місце:</b> {potential_ticket.place_in_carriage}
                                     </div>
                                     <div className="cart-ticket-route">
-                                        {stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}({potential_ticket.trip_starting_station_departure_time}) - {stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}({potential_ticket.trip_ending_station_arrival_time})
+                                        <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text> - <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)}</Text>)
                                     </div>
                                     {/*<Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>*/}
                                 </div>

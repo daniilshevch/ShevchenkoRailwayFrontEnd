@@ -10,6 +10,9 @@ import { TbCircleLetterAFilled } from "react-icons/tb";
 import { TbCircleLetterBFilled } from "react-icons/tb";
 import { TbCircleLetterCFilled } from "react-icons/tb";
 import './CarriageInfoPanel.css';
+import {
+    changeCarriageTypeIntoUkrainian
+} from "../../../../../../SystemUtils/InterpreterDictionaries/CarriagesDictionaries.js";
 function CarriageInfoPanel({ carriageNumber, type, qualityClass, features,  freePlaces, totalPlaces, price })
 {
     const classIcons = {
@@ -24,7 +27,7 @@ function CarriageInfoPanel({ carriageNumber, type, qualityClass, features,  free
                 {classIcons[qualityClass]}
                 <h3>Вагон №{carriageNumber}</h3>
             </div>
-            <p>Тип: {type}</p>
+            <p>Тип: {changeCarriageTypeIntoUkrainian(type)}</p>
             <p>Місця: {freePlaces}/{totalPlaces}</p>
             <div className = "features-row">
                 <p>

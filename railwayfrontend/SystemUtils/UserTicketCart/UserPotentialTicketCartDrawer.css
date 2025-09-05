@@ -63,6 +63,15 @@
     margin-top: 8px;
     font-size: 12px;
 }
+.station-title
+{
+    font-weight: 700;
+}
+.station-time
+{
+    font-weight: 500;
+}
+
 
 /* Респонсивність */
 @media (max-width: 768px) {

@@ -24,7 +24,7 @@ function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, 
         <button
             className={`seat ${baseClass} ${classByQuality} ${classByType}`}
             disabled={!isFree}
-            onClick={isFree ? () => onClick(carriageNumber, seatNumber, price, startStation, endStation) : undefined}
+            onClick={isFree ? () => onClick(carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) : undefined}
         >
             {seatNumber}
         </button>

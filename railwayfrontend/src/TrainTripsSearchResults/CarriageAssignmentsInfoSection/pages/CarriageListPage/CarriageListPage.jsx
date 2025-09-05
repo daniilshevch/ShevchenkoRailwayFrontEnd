@@ -17,6 +17,7 @@ function CarriageListPage()
     const {train_race_id, start, end} = useParams();
     const [startingStationDepartureTime, setStartingStationDepartureTime] = useState(null);
     const [endingStationArrivalTime, setEndingStationArrivalTime] = useState(null);
+    const [trainRouteClass, setTrainRouteClass] = useState(null);
 
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
@@ -61,10 +62,13 @@ function CarriageListPage()
             return selectedPotentialTicketSeats.has(seatKeyCodeForCart(train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station));
         }, [train_race_id, selectedPotentialTicketSeats]);
 
-    const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation) => {
+    const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) => {
         const potentialTicket = {
             train_race_id: train_race_id,
+            train_route_quality_class: trainRouteClass,
             carriage_position_in_squad: carriageNumber,
+            carriage_type: carriageType,
+            carriage_quality_class: carriageQualityClass,
             place_in_carriage: seatNumber,
             trip_starting_station: startStation,
             trip_ending_station: endStation,
@@ -103,6 +107,8 @@ function CarriageListPage()
                 setStartingStationDepartureTime(tripStartingStationDepartureTime);
                 const tripEndingStationArrivalTime = trainDataObject.trip_ending_station_arrival_time;
                 setEndingStationArrivalTime(tripEndingStationArrivalTime);
+                const trainRouteQualityClass = trainDataObject.train_route_class;
+                setTrainRouteClass(trainRouteQualityClass);
                 console.log(groupedCarriageStatisticsList);
                 console.log(typeParams);
                 let carriagesList = [];
