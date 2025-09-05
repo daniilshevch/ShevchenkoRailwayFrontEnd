@@ -15,6 +15,8 @@ function CarriageListPage()
     const [searchParams] = useSearchParams();
     const [carriages, setCarriages] = useState(null);
     const {train_race_id, start, end} = useParams();
+    const [startingStationDepartureTime, setStartingStationDepartureTime] = useState(null);
+    const [endingStationArrivalTime, setEndingStationArrivalTime] = useState(null);
 
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
@@ -66,6 +68,8 @@ function CarriageListPage()
             place_in_carriage: seatNumber,
             trip_starting_station: startStation,
             trip_ending_station: endStation,
+            trip_starting_station_departure_time: startingStationDepartureTime,
+            trip_ending_station_arrival_time: endingStationArrivalTime,
             price: price ?? 0
         };
         if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
@@ -95,6 +99,10 @@ function CarriageListPage()
                 const trainDataObject = JSON.parse(trainData);
                 const carriage_statistics_list = trainDataObject.carriage_statistics_list;
                 const groupedCarriageStatisticsList = trainDataObject.grouped_carriage_statistics_list;
+                const tripStartingStationDepartureTime = trainDataObject.trip_starting_station_departure_time;
+                setStartingStationDepartureTime(tripStartingStationDepartureTime);
+                const tripEndingStationArrivalTime = trainDataObject.trip_ending_station_arrival_time;
+                setEndingStationArrivalTime(tripEndingStationArrivalTime);
                 console.log(groupedCarriageStatisticsList);
                 console.log(typeParams);
                 let carriagesList = [];

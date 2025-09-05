@@ -3,6 +3,11 @@
         "SH": "Ш",
         "K": "K"
     }
+    export function getTrainRouteIdFromTrainRaceId(trainRaceId)
+    {
+        const parts = trainRaceId.split("_");
+        return parts[0];
+    }
     function changeTrainRouteIdIntoUkrainian(trainRouteId)
     {
         for (const key of Object.keys(lettersDictionary).sort((a, b) => b.length - a.length)) {

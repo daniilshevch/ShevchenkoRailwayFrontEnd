@@ -2,6 +2,7 @@
 import React from "react";
 const { Text } = Typography;
 import {stationTitleIntoUkrainian} from "../InterpreterDictionaries/StationsDictionary.js";
+import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterDictionaries/TrainRoutesDictionary.js";
 import "./UserPotentialTicketCartDrawer.css";
 
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
@@ -16,7 +17,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
             maskClosable={false}
             closable={true}
             bodyStyle={{
-                padding: "1px",
+                padding: "3px",
                 overflowY: "auto",
             }}
             headerStyle={{
@@ -38,14 +39,14 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                             >
                                 <div className="cart-ticket-info">
                                     <div className="cart-ticket-header">
-                                        <b>Поїзд:</b> {potential_ticket.train_race_id}&nbsp;
+                                        <b>Поїзд:</b>  {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}&nbsp;
                                         <b>Вагон:</b> {potential_ticket.carriage_position_in_squad}&nbsp;
                                         <b>Місце:</b> {potential_ticket.place_in_carriage}
                                     </div>
                                     <div className="cart-ticket-route">
-                                        <b>Маршрут:</b> {stationTitleIntoUkrainian(potential_ticket.trip_starting_station)} - {stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}
+                                        {stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}({potential_ticket.trip_starting_station_departure_time}) - {stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}({potential_ticket.trip_ending_station_arrival_time})
                                     </div>
-                                    <Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>
+                                    {/*<Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>*/}
                                 </div>
                                 <Button danger size="small" onClick={() => removePotentialTicketFromCart(potential_ticket)}>
                                     Видалити
