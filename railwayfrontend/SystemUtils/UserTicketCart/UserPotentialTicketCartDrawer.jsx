@@ -21,7 +21,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
             open={cartState.potentialTicketsList.length > 0}
             placement="bottom"
             mask={false}
-            height="200px"
+            height="202px"
             maskClosable={false}
             closable={true}
             bodyStyle={{
@@ -47,18 +47,23 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                             >
                                 <div className="cart-ticket-info">
                                     <div className="cart-ticket-header">
-                                        <b>Поїзд:</b>  {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}(клас {potential_ticket.train_route_quality_class})&nbsp;
-                                        <b>Вагон:</b> {potential_ticket.carriage_position_in_squad}({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, {potential_ticket.carriage_quality_class})&nbsp;
-                                        <b>Місце:</b> {potential_ticket.place_in_carriage}
+                                        <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
+                                        <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
+                                        <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text>
                                     </div>
                                     <div className="cart-ticket-route">
-                                        <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text> - <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)}</Text>)
+                                        <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)}</Text>)
                                     </div>
                                     {/*<Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>*/}
                                 </div>
-                                <Button danger size="small" onClick={() => removePotentialTicketFromCart(potential_ticket)}>
-                                    Видалити
-                                </Button>
+                                <div className="cart-ticket-actions">
+                                    <Text className="ticket-price" type="primary">
+                                        Ціна: {potential_ticket.price ?? 0} ₴
+                                    </Text>
+                                    <Button danger size="small" onClick={() => removePotentialTicketFromCart(potential_ticket)}>
+                                        Видалити
+                                    </Button>
+                                </div>
                             </div>
                         ))}
                     </div>
