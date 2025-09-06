@@ -12,7 +12,9 @@ import AdminTrainRaceInfoPage from "./AdminPanel/AdminTrainRacesManagement/pages
 import LoginPage from "./RegistrationAndLogin/pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "./RegistrationAndLogin/pages/RegisterPage/RegisterPage.jsx";
 import DateSlider from "./TrainTripsSearchResults/TrainRacesInfoSection/components/DateSlider/DateSlider.jsx";
-
+import CarriageTypeAndQualityFilter
+    from "./TrainTripsSearchResults/CarriageAssignmentsInfoSection/components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
+import {grouped_carriage_statistics_list} from "../DevelopmentHelpingTools/TestData.js";
 
       
 
@@ -22,6 +24,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
             <Route path = "/test">
                 <Route path = "date-slider" element={<DateSlider />}></Route>
+                <Route path = "filter" element = {<CarriageTypeAndQualityFilter groupedSeats={grouped_carriage_statistics_list} />}></Route>
             </Route>
             <Route path = "/login" element = {<LoginPage />} />
             <Route path = "/register" element = {<RegisterPage />} />
