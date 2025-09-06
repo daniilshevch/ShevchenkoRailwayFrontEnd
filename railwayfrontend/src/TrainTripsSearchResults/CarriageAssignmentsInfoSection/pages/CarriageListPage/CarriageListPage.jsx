@@ -1,7 +1,7 @@
 ﻿import React, {useEffect, useReducer, useState, useMemo, useCallback    } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CarriageListLayout from '../../components/CarriageListLayout/CarriageListLayout.jsx';
-import {Button, Divider, Space, Drawer, Typography} from 'antd';
+import {message} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer.jsx";
@@ -10,8 +10,24 @@ const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
 };
+const divideTypeAndQuality = (typeQualityClass) =>
+{
+    const typeAndQualityList = typeQualityClass.split('@');
+    const type = typeAndQualityList[0];
+    let qualities = [];
+    if(typeAndQualityList.length > 1) {
+        const qualityList = typeAndQualityList[1];
+        qualities = qualityList.split("$");
+    }
+    else
+    {
+        qualities = [];
+    }
+    return {type, qualities};
+}
 function CarriageListPage()
 {
+    const [messageApi, contextHolder] = message.useMessage();
     const [searchParams] = useSearchParams();
     const [carriages, setCarriages] = useState(null);
     const {train_race_id, start, end} = useParams();
@@ -77,7 +93,14 @@ function CarriageListPage()
             price: price ?? 0
         };
         if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
-            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
+            if(potentialTicketCartState.potentialTicketsList.length < 4)
+            {
+                potentialTicketCartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
+            }
+            else
+            {
+                messageApi.info("Максимальна кількість потенційних квитків в кошику - 4")
+            }
         }
         else
         {
@@ -114,19 +137,27 @@ function CarriageListPage()
                 let carriagesList = [];
                 if (typeParams.length > 0) {
                     for (const type of typeParams) {
-                        const typeGroup = groupedCarriageStatisticsList?.[type];
+                        const typeAndQuality = divideTypeAndQuality(type);
+                        const _type = typeAndQuality.type;
+                        const qualities = typeAndQuality.qualities;
+                        const typeGroup = groupedCarriageStatisticsList?.[_type];
                         console.log(typeGroup);
+                        console.log("----");
+                        console.log(qualities);
+                        console.log("XXXXXXXXXXXX");
                         if (!typeGroup) {
                             continue;
                         }
                         const qualityClassDictionary = typeGroup.carriage_quality_class_dictionary;
                         let selectedQualities = undefined;
-                        if (qualityParams.length > 0) {
-                            selectedQualities = qualityParams.filter(quality => qualityClassDictionary[quality] != undefined);
+                        if (qualities.length > 0) {
+                            selectedQualities = qualities.filter(quality => qualityClassDictionary[quality] != undefined);
                         }
                         else {
                             selectedQualities = Object.keys(qualityClassDictionary);
                         }
+                        console.log("--------");
+                        console.log(selectedQualities);
                         for (const quality of selectedQualities) {
                             const qualityClassData = qualityClassDictionary[quality];
                             if (!qualityClassData) {
@@ -152,25 +183,28 @@ function CarriageListPage()
         }
     }, [searchParams]);
     return (
-        <div className="carriage-list-page">
-            {carriages ? (
-                <>
-                    <CarriageListLayout
-                        carriages={carriages}
-                        onSeatClick={onSeatClickAction}
-                        startStation={start}
-                        endStation={end}
-                        isSeatSelectedInPotentialTicketCart = {isSeatSelectedInPotentialTicketCart}
-                    />
-                    <UserPotentialTicketCartDrawer
-                        cartState={potentialTicketCartState}
-                        removePotentialTicketFromCart={removePotentialTicketFromCart}
-                    />
-                </>
-            ) : (
-            <p>Завантаження...</p>
-        )}
-        </div>
+        <>
+            {contextHolder}
+            <div className="carriage-list-page">
+                {carriages ? (
+                    <>
+                        <CarriageListLayout
+                            carriages={carriages}
+                            onSeatClick={onSeatClickAction}
+                            startStation={start}
+                            endStation={end}
+                            isSeatSelectedInPotentialTicketCart = {isSeatSelectedInPotentialTicketCart}
+                        />
+                        <UserPotentialTicketCartDrawer
+                            cartState={potentialTicketCartState}
+                            removePotentialTicketFromCart={removePotentialTicketFromCart}
+                        />
+                    </>
+                ) : (
+                <p>Завантаження...</p>
+            )}
+            </div>
+        </>
     )
 
 }

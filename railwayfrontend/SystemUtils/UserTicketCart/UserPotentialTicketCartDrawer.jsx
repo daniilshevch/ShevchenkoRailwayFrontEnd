@@ -1,4 +1,5 @@
-﻿import {Button, Divider, Drawer, Space, Typography} from "antd";
+﻿import {Button, Divider, Drawer, Space, Typography, Tooltip, Badge} from "antd";
+import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import React from "react";
 const { Text } = Typography;
 import {stationTitleIntoUkrainian} from "../InterpreterDictionaries/StationsDictionary.js";
@@ -24,6 +25,17 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
             height="202px"
             maskClosable={false}
             closable={true}
+            title={
+                <Space align="center" size={8}>
+                    <Badge count={cartState.potentialTicketsList.length} size="small" color="#1677ff">
+                        <ShoppingCartOutlined style={{ fontSize: 18 }} />
+                    </Badge>
+                    <Text strong>Кошик квитків ({cartState.potentialTicketsList.length}/4)</Text>
+                    <Tooltip title="Обрані місця для одного замовлення (до 4 в одному кошику)">
+                        <InfoCircleOutlined style={{ color: "#999" }} />
+                    </Tooltip>
+                </Space>
+            }
             bodyStyle={{
                 padding: "3px",
                 overflowY: "auto",
@@ -68,7 +80,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                         ))}
                     </div>
 
-                    {/* Права частина */}
+
                     <div className="cart-sidebar">
                         <div className="cart-total">
                             <Text strong>До сплати:</Text>
