@@ -6,7 +6,7 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
     const navigate = useNavigate();
     const handleCarriageTypeAndQualityClassClick = (carriageType, qualityClass, trainRaceId) => {
         localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
-        navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}@${qualityClass}`);
+        navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}~${qualityClass}`);
     }
     const getColorClass = (qualityClass) => {
         switch (qualityClass) {

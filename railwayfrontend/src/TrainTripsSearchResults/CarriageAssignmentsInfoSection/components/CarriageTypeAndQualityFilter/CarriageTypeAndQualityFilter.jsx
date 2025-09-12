@@ -14,18 +14,51 @@ export default function CarriageTypeAndQualityFilter(
     })
 {
     const carriageTypes = useMemo(() => Object.keys(groupedSeats), [groupedSeats]);
-    const [selectedTypes, setSelectedTypes] = useState(() => {
-        return initialSelectedTypes.filter(type => carriageTypes.includes(type));
-    });
+    const [selectedTypes, setSelectedTypes] = useState(() => initialSelectedTypes);
+    const [initiallyLoaded, setInitiallyLoaded] = useState(false);
     const [selectedSubtypes, setSelectedSubtypes] = useState(() => {
        const checkedSubtypes = {};
-       for(const type of carriageTypes)
+       for(const type of initialSelectedTypes)
        {
            const initialSubtypes = initialSelectedSubtypes?.[type] ?? [];
            checkedSubtypes[type] = Array.isArray(initialSubtypes) ? Array.from(new Set(initialSubtypes)) : [];
        }
        return checkedSubtypes;
     });
+
+    const getQueryStringParams = (typesArray, subtypesDictionary) =>
+    {
+        return typesArray.map(type => {
+            const subtypes = subtypesDictionary[type] || [];
+            return subtypes.length ? `${type}~${subtypes.join("*")}` : type;
+        })
+    };
+
+    const implementCarriageFilteringChanges = (nextTypes, nextSubtypes) => {
+        const queryParams = getQueryStringParams(nextTypes, nextSubtypes);
+        onChange?.({selectedTypes: nextTypes, selectedSubtypes: nextSubtypes, queryParams: queryParams});
+    }
+
+    useEffect(() => {
+          if (!carriageTypes.length || initiallyLoaded) return;
+          const nextSub = {};
+          for (const t of carriageTypes) {
+                const init = initialSelectedSubtypes?.[t] ?? [];
+                if(init.length > 0 && init[0] === "All")
+                {
+                    nextSub[t] = ["S", "A", "B", "C"]
+                }
+                else {
+                    nextSub[t] = Array.isArray(init) ? Array.from(new Set(init)) : [];
+                }
+              }
+          const nextTypes = carriageTypes.filter(t => (nextSub[t]?.length ?? 0) > 0);
+          setSelectedSubtypes(nextSub);
+          setSelectedTypes(nextTypes);
+          implementCarriageFilteringChanges(nextTypes, nextSub);
+          setInitiallyLoaded(true);
+         }, [carriageTypes, initialSelectedSubtypes, initiallyLoaded, implementCarriageFilteringChanges]);
+
     useEffect(() => {
         setSelectedTypes(previous => previous.filter(type => carriageTypes.includes(type)));
         setSelectedSubtypes(previous => {
@@ -53,27 +86,8 @@ export default function CarriageTypeAndQualityFilter(
         }));
     };
 
-    const getQueryStringParams = (typesArray, subtypesDictionary) =>
-    {
-        return typesArray.map(type => {
-            const subtypes = subtypesDictionary[type] || [];
-            return subtypes.length ? `${type}@${subtypes.join("$")}` : type;
-        })
-    };
 
-    const implementCarriageFilteringChanges = (nextTypes, nextSubtypes) => {
-        const queryParams = getQueryStringParams(nextTypes, nextSubtypes);
-        onChange?.({selectedTypes: nextTypes, selectedSubtypes: nextSubtypes, queryParams: queryParams});
-    }
 
-    // const handleTypesChange = (next) => {
-    //     const nextTypes = Array.isArray(next) ? next : [next];
-    //     setSelectedTypes(nextTypes);
-    //     setSelectedSubtypes(previous => {
-    //         implementCarriageFilteringChanges(nextTypes, previous);
-    //         return previous;
-    //     })
-    // };
     const handleSubtypesChange = (changedCarriageType, changedCarriageTypeSubtypes) => {
         setSelectedSubtypes(previousSubtypes => {
             const nextSubtypes = {...previousSubtypes, [changedCarriageType]: changedCarriageTypeSubtypes};
@@ -146,47 +160,41 @@ export default function CarriageTypeAndQualityFilter(
     const segmentedItems = carriageTypes.map((carriageType) => ({ value: carriageType, label: <TypeLabel type={carriageType}/> }));
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 60 }}>
+        <div style={{ flexDirection: "column", gap: 12 }}>
             <Segmented
                 options={segmentedItems}
                 multiple
                 size="large"
                 value={selectedTypes}
-                style={{ maxWidth: "100%", flexWrap: "wrap" }}
             />
 
             {/* Підсумок поточного вибору */}
-            <div style={{ marginTop: 8 }}>
-                <Typography.Text strong>Вибір:</Typography.Text>
-                <div style={{ marginTop: 6 }}>
-                    {selectedTypes.length === 0 ? (
-                        <Typography.Text type="secondary">Нічого не вибрано</Typography.Text>
-                    ) : (
-                        <Space wrap>
-                            {selectedTypes.map((t) => (
-                                <Tooltip
-                                    key={t}
-                                    title={
-                                        selectedSubtypes[t]?.length
-                                            ? `Класи для ${t}: ${selectedSubtypes[t].join(", ")}`
-                                            : `Класи для ${t} не обрані`
-                                    }
-                                >
-                                    <Tag color={selectedSubtypes[t]?.length ? "processing" : "default"}>
-                                        {t}
-                                        {selectedSubtypes[t]?.length ? ` (${selectedSubtypes[t].length})` : ""}
-                                    </Tag>
-                                </Tooltip>
-                            ))}
-                        </Space>
-                    )}
-                </div>
-                <div style={{ marginTop: 6 }}>
-                    <Typography.Text type="secondary">
-                        Токени (для URL/query): {getQueryStringParams(selectedTypes, selectedSubtypes).join(", ") || "—"}
-                    </Typography.Text>
-                </div>
-            </div>
+            {/*<div style={{ marginTop: 8 }}>*/}
+            {/*    <Typography.Text strong>Вибір:</Typography.Text>*/}
+            {/*    <div style={{ marginTop: 6 }}>*/}
+            {/*        {selectedTypes.length === 0 ? (*/}
+            {/*            <Typography.Text type="secondary">Нічого не вибрано</Typography.Text>*/}
+            {/*        ) : (*/}
+            {/*            <Space wrap>*/}
+            {/*                {selectedTypes.map((t) => (*/}
+            {/*                    <Tooltip*/}
+            {/*                        key={t}*/}
+            {/*                        title={*/}
+            {/*                            selectedSubtypes[t]?.length*/}
+            {/*                                ? `Класи для ${t}: ${selectedSubtypes[t].join(", ")}`*/}
+            {/*                                : `Класи для ${t} не обрані`*/}
+            {/*                        }*/}
+            {/*                    >*/}
+            {/*                        <Tag color={selectedSubtypes[t]?.length ? "processing" : "default"}>*/}
+            {/*                            {t}*/}
+            {/*                            {selectedSubtypes[t]?.length ? ` (${selectedSubtypes[t].length})` : ""}*/}
+            {/*                        </Tag>*/}
+            {/*                    </Tooltip>*/}
+            {/*                ))}*/}
+            {/*            </Space>*/}
+            {/*        )}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </div>
     );
 }

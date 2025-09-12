@@ -8,6 +8,8 @@ import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicket
 import CarriageTypeAndQualityFilter
     from "../../components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
 import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
+import CarriageFilteringHeader from "../../components/CarriageFilteringHeader/CarriageFilteringHeader.jsx";
+import TrainRaceInfoHeader from "../../components/TrainRaceInfoHeader/TrainRaceInfoHeader.jsx";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -33,6 +35,10 @@ function CarriageListPage()
             if(qualities.length > 0)
             {
                 dict[type] = Array.from(new Set(qualities));
+            }
+            else
+            {
+                dict[type] = ["All"]
             }
         }
         return dict;
@@ -203,12 +209,19 @@ function CarriageListPage()
     return (
         <>
             {contextHolder}
-            <CarriageTypeAndQualityFilter
+            <TrainRaceInfoHeader />
+            <CarriageFilteringHeader
                 groupedSeats={carriageStats}
                 initialSelectedTypes={initialSelectedTypes}
                 initialSelectedSubtypes={initialSelectedSubtypes}
                 onChange={handleFilterChange}
-            ></CarriageTypeAndQualityFilter>
+            ></CarriageFilteringHeader>
+            {/*<CarriageTypeAndQualityFilter*/}
+            {/*    groupedSeats={carriageStats}*/}
+            {/*    initialSelectedTypes={initialSelectedTypes}*/}
+            {/*    initialSelectedSubtypes={initialSelectedSubtypes}*/}
+            {/*    onChange={handleFilterChange}*/}
+            {/*></CarriageTypeAndQualityFilter>*/}
             <div className="carriage-list-page">
                 {carriages ? (
                     <>
