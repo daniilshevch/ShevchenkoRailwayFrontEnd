@@ -1,11 +1,14 @@
 ﻿import React, {useMemo, useState, useEffect} from "react";
 import { Segmented, Popover, Checkbox, Tag, Badge, Space, Typography, Tooltip, Divider } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import {
+    changeCarriageTypeIntoUkrainian
+} from "../../../../../SystemUtils/InterpreterDictionaries/CarriagesDictionaries.js";
 export default function CarriageTypeAndQualityFilter(
     {
         groupedSeats = {},
         initialSelectedTypes = [],
-        initialSelectedSubtypes = [],
+        initialSelectedSubtypes = {},
         onChange
     })
 {
@@ -17,8 +20,8 @@ export default function CarriageTypeAndQualityFilter(
        const checkedSubtypes = {};
        for(const type of carriageTypes)
        {
-           const subtypes = initialSelectedSubtypes?.[type] ?? [];
-           checkedSubtypes[type] = Array.isArray(subtypes) ? Array.from(new Set(subtypes)) : [];
+           const initialSubtypes = initialSelectedSubtypes?.[type] ?? [];
+           checkedSubtypes[type] = Array.isArray(initialSubtypes) ? Array.from(new Set(initialSubtypes)) : [];
        }
        return checkedSubtypes;
     });
@@ -28,7 +31,7 @@ export default function CarriageTypeAndQualityFilter(
             const nextSubtypes = {};
             for(const type of carriageTypes)
             {
-                nextSubtypes[type] = Array.isArray(previous[type]) ? previous[type] : [...previous[type]];
+                nextSubtypes[type] = Array.isArray(previous[type]) ? previous[type] : [];
             }
             return nextSubtypes;
         });
@@ -41,12 +44,45 @@ export default function CarriageTypeAndQualityFilter(
             return [];
         }
         const carriageQualityClassDictionary = statsForCarriageType.carriage_quality_class_dictionary || {};
-        return Object.entries(carriageQualityClassDictionary).map(([qualityClass, stats]) => ({
+        return Object.entries(carriageQualityClassDictionary).map(([qualityClass, statsForQualityClass]) => ({
             key: qualityClass,
-            free_places: stats.free_places,
-            total_places: stats.total_places,
-            min_price: stats.min_price
+            free_places: statsForQualityClass.free_places,
+            total_places: statsForQualityClass.total_places,
+            min_price: statsForQualityClass.min_price
         }));
+    };
+
+    const getQueryStringParams = (typesArray, subtypesDictionary) =>
+    {
+        return typesArray.map(type => {
+            const subtypes = subtypesDictionary[type] || [];
+            return subtypes.length ? `${type}@${subtypes.join("$")}` : type;
+        })
+    };
+
+    const implementCarriageFilteringChanges = (nextTypes, nextSubtypes) => {
+        const queryParams = getQueryStringParams(nextTypes, nextSubtypes);
+        onChange?.({selectedTypes: nextTypes, selectedSubtypes: nextSubtypes, queryParams: queryParams});
+    }
+
+    // const handleTypesChange = (next) => {
+    //     const nextTypes = Array.isArray(next) ? next : [next];
+    //     setSelectedTypes(nextTypes);
+    //     setSelectedSubtypes(previous => {
+    //         implementCarriageFilteringChanges(nextTypes, previous);
+    //         return previous;
+    //     })
+    // };
+    const handleSubtypesChange = (changedCarriageType, changedCarriageTypeSubtypes) => {
+        setSelectedSubtypes(previous => {
+            const nextSubtypes = {...previous, [changedCarriageType]: changedCarriageTypeSubtypes};
+            setSelectedTypes(previous => {
+                const ensureTypes = previous.includes(changedCarriageType) ? previous : [...previous, changedCarriageType];
+                implementCarriageFilteringChanges(ensureTypes, nextSubtypes);
+                return ensureTypes;
+            })
+            return nextSubtypes;
+        });
     };
 
 
@@ -57,7 +93,7 @@ export default function CarriageTypeAndQualityFilter(
 
         const content = (
             <div style={{ minWidth: 240 }}>
-                <div style={{ fontWeight: 600, marginBottom: 6 }}>{type}</div>
+                <div style={{ fontWeight: 600, marginBottom: 6 }}>{changeCarriageTypeIntoUkrainian(type)}</div>
                 <div style={{ marginBottom: 8 }}>
                     <Space wrap>
                         {/*<Tag color="blue">Вільно: {s.free_places ?? "—"}/{s.total_places ?? "—"}</Tag>*/}
@@ -65,11 +101,10 @@ export default function CarriageTypeAndQualityFilter(
                     </Space>
                 </div>
                 <Divider style={{ margin: "8px 0" }} />
-                <div style={{ marginBottom: 6, fontSize: 12, color: "#888" }}>Оберіть класи для типу {type}:</div>
                 <Checkbox.Group
                     style={{ display: "grid", gap: 6 }}
                     value={selectedSubtypes[type]}
-                    // onChange={(vals) => handleSubtypesChange(type, vals)}
+                    onChange={(vals) => handleSubtypesChange(type, vals)}
                 >
                     {getClassEntries(type).map((c) => (
                         <Checkbox key={c.key} value={c.key}>
@@ -84,44 +119,39 @@ export default function CarriageTypeAndQualityFilter(
             </div>
         );
 
-        const dropdownTrigger = (
-            <span
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
-                style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-            >
-        <span style={{ fontWeight: 600 }}>{type}</span>
-                {subCount > 0 ? (
-                    <Badge count={subCount} size="small">
-                        <DownOutlined />
-                    </Badge>
-                ) : (
-                    <DownOutlined />
-                )}
-      </span>
-        );
-
         return (
-            <Popover content={content} trigger="click" placement="bottom">
-                {dropdownTrigger}
-            </Popover>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <Popover content={content} trigger="hover" placement="bottom">
+                    <span style={{ fontWeight: 600 }}>{type}</span>
+                            <span
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ display: "inline-flex", alignItems: "center" }}
+                            >
+                                  {subCount > 0 ? (
+                                      <Badge count={subCount} size="small">
+                                          <DownOutlined />
+                                      </Badge>
+                                  ) : (
+                                      <DownOutlined />
+                                  )}
+                            </span>
+                </Popover>
+            </span>
         );
     };
 
-    const segmentedItems = carriageTypes.map((t) => ({ value: t, label: <TypeLabel type={t} /> }));
+    const segmentedItems = carriageTypes.map((carriageType) => ({ value: carriageType, label: <TypeLabel type={carriageType}/> }));
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <Typography.Text type="secondary">
-                Оберіть типи вагонів (можна кілька) і задайте класи окремо для КОЖНОГО типу
-            </Typography.Text>
 
             <Segmented
                 options={segmentedItems}
                 multiple
                 size="large"
                 value={selectedTypes}
-                // onChange={handleTypesChange}
+                //onChange={handleTypesChange}
                 style={{ maxWidth: "100%", flexWrap: "wrap" }}
             />
 
@@ -153,7 +183,7 @@ export default function CarriageTypeAndQualityFilter(
                 </div>
                 <div style={{ marginTop: 6 }}>
                     <Typography.Text type="secondary">
-                        {/*Токени (для URL/query): {encodeTokens(selectedTypes, selectedSubtypes).join(", ") || "—"}*/}
+                        Токени (для URL/query): {getQueryStringParams(selectedTypes, selectedSubtypes).join(", ") || "—"}
                     </Typography.Text>
                 </div>
             </div>
