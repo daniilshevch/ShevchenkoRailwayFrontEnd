@@ -6,7 +6,7 @@ import 'dayjs/locale/uk';
 import locale from 'antd/locale/uk_UA';
 import { ConfigProvider } from 'antd';
 import { SwapOutlined, SearchOutlined } from '@ant-design/icons';
-import { stationsList } from "../../../../../SystemUtils/InterpreterDictionaries/StationsDictionary.js";
+import { stationsList } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import './CompactTripsSearchForm.css';
 
 

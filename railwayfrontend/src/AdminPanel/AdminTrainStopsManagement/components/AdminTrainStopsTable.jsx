@@ -1,6 +1,6 @@
 ﻿import {Button, DatePicker, Form, Input, message, Popconfirm, Select, Switch, Table} from "antd";
 import React, {useState} from "react";
-import {stationTitleIntoUkrainian} from "../../../../SystemUtils/InterpreterDictionaries/StationsDictionary.js";
+import {stationTitleIntoUkrainian} from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import {enumOptions} from "../../GeneralComponents/EnumOptionConvertion.jsx";
 import {TRAIN_STOP_TYPE_OPTIONS} from "./AdminTrainStopsEnums.js";
 import dayjs from 'dayjs';

@@ -1,12 +1,12 @@
 ﻿import React, {useState} from 'react';
 import './TrainTripCard.css';
 import CarriageTypeButton from './CarriageTypeButton/CarriageTypeButton.jsx';
-import {stationTitleIntoUkrainian} from "../../../../../SystemUtils/InterpreterDictionaries/StationsDictionary.js";
+import {stationTitleIntoUkrainian} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import {Button, Tag} from 'antd';
 import TrainScheduleModal from '../TrainScheduleModal/TrainScheduleModal.jsx';
 import SpeedometerComponent from './SpeedometerComponent/SpeedometerComponent.jsx';
-import changeTrainRouteIdIntoUkrainian from "../../../../../SystemUtils/InterpreterDictionaries/TrainRoutesDictionary.js";
-import changeTrainRouteBrandedNameIntoUkrainian from "../../../../../SystemUtils/InterpreterDictionaries/TrainBrandedNamesDictionary.js";
+import changeTrainRouteIdIntoUkrainian from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
+import changeTrainRouteBrandedNameIntoUkrainian from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainBrandedNamesDictionary.js";
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });

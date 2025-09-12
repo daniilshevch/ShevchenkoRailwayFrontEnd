@@ -1,6 +1,6 @@
 ﻿import {DatePicker, Form, Input, message, Modal, AutoComplete, Switch} from "antd";
 import React, {useEffect} from "react";
-import {stationsList, stationTitleIntoUkrainian} from "../../../../SystemUtils/InterpreterDictionaries/StationsDictionary.js";
+import {stationsList, stationTitleIntoUkrainian} from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import dayjs from 'dayjs';
 import {parseTrainRaceId} from "../../GeneralComponents/TrainRaceIdParser.js";
 

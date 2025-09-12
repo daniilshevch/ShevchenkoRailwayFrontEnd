@@ -5,35 +5,53 @@ import {message} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer.jsx";
-
+import CarriageTypeAndQualityFilter
+    from "../../components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
+import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
 };
-const divideTypeAndQuality = (typeQualityClass) =>
-{
-    const typeAndQualityList = typeQualityClass.split('@');
-    const type = typeAndQualityList[0];
-    let qualities = [];
-    if(typeAndQualityList.length > 1) {
-        const qualityList = typeAndQualityList[1];
-        qualities = qualityList.split("$");
-    }
-    else
-    {
-        qualities = [];
-    }
-    return {type, qualities};
-}
+
 function CarriageListPage()
 {
     const [messageApi, contextHolder] = message.useMessage();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [carriageStats, setCarriageStats] = useState({});
     const [carriages, setCarriages] = useState(null);
     const {train_race_id, start, end} = useParams();
     const [startingStationDepartureTime, setStartingStationDepartureTime] = useState(null);
     const [endingStationArrivalTime, setEndingStationArrivalTime] = useState(null);
     const [trainRouteClass, setTrainRouteClass] = useState(null);
+
+    const initialSelectedSubtypes = useMemo(() => {
+        const dict = {};
+        const tokens = searchParams.getAll("type");
+        for(const token of tokens)
+        {
+            const {type, qualities} = divideTypeAndQuality(token);
+            if(qualities.length > 0)
+            {
+                dict[type] = Array.from(new Set(qualities));
+            }
+        }
+        return dict;
+    }, [searchParams]);
+    const initialSelectedTypes = useMemo(() => Object.keys(initialSelectedSubtypes), [initialSelectedSubtypes]);
+    const handleFilterChange = ({ queryParams }) => {
+        const current = searchParams.getAll("type");
+        const same =
+            current.length === queryParams.length &&
+            current.every((v, i) => v === queryParams[i]);
+        if (same) return;
+
+        const next = new URLSearchParams(searchParams);
+        next.delete("type");
+        for (const t of queryParams) next.append("type", t);
+        setSearchParams(next, { replace: true });
+    };
+
+
 
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
@@ -117,7 +135,6 @@ function CarriageListPage()
 
     useEffect(() => {
         const typeParams = searchParams.getAll("type");
-        const qualityParams = searchParams.getAll("quality");
         const trainData = localStorage.getItem("generalTrainRaceData");
         if (trainData)
         {
@@ -126,6 +143,7 @@ function CarriageListPage()
                 const trainDataObject = JSON.parse(trainData);
                 const carriage_statistics_list = trainDataObject.carriage_statistics_list;
                 const groupedCarriageStatisticsList = trainDataObject.grouped_carriage_statistics_list;
+                setCarriageStats(groupedCarriageStatisticsList);
                 const tripStartingStationDepartureTime = trainDataObject.trip_starting_station_departure_time;
                 setStartingStationDepartureTime(tripStartingStationDepartureTime);
                 const tripEndingStationArrivalTime = trainDataObject.trip_ending_station_arrival_time;
@@ -185,6 +203,12 @@ function CarriageListPage()
     return (
         <>
             {contextHolder}
+            <CarriageTypeAndQualityFilter
+                groupedSeats={carriageStats}
+                initialSelectedTypes={initialSelectedTypes}
+                initialSelectedSubtypes={initialSelectedSubtypes}
+                onChange={handleFilterChange}
+            ></CarriageTypeAndQualityFilter>
             <div className="carriage-list-page">
                 {carriages ? (
                     <>

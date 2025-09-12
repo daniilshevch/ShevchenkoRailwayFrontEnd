@@ -3,12 +3,13 @@ import { Segmented, Popover, Checkbox, Tag, Badge, Space, Typography, Tooltip, D
 import { DownOutlined } from "@ant-design/icons";
 import {
     changeCarriageTypeIntoUkrainian
-} from "../../../../../SystemUtils/InterpreterDictionaries/CarriagesDictionaries.js";
+} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
+
 export default function CarriageTypeAndQualityFilter(
     {
         groupedSeats = {},
-        initialSelectedTypes = [],
-        initialSelectedSubtypes = {},
+        initialSelectedTypes,
+        initialSelectedSubtypes,
         onChange
     })
 {
@@ -74,12 +75,13 @@ export default function CarriageTypeAndQualityFilter(
     //     })
     // };
     const handleSubtypesChange = (changedCarriageType, changedCarriageTypeSubtypes) => {
-        setSelectedSubtypes(previous => {
-            const nextSubtypes = {...previous, [changedCarriageType]: changedCarriageTypeSubtypes};
-            setSelectedTypes(previous => {
-                const ensureTypes = previous.includes(changedCarriageType) ? previous : [...previous, changedCarriageType];
-                implementCarriageFilteringChanges(ensureTypes, nextSubtypes);
-                return ensureTypes;
+        setSelectedSubtypes(previousSubtypes => {
+            const nextSubtypes = {...previousSubtypes, [changedCarriageType]: changedCarriageTypeSubtypes};
+            setSelectedTypes(previousTypes => {
+                const hasAny = (nextSubtypes[changedCarriageType]?.length ?? 0) > 0;
+                const nextTypes = hasAny ? Array.from(new Set([...previousTypes, changedCarriageType])) : previousTypes.filter(type => type !== changedCarriageType);
+                implementCarriageFilteringChanges(nextTypes, nextSubtypes);
+                return nextTypes;
             })
             return nextSubtypes;
         });
@@ -144,14 +146,12 @@ export default function CarriageTypeAndQualityFilter(
     const segmentedItems = carriageTypes.map((carriageType) => ({ value: carriageType, label: <TypeLabel type={carriageType}/> }));
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 60 }}>
             <Segmented
                 options={segmentedItems}
                 multiple
                 size="large"
                 value={selectedTypes}
-                //onChange={handleTypesChange}
                 style={{ maxWidth: "100%", flexWrap: "wrap" }}
             />
 

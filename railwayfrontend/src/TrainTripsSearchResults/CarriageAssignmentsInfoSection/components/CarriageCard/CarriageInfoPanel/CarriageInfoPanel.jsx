@@ -12,7 +12,7 @@ import { TbCircleLetterCFilled } from "react-icons/tb";
 import './CarriageInfoPanel.css';
 import {
     changeCarriageTypeIntoUkrainian
-} from "../../../../../../SystemUtils/InterpreterDictionaries/CarriagesDictionaries.js";
+} from "../../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 function CarriageInfoPanel({ carriageNumber, type, qualityClass, features,  freePlaces, totalPlaces, price })
 {
     const classIcons = {

@@ -2,9 +2,9 @@
 import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import React from "react";
 const { Text } = Typography;
-import {stationTitleIntoUkrainian} from "../InterpreterDictionaries/StationsDictionary.js";
-import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterDictionaries/TrainRoutesDictionary.js";
-import {changeCarriageTypeIntoUkrainian} from "../InterpreterDictionaries/CarriagesDictionaries.js";
+import {stationTitleIntoUkrainian} from "../InterpreterMethodsAndDictionaries/StationsDictionary.js";
+import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
+import {changeCarriageTypeIntoUkrainian} from "../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import "./UserPotentialTicketCartDrawer.css";
 const formatDM_HM = (value) => {
     const d = new Date(value);

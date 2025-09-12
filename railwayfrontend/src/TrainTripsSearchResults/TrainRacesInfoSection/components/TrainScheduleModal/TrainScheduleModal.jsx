@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { Modal, Timeline, Typography } from 'antd';
-import { stationTitleIntoUkrainian } from "../../../../../SystemUtils/InterpreterDictionaries/StationsDictionary.js";
+import { stationTitleIntoUkrainian } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import './TrainScheduleModal.css';
 
 const { Text } = Typography;
