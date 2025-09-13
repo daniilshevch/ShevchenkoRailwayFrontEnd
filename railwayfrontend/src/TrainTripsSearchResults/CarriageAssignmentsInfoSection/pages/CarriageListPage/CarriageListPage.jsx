@@ -10,6 +10,9 @@ import CarriageTypeAndQualityFilter
 import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
 import CarriageFilteringHeader from "../../components/CarriageFilteringHeader/CarriageFilteringHeader.jsx";
 import TrainRaceInfoHeader from "../../components/TrainRaceInfoHeader/TrainRaceInfoHeader.jsx";
+import changeTrainRouteIdIntoUkrainian
+    from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
+import TrainScheduleModal from "../../../TrainRacesInfoSection/components/TrainScheduleModal/TrainScheduleModal.jsx";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -24,7 +27,10 @@ function CarriageListPage()
     const {train_race_id, start, end} = useParams();
     const [startingStationDepartureTime, setStartingStationDepartureTime] = useState(null);
     const [endingStationArrivalTime, setEndingStationArrivalTime] = useState(null);
+    const [trainRouteId, setTrainRouteId] = useState(null);
     const [trainRouteClass, setTrainRouteClass] = useState(null);
+    const [isScheduleVisible, setIsScheduleVisible] = useState(false);
+    const [trainStops, setTrainStops] = useState(null);
 
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
@@ -155,7 +161,10 @@ function CarriageListPage()
                 const tripEndingStationArrivalTime = trainDataObject.trip_ending_station_arrival_time;
                 setEndingStationArrivalTime(tripEndingStationArrivalTime);
                 const trainRouteQualityClass = trainDataObject.train_route_class;
+                const trainRouteId = trainDataObject.train_route_id;
                 setTrainRouteClass(trainRouteQualityClass);
+                setTrainRouteId(trainRouteId);
+                setTrainStops(trainDataObject.train_schedule);
                 console.log(groupedCarriageStatisticsList);
                 console.log(typeParams);
                 let carriagesList = [];
@@ -209,7 +218,15 @@ function CarriageListPage()
     return (
         <>
             {contextHolder}
-            <TrainRaceInfoHeader />
+            <TrainRaceInfoHeader
+                trainRouteId={changeTrainRouteIdIntoUkrainian(trainRouteId)}
+                trainRouteQualityClass={trainRouteClass}
+                startingStation={start}
+                endingStation={end}
+                startingStationDepartureTime={startingStationDepartureTime}
+                endingStationArrivalTime={endingStationArrivalTime}
+                setTrainScheduleModalVisible={setIsScheduleVisible}
+            />
             <CarriageFilteringHeader
                 groupedSeats={carriageStats}
                 initialSelectedTypes={initialSelectedTypes}
@@ -241,6 +258,11 @@ function CarriageListPage()
                 <p>Завантаження...</p>
             )}
             </div>
+            <TrainScheduleModal
+                visible={isScheduleVisible}
+                onClose={() => setIsScheduleVisible(false)}
+                trainStops={trainStops}
+            />
         </>
     )
 

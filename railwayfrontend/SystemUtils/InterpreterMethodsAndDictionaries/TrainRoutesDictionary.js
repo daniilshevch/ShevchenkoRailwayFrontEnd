@@ -10,6 +10,10 @@
     }
     function changeTrainRouteIdIntoUkrainian(trainRouteId)
     {
+        if(!trainRouteId)
+        {
+            return null;
+        }
         for (const key of Object.keys(lettersDictionary).sort((a, b) => b.length - a.length)) {
             if (trainRouteId.endsWith(key)) {
                 const baseNumber = trainRouteId.slice(0, -key.length);

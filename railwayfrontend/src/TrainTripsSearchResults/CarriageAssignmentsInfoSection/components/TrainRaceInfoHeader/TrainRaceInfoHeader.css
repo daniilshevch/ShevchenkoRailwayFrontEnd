@@ -13,10 +13,10 @@
     margin-top: 55px;
 }
 
-/* Ліва частина розтягується, щоб фільтр міг переноситись */
 .train-race-info-toolbar .toolbar-left {
     flex: 1 1 auto;
-    min-width: 0;          /* важливо, щоб Segmented міг переноситись у кілька рядків */
+    min-width: 0;
+    display: flex;
 }
 
 /* Права частина — фіксована */
@@ -27,4 +27,54 @@
 /* На випадок довгого списку опцій */
 .train-race-info-toolbar .ant-segmented {
     flex-wrap: wrap;
+}
+
+.train-route-id
+{
+    font-weight: 700;
+}
+.train-class-section-A
+{
+    font-weight: 700;
+    color: red;
+    margin-right: 5px;
+}
+.train-class-section-B
+{
+    font-weight: 700;
+    color: green;
+    margin-right: 5px;
+}
+.train-class-section-C
+{
+    font-weight: 700;
+    color: blue;
+    margin-right: 5px;
+}
+
+.cart-limit {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+}
+.station-title
+{
+    font-weight: 700;
+}
+.station-time
+{
+    font-weight: 500;
+    margin-right: 5px;
+}
+.arrow
+{
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.train-schedule-bar-button
+{
+    font-weight: 700;
+    margin-right: 0;
+    color: blue;
 }
