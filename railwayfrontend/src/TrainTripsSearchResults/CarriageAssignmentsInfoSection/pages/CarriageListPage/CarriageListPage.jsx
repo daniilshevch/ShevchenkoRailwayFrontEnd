@@ -262,6 +262,7 @@ function CarriageListPage()
                 visible={isScheduleVisible}
                 onClose={() => setIsScheduleVisible(false)}
                 trainStops={trainStops}
+                trainQualityClass={trainRouteClass}
             />
         </>
     )

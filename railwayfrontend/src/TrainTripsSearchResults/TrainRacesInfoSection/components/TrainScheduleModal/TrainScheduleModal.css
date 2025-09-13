@@ -7,9 +7,14 @@
 /*    background-color: #1890ff !important;*/
 /*}*/
 
-
-.trip-segment .ant-timeline-item-tail {
+.class-A.trip-segment .ant-timeline-item-tail {
+    border-left: 3px solid red; /* або #1890ff — синя, або будь-який інший */
+}
+.class-B.trip-segment .ant-timeline-item-tail {
     border-left: 3px solid #52c41a; /* або #1890ff — синя, або будь-який інший */
+}
+.class-C.trip-segment .ant-timeline-item-tail {
+    border-left: 3px solid blue; /* або #1890ff — синя, або будь-який інший */
 }
 .non-trip-segment .ant-timeline-item-tail {
     border-left: 3px dashed grey; /* або: lightgray, або 0px */
@@ -20,9 +25,19 @@
 .ant-timeline-item:first-child {
     padding-top: 1px;
 }
-.final-trip-stop .ant-timeline-item-head {
+.class-A.final-trip-stop .ant-timeline-item-head {
+    background-color: red;
+    border: red;
+    border-radius: 50%;
+}
+.class-B.final-trip-stop .ant-timeline-item-head {
     background-color: #52c41a;
     border: #52c41a;
+    border-radius: 50%;
+}
+.class-C.final-trip-stop .ant-timeline-item-head {
+    background-color: blue;
+    border: blue;
     border-radius: 50%;
 }
 

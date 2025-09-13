@@ -18,7 +18,27 @@ const defineTripStopType = (train_stop) => {
         return "non-trip-segment"
     }
 }
-const TrainScheduleModal = ({ visible, onClose, trainStops }) => {
+const getColorForQualityClass = (trainQualityClass) =>
+{
+    if(trainQualityClass === "A")
+    {
+        return "red";
+    }
+    else if(trainQualityClass === "B")
+    {
+        return "green";
+    }
+    else if(trainQualityClass === "C")
+    {
+        return "blue";
+    }
+    else
+    {
+        return "black";
+    }
+
+}
+const TrainScheduleModal = ({ visible, onClose, trainStops, trainQualityClass }) => {
     if(trainStops && trainStops.length > 0) {
         return (
             <Modal className="train-schedule-modal" onClose={onClose}
@@ -27,6 +47,7 @@ const TrainScheduleModal = ({ visible, onClose, trainStops }) => {
                    onCancel={onClose}
                    footer={null}
                    width={550}
+                   zIndex={2000}
 
             >
                 <Timeline mode="left">
@@ -44,7 +65,7 @@ const TrainScheduleModal = ({ visible, onClose, trainStops }) => {
                         return (
                             <Timeline.Item
                                 key={index}
-                                color={stop.is_part_of_trip && !stop.is_final_trip_stop ? 'green' : 'gray'}
+                                color={stop.is_part_of_trip && !stop.is_final_trip_stop ? getColorForQualityClass(trainQualityClass) : 'gray'}
                                 //label={departure !== '—' ? `${departure}` : arrival}
                                 label={
                                     <div className="timeline-label">
@@ -52,7 +73,7 @@ const TrainScheduleModal = ({ visible, onClose, trainStops }) => {
                                         {departure !== '—' && <div className="departure-time">{departure}</div>}
                                     </div>
                                 }
-                                className={defineTripStopType(stop)}
+                                className={`${defineTripStopType(stop)} class-${trainQualityClass}`}
                             >
                                 <div className="timeline-stop-inline">
                                     <div>

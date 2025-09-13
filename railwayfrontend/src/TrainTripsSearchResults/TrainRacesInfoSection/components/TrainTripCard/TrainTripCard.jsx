@@ -212,6 +212,7 @@ function TrainTripCard({ train })
                 visible={isScheduleVisible}
                 onClose={() => setIsScheduleVisible(false)}
                 trainStops={train.train_schedule}
+                trainQualityClass={train.train_route_class}
             />
         </div>
     );
