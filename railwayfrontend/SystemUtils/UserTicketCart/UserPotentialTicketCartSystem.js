@@ -7,6 +7,35 @@ const initialPotentialTicketCartState = {
 };
 function potentialTicketCartReducer(state, action)
 {
+    const addTicket = () => {
+        const ticketExistance = state.potentialTicketsList.some(potential_ticket =>
+            potential_ticket.train_race_id === action.ticket.train_race_id
+            && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
+            && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
+            && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
+            && potential_ticket.trip_ending_station === action.ticket.trip_ending_station
+        );
+        const updatedTicketsList = ticketExistance ? state.potentialTicketsList : [...state.potentialTicketsList, action.ticket];
+        let newTotalSum = state.totalSum;
+        if (ticketExistance === false) {
+            newTotalSum += action.ticket.price;
+        }
+        return {...state, potentialTicketsList: updatedTicketsList, totalSum: newTotalSum};
+    }
+    const removeTicket = () => {
+        const updatedTicketsList = state.potentialTicketsList.filter(potential_ticket => !(potential_ticket.train_race_id === action.ticket.train_race_id
+            && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
+            && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
+            && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
+            && potential_ticket.trip_ending_station === action.ticket.trip_ending_station));
+
+        const newTotalSum = updatedTicketsList.reduce(
+            (sum, ticket) => sum + (ticket.price || 0),
+            0
+        );
+        return {...state, potentialTicketsList: updatedTicketsList, totalSum: newTotalSum};
+    }
+
     switch (action.type)
     {
         case "ALLOCATE_FROM_LOCAL_STORAGE": {
@@ -22,35 +51,15 @@ function potentialTicketCartReducer(state, action)
         case "CLOSE":
             return {...state, isOpen: false};
         case "ADD_TICKET": {
-            const ticketExistance = state.potentialTicketsList.
-            some(potential_ticket =>
-                potential_ticket.train_race_id === action.ticket.train_race_id
-            && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
-            && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
-            && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
-            && potential_ticket.trip_ending_station === action.ticket.trip_ending_station
-            );
-            const updatedTicketsList = ticketExistance ? state.potentialTicketsList : [...state.potentialTicketsList, action.ticket];
-            let newTotalSum = state.totalSum;
-            if(ticketExistance === false)
-            {
-                newTotalSum += action.ticket.price;
-            }
-            return {...state, potentialTicketsList: updatedTicketsList, totalSum: newTotalSum};
+
+            return addTicket();
         }
         case "REMOVE_TICKET": {
-            const updatedTicketsList = state.potentialTicketsList.
-            filter(potential_ticket => !(potential_ticket.train_race_id === action.ticket.train_race_id
-                && potential_ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad
-                && potential_ticket.place_in_carriage === action.ticket.place_in_carriage
-                && potential_ticket.trip_starting_station === action.ticket.trip_starting_station
-                && potential_ticket.trip_ending_station === action.ticket.trip_ending_station));
-
-            const newTotalSum = updatedTicketsList.reduce(
-                (sum, ticket) => sum + (ticket.price || 0),
-                0
-            );
-            return {...state, potentialTicketsList: updatedTicketsList, totalSum: newTotalSum};
+            return removeTicket();
+        }
+        case "CHANGE_TICKET_STATUS": {
+            removeTicket();
+            return addTicket();
         }
         case "CLEAR_CART":
             return {...state, potentialTicketsList: [], totalSum: 0};

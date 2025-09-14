@@ -1,6 +1,6 @@
 ﻿import {Button, Divider, Drawer, Space, Typography, Tooltip, Badge} from "antd";
 import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
-import React from "react";
+import React, {useReducer} from "react";
 const { Text } = Typography;
 import {stationTitleIntoUkrainian} from "../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
@@ -12,27 +12,30 @@ import {useNavigate} from "react-router-dom";
 import {
     changeTicketBookingStatusIntoUkrainian
 } from "../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
+import {initialPotentialTicketCartState, potentialTicketCartReducer} from "./UserPotentialTicketCartSystem.js";
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
 {
     const navigate = useNavigate();
+    const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
         const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
-        console.log(potentialTicketsCart);
         const token = localStorage.getItem('token');
         const ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
-        console.log("Tickets");
-        console.log(ticketBookings);
+        //console.log("BOOKINGS IN CART");
+        //console.log(ticketBookings);
         const ticketBookingsDtoForFetch = [];
         for(const ticket of ticketBookings)
         {
-            const ticketDto = {
-                train_route_on_date_id: ticket.train_race_id,
-                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-                starting_station_title: ticket.trip_starting_station,
-                ending_station_title: ticket.trip_ending_station,
-                place_in_carriage: ticket.place_in_carriage
-            };
-            ticketBookingsDtoForFetch.push(ticketDto);
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+                const ticketDto = {
+                    train_route_on_date_id: ticket.train_race_id,
+                    passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                    starting_station_title: ticket.trip_starting_station,
+                    ending_station_title: ticket.trip_ending_station,
+                    place_in_carriage: ticket.place_in_carriage
+                };
+                ticketBookingsDtoForFetch.push(ticketDto);
+            }
         }
         const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
             method: 'POST',
@@ -46,8 +49,41 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         {
             throw new Error("Невірні облікові дані");
         }
-        const data = await response.json();
-        console.log(data);
+        const ticketReservationResult =  await response.json();
+
+
+        for(const ticket of ticketBookings)
+        {
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+                console.log("FROM BACK");
+                console.log(ticketReservationResult);
+                console.log("IN LOCAL STORAGE");
+                console.log(ticketBookings);
+                const ticketBookingReservationStatus = ticketReservationResult.find(ticket_booking =>
+                    ticket_booking.train_route_on_date_id === ticket.train_race_id &&
+                    ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
+                    ticket_booking.starting_station_title === ticket.trip_starting_station &&
+                    ticket_booking.ending_station_title === ticket.trip_ending_station &&
+                    ticket_booking.place_in_carriage === ticket.place_in_carriage)?.ticket_status;
+                console.log(`STATUS: ${ticketBookingReservationStatus}`);
+                if (ticketBookingReservationStatus === "Booking_In_Progress") {
+                    ticket.ticket_status = "RESERVED";
+                } else {
+                    ticket.ticket_status = "BOOKING_FAILED";
+                }
+            }
+        }
+        console.log("TICKET BOOKINGS");
+        console.log(ticketBookings);
+        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        for(const ticket of ticketBookings)
+        {
+            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+        }
+        localStorage.setItem("potentialTicketsCart", JSON.stringify({
+            potentialTicketsList: ticketBookings}));
+        console.log("DATA");
+        console.log(ticketReservationResult);
         navigate('/ticket-booking');
     }
 
