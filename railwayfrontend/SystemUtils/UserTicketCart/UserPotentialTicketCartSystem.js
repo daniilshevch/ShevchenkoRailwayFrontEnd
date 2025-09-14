@@ -1,4 +1,5 @@
 ﻿import {React, useReducer} from "react";
+import {SERVER_URL} from "../ConnectionConfiguration/ConnectionConfiguration.js";
 const initialPotentialTicketCartState = {
     potentialTicketsList: [],
     isOpen: false,

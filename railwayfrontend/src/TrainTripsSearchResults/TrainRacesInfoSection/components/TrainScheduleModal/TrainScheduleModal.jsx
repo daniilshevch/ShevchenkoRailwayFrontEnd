@@ -32,17 +32,21 @@ const getColorForQualityClass = (trainQualityClass) =>
     {
         return "blue";
     }
+    else if(trainQualityClass === "S")
+    {
+        return "purple";
+    }
     else
     {
         return "black";
     }
 
 }
-const TrainScheduleModal = ({ visible, onClose, trainStops, trainQualityClass }) => {
+const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQualityClass, startingStationUkrainianTitle, endingStationUkraininTitle }) => {
     if(trainStops && trainStops.length > 0) {
         return (
             <Modal className="train-schedule-modal" onClose={onClose}
-                   title="Розклад руху"
+                   title={`Розклад руху поїзда ${trainRouteId} (${startingStationUkrainianTitle} - ${endingStationUkraininTitle})`}
                    open={visible}
                    onCancel={onClose}
                    footer={null}

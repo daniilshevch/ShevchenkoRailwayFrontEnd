@@ -36,6 +36,8 @@ function trainQualityClassTag(quality_class)
     const defineQualityClassColor = (quality_class) =>
     {
         switch (quality_class) {
+            case "S":
+                return "purple";
             case "A":
                 return "red";
             case "B":
@@ -213,6 +215,9 @@ function TrainTripCard({ train })
                 onClose={() => setIsScheduleVisible(false)}
                 trainStops={train.train_schedule}
                 trainQualityClass={train.train_route_class}
+                trainRouteId={changeTrainRouteIdIntoUkrainian(train.train_route_id)}
+                startingStationUkrainianTitle={stationTitleIntoUkrainian(train.full_route_starting_station_title)}
+                endingStationUkraininTitle={stationTitleIntoUkrainian(train.full_route_ending_station_title)}
             />
         </div>
     );

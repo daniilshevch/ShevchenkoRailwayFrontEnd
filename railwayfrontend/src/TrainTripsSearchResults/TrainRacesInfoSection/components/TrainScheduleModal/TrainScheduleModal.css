@@ -7,6 +7,9 @@
 /*    background-color: #1890ff !important;*/
 /*}*/
 
+.class-S.trip-segment .ant-timeline-item-tail {
+    border-left: 3px solid purple; /* або #1890ff — синя, або будь-який інший */
+}
 .class-A.trip-segment .ant-timeline-item-tail {
     border-left: 3px solid red; /* або #1890ff — синя, або будь-який інший */
 }
@@ -23,7 +26,12 @@
     border-left: 3px dashed grey; /* або: lightgray, або 0px */
 }
 .ant-timeline-item:first-child {
-    padding-top: 1px;
+    padding-top: 7px;
+}
+.class-S.final-trip-stop .ant-timeline-item-head {
+    background-color: purple;
+    border: purple;
+    border-radius: 50%;
 }
 .class-A.final-trip-stop .ant-timeline-item-head {
     background-color: red;

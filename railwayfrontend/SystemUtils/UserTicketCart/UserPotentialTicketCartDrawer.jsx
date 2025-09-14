@@ -7,8 +7,50 @@ import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from ".
 import {changeCarriageTypeIntoUkrainian} from "../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import "./UserPotentialTicketCartDrawer.css";
 import {formatDM_HM} from "../InterpreterMethodsAndDictionaries/TimeFormaters.js";
+import {SERVER_URL} from "../ConnectionConfiguration/ConnectionConfiguration.js";
+import {useNavigate} from "react-router-dom";
+import {
+    changeTicketBookingStatusIntoUkrainian
+} from "../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
 {
+    const navigate = useNavigate();
+    const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
+        const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+        console.log(potentialTicketsCart);
+        const token = localStorage.getItem('token');
+        const ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
+        console.log("Tickets");
+        console.log(ticketBookings);
+        const ticketBookingsDtoForFetch = [];
+        for(const ticket of ticketBookings)
+        {
+            const ticketDto = {
+                train_route_on_date_id: ticket.train_race_id,
+                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                starting_station_title: ticket.trip_starting_station,
+                ending_station_title: ticket.trip_ending_station,
+                place_in_carriage: ticket.place_in_carriage
+            };
+            ticketBookingsDtoForFetch.push(ticketDto);
+        }
+        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(ticketBookingsDtoForFetch),
+        });
+        if(!response.ok)
+        {
+            throw new Error("Невірні облікові дані");
+        }
+        const data = await response.json();
+        console.log(data);
+        navigate('/ticket-booking');
+    }
+
     const tickets = cartState.potentialTicketsList;
     return (
         <Drawer
@@ -54,10 +96,11 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                     <div className="cart-ticket-header">
                                         <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
                                         <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
-                                        <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text>
+                                        <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text> |&nbsp;
+                                        <b>Статус:</b> <Text className="place-number">{changeTicketBookingStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
                                     </div>
                                     <div className="cart-ticket-route">
-                                        <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)}</Text>)
+                                        <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>
                                     </div>
                                     {/*<Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>*/}
                                 </div>
@@ -80,7 +123,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                             <Text strong className="cart-total-price">{cartState.totalSum} ₴</Text>
                         </div>
                         <Divider style={{ margin: "12px 0" }} />
-                        <Button type="primary" block size="large" onClick={()=> {}}>
+                        <Button type="primary" block size="large" onClick={()=> INITIALIZE_TICKET_BOOKING_PROCESS()}>
                             Оформити
                         </Button>
                         <Text type="secondary" className="cart-limit">

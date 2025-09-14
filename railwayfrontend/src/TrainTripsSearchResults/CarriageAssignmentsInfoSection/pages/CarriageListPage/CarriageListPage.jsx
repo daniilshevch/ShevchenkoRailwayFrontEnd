@@ -13,6 +13,9 @@ import TrainRaceInfoHeader from "../../components/TrainRaceInfoHeader/TrainRaceI
 import changeTrainRouteIdIntoUkrainian
     from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import TrainScheduleModal from "../../../TrainRacesInfoSection/components/TrainScheduleModal/TrainScheduleModal.jsx";
+import {
+    stationTitleIntoUkrainian
+} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -31,6 +34,8 @@ function CarriageListPage()
     const [trainRouteClass, setTrainRouteClass] = useState(null);
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const [trainStops, setTrainStops] = useState(null);
+    const [fullRouteStartingStationTitle, setFullRouteStartingStationTitle] = useState(null);
+    const [fullRouteEndingStationTitle, setFullRouteEndingStationTitle] = useState(null);
 
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
@@ -120,7 +125,8 @@ function CarriageListPage()
             trip_ending_station: endStation,
             trip_starting_station_departure_time: startingStationDepartureTime,
             trip_ending_station_arrival_time: endingStationArrivalTime,
-            price: price ?? 0
+            price: price ?? 0,
+            ticket_status: "SELECTED_YET_NOT_RESERVED"
         };
         if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
             if(potentialTicketCartState.potentialTicketsList.length < 4)
@@ -165,6 +171,8 @@ function CarriageListPage()
                 setTrainRouteClass(trainRouteQualityClass);
                 setTrainRouteId(trainRouteId);
                 setTrainStops(trainDataObject.train_schedule);
+                setFullRouteStartingStationTitle(trainDataObject.full_route_starting_station_title);
+                setFullRouteEndingStationTitle(trainDataObject.full_route_ending_station_title)
                 console.log(groupedCarriageStatisticsList);
                 console.log(typeParams);
                 let carriagesList = [];
@@ -263,6 +271,9 @@ function CarriageListPage()
                 onClose={() => setIsScheduleVisible(false)}
                 trainStops={trainStops}
                 trainQualityClass={trainRouteClass}
+                trainRouteId={changeTrainRouteIdIntoUkrainian(trainRouteId)}
+                startingStationUkrainianTitle={stationTitleIntoUkrainian(fullRouteStartingStationTitle)}
+                endingStationUkraininTitle={stationTitleIntoUkrainian(fullRouteEndingStationTitle)}
             />
         </>
     )
