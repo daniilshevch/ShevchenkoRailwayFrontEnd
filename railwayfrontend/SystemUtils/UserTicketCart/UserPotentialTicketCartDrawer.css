@@ -26,7 +26,7 @@
     flex-direction: column;
     align-items: flex-end; /* вирівнює і кнопку, і ціну праворуч */
     gap: 6px;
-    min-width: 100px;      /* опційно: щоб не “стрибало” при різних довжинах */
+    min-width: 80px;      /* опційно: щоб не “стрибало” при різних довжинах */
 }
 
 .ticket-price {

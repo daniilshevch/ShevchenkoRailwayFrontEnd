@@ -125,6 +125,8 @@ function CarriageListPage()
             trip_ending_station: endStation,
             trip_starting_station_departure_time: startingStationDepartureTime,
             trip_ending_station_arrival_time: endingStationArrivalTime,
+            full_route_starting_station: fullRouteStartingStationTitle,
+            full_route_ending_station: fullRouteEndingStationTitle,
             price: price ?? 0,
             ticket_status: "SELECTED_YET_NOT_RESERVED"
         };

@@ -1,3 +1,39 @@
+
+const ticket = {
+    carriage_position_in_squad: 3,
+    carriage_quality_class: "C",
+    carriage_type : "Coupe",
+    place_in_carriage
+        :
+        17,
+    price
+        :
+        211,
+    ticket_status
+        :
+        "SELECTED_YET_NOT_RESERVED",
+    train_race_id
+        :
+        "1K_2025_10_01",
+    train_route_quality_class
+        :
+        "S",
+    trip_ending_station
+        :
+        "Zhmerynka",
+    trip_ending_station_arrival_time
+        :
+        "2025-10-02T02:51:00",
+    trip_starting_station
+        :
+        "Ternopil",
+    trip_starting_station_departure_time
+        :
+        "2025-10-02T00:21:00",
+    full_route_starting_station: "Odesa-Holovna",
+    full_route_ending_station: "Lviv"
+};
+
 const carriage_statistics_list = [
     {
         "carriage_position_in_squad": 0,
@@ -3452,4 +3488,4 @@ const grouped_carriage_statistics_list = {
         }
     }
 };
-export {carriage_statistics_list, grouped_carriage_statistics_list};
+export {carriage_statistics_list, grouped_carriage_statistics_list, ticket};

@@ -1,0 +1,22 @@
+/* SingleTicketBookingConfirmationInfoComponent.css */
+.ticket-two-col {
+    display: grid;
+    grid-template-columns: 1fr 360px; /* ліворуч — гнучко, праворуч — фіксована ширина форми */
+    gap: 16px;
+    align-items: start; /* щоб верхні краї були на одному рівні */
+}
+
+.ticket-two-col__left {
+    min-width: 0; /* щоб Descriptions не вилазив за межі */
+}
+
+.ticket-two-col__right {
+    /* вертикальне вирівнювання Form.Item нормально працює за замовчуванням */
+}
+
+/* На планшетах і менше — складай у стовпець */
+@media (max-width: 992px) {
+    .ticket-two-col {
+        grid-template-columns: 1fr;
+    }
+}

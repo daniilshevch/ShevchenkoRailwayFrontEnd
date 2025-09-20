@@ -14,7 +14,14 @@ const BackgroundImageCarousel = () => {
             </div>
             <div>
                 <img
-                    src="/background_images/lutsk1day.jpg"
+                    src="/background_images/test3.png"
+                    alt="Wallpaper 2"
+                    style={{ width: '100%', height: '700px', objectFit: 'cover' }}
+                />
+            </div>
+            <div>
+                <img
+                    src="/background_images/viaduk.jpg"
                     alt="Wallpaper 2"
                     style={{ width: '100%', height: '700px', objectFit: 'cover' }}
                 />
