@@ -47,25 +47,30 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         {
             throw new Error("Невірні облікові дані");
         }
-        const ticketReservationResult =  await response.json();
+        const ticketListReservationResult =  await response.json();
 
 
         for(const ticket of ticketBookings)
         {
             if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
                 console.log("FROM BACK");
-                console.log(ticketReservationResult);
                 console.log("IN LOCAL STORAGE");
                 console.log(ticketBookings);
-                const ticketBookingReservationStatus = ticketReservationResult.find(ticket_booking =>
+                const singleTicketBookingReservationResult = ticketListReservationResult.find(ticket_booking =>
                     ticket_booking.train_route_on_date_id === ticket.train_race_id &&
                     ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
                     ticket_booking.starting_station_title === ticket.trip_starting_station &&
                     ticket_booking.ending_station_title === ticket.trip_ending_station &&
-                    ticket_booking.place_in_carriage === ticket.place_in_carriage)?.ticket_status;
+                    ticket_booking.place_in_carriage === ticket.place_in_carriage);
+                const ticketBookingReservationStatus = singleTicketBookingReservationResult?.ticket_status;
                 console.log(`STATUS: ${ticketBookingReservationStatus}`);
                 if (ticketBookingReservationStatus === "Booking_In_Progress") {
                     ticket.ticket_status = "RESERVED";
+                    ticket.id = singleTicketBookingReservationResult.id;
+                    ticket.user_id = singleTicketBookingReservationResult.user_id;
+                    ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
+                    ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;
+                    ticket.booking_expiration_time = singleTicketBookingReservationResult.booking_expiration_time;
                 } else {
                     ticket.ticket_status = "BOOKING_FAILED";
                 }
@@ -81,7 +86,6 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         localStorage.setItem("potentialTicketsCart", JSON.stringify({
             potentialTicketsList: ticketBookings}));
         console.log("DATA");
-        console.log(ticketReservationResult);
         navigate('/ticket-booking');
     }
 

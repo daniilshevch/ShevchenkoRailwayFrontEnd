@@ -1,5 +1,5 @@
-﻿import React from "react";
-import { Card, Descriptions, Form, Input, Typography } from "antd";
+﻿import React, {useEffect, useReducer} from "react";
+import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space } from "antd";
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
@@ -11,6 +11,11 @@ import changeTrainRouteIdIntoUkrainian, {
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import {formatDM_HM} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TimeFormaters.js";
 import "./SingleTicketBookingConfirmationInfoComponent.css";
+import {
+    initialPotentialTicketCartState,
+    potentialTicketCartReducer
+} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
+import {SERVER_URL} from "../../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
 const { Text } = Typography;
 function UpperOrLower(number)
 {
@@ -24,8 +29,40 @@ function UpperOrLower(number)
     }
 
 }
-function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, namePrefix})
+
+function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, namePrefix, potentialTicketCartState, potentialTicketCartDispatch})
 {
+    async function cancelTicketReservation(ticket)
+    {
+        const token = localStorage.getItem("token");
+        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+        const ticket_info = {
+            id: ticket.id,
+            user_id: ticket.user_id,
+            train_route_on_date_id: ticket.train_race_id,
+            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+            passenger_carriage_id: ticket.passenger_carriage_id,
+            starting_station_title: ticket.trip_starting_station,
+            ending_station_title: ticket.trip_ending_station,
+            place_in_carriage: ticket.place_in_carriage,
+            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+            booking_initialization_time: ticket.booking_initialization_time,
+            booking_expiration_time: ticket.booking_expiration_time
+        };
+        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Cancel-Ticket-Booking-Reservation`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(ticket_info)
+        });
+        if (!response.ok)
+        {
+            console.log(response);
+        }
+    }
+
     if(!ticket)
     {
         return null;
@@ -34,6 +71,18 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
         <Card
             size="small"
             title={`Квиток ${index + 1} із ${total}`}
+            extra={
+                <Space size={8}>
+                    <Popconfirm
+                        title="Скасувати бронь на цей квиток?"
+                        okText="Так"
+                        cancelText="Ні"
+                        onConfirm={() => {cancelTicketReservation(ticket)}}
+                    >
+                        <Button size="small" danger>Скасувати бронювання</Button>
+                    </Popconfirm>
+                </Space>
+            }
         >
             <div className="ticket-two-col">
                 <div className="ticket-two-col__left">

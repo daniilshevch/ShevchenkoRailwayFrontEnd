@@ -5,7 +5,7 @@ import SingleTicketBookingConfirmationInfoComponent
 
 
 const { Title, Text } = Typography;
-function TicketBookingsCarousel({tickets, onSubmit})
+function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, potentialTicketCartDispatch})
 {
     const [form] = Form.useForm();
     const carouselRef = useRef(null);
@@ -26,7 +26,7 @@ function TicketBookingsCarousel({tickets, onSubmit})
         <Card style={{ maxWidth: 1000, margin: "0 auto" }} bodyStyle={{ padding: 16 }}>
             <Space direction="vertical" size={16} style={{ width: "100%" }}>
                 <Title level={4} style={{ margin: 0 }}>
-                    Оформлення квитків ({total}/4)
+                    Оформлення квитків
                 </Title>
 
                 <Form form={form} layout="vertical">
@@ -45,6 +45,8 @@ function TicketBookingsCarousel({tickets, onSubmit})
                                     index={idx}
                                     total={total}
                                     namePrefix={["passengers", idx]}
+                                    potentialTicketCartState={potentialTicketCartState}
+                                    potentialTicketCartDispatch={potentialTicketCartDispatch}
                                 />
                             </div>
                         ))}

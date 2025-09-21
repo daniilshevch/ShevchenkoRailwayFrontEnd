@@ -23,10 +23,23 @@ function TicketBookingConfirmationPage()
             console.error(error);
         }
     }, []);
+    useEffect(() => {
+        try
+        {
+            localStorage.setItem("potentialTicketsCart", JSON.stringify({
+                potentialTicketsList: potentialTicketCartState.potentialTicketsList}));
+        }
+        catch(error)
+        {
+            console.error(error);
+        }
+    }, [potentialTicketCartState.potentialTicketsList]);
     return (
         <div className="booking-background-image">
             <TicketBookingsCarousel
                 tickets={potentialTicketCartState.potentialTicketsList}
+                potentialTicketCartState={potentialTicketCartState}
+                potentialTicketCartDispatch={potentialTicketCartDispatch}
             />
         </div>
     )

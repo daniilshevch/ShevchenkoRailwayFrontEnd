@@ -4,7 +4,7 @@ import './BackgroundImageCarousel.css';
 
 const BackgroundImageCarousel = () => {
     return (
-        <Carousel autoplay>
+        <Carousel autoplay = {{dotDuration: true}}>
             <div>
                 <img
                     src="/background_images/lutsk1night.jpg"
