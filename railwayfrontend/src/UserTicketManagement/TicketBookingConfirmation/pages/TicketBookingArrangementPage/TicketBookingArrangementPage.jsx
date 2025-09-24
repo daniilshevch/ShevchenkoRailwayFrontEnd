@@ -3,10 +3,10 @@ import {useEffect, useReducer, useState} from "react";
 import {
     initialPotentialTicketCartState,
     potentialTicketCartReducer
-} from "../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
-import TicketBookingsCarousel from "../components/TicketBookingsCarousel/TicketBookingsCarousel.jsx";
-import "./TicketBookingConfirmationPage.css";
-function TicketBookingConfirmationPage()
+} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
+import TicketBookingsCarousel from "../../components/TicketBookingsCarousel/TicketBookingsCarousel.jsx";
+import "./TicketBookingArrangementPage.css";
+function TicketBookingArrangementPage()
 {
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     useEffect(() => {
@@ -44,4 +44,4 @@ function TicketBookingConfirmationPage()
         </div>
     )
 }
-export default TicketBookingConfirmationPage;
+export default TicketBookingArrangementPage;

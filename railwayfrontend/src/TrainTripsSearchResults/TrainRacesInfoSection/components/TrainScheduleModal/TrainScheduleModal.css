@@ -87,6 +87,7 @@
     position: relative;
     font-size: 13px;
     color: #555;
+    font-weight: 500;
 }
 
 .arrival-time {

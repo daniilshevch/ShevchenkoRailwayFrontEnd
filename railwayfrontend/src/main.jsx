@@ -15,10 +15,10 @@ import DateSlider from "./TrainTripsSearchResults/TrainRacesInfoSection/componen
 import CarriageTypeAndQualityFilter
     from "./TrainTripsSearchResults/CarriageAssignmentsInfoSection/components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
 import {grouped_carriage_statistics_list} from "../DevelopmentHelpingTools/TestData.js";
-import TicketBookingConfirmationPage
-    from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingConfirmationPage.jsx";
+import TicketBookingArrangementPage
+    from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingArrangementPage/TicketBookingArrangementPage.jsx";
 import SingleTicketBookingConfirmationInfoComponent
-    from "./UserTicketManagement/TicketBookingConfirmation/components/SingleTicketBookingConfirmationInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
+    from "./UserTicketManagement/TicketBookingConfirmation/components/SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {ticket} from "../DevelopmentHelpingTools/TestData.js";
       
 
@@ -40,7 +40,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/" element={<HomePage />} />
                     <Route path="/:train_race_id/:start/:end/carriages" element={<CarriageListPage />} />
                     <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
-                    <Route path="/ticket-booking" element = {<TicketBookingConfirmationPage />} />
+                    <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

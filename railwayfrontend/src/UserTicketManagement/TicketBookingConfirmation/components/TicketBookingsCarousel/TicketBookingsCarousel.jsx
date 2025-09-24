@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Carousel, Card, Space, Typography, Form, Button, message } from "antd";
 import SingleTicketBookingConfirmationInfoComponent
-    from "../SingleTicketBookingConfirmationInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
+    from "../SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 
 
 const { Title, Text } = Typography;
