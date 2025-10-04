@@ -109,7 +109,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                 </div>
                 <div className="ticket-two-col__right">
                     <Form.Item
-                        name={[namePrefix, "firstName"]}
+                        name={[...namePrefix, "firstName"]}
                         label="Ім'я пасажира"
                         rules={[
                             { required: true, message: "Вкажіть ім'я" },
@@ -120,7 +120,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                     </Form.Item>
 
                     <Form.Item
-                        name={[namePrefix, "lastName"]}
+                        name={[...namePrefix, "lastName"]}
                         label="Прізвище пасажира"
                         rules={[
                             { required: true, message: "Вкажіть прізвище" },

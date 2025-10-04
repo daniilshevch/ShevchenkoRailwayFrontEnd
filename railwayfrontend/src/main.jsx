@@ -20,6 +20,10 @@ import TicketBookingArrangementPage
 import SingleTicketBookingConfirmationInfoComponent
     from "./UserTicketManagement/TicketBookingConfirmation/components/SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {ticket} from "../DevelopmentHelpingTools/TestData.js";
+import TicketBookingResultPage
+    from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
+import TicketBookingCompletionResultPage
+    from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -41,6 +45,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/:train_race_id/:start/:end/carriages" element={<CarriageListPage />} />
                     <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
                     <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
+                    <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

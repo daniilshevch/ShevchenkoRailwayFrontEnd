@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Carousel, Card, Space, Typography, Form, Button, message } from "antd";
 import SingleTicketBookingConfirmationInfoComponent
     from "../SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
+import {useNavigate} from "react-router-dom";
 
 
 const { Title, Text } = Typography;
@@ -10,13 +11,38 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
     const [form] = Form.useForm();
     const carouselRef = useRef(null);
     const [current, setCurrent] = useState(0);
+    const navigate = useNavigate();
     const total = tickets.length;
+    const handleConfirm = () =>
+    {
+        const values = form.getFieldsValue();
+        const completedTicketsWithPassengerTripInfo = tickets.map((ticket, idx) => {
+            const passenger_info = values.passengers?.[idx] || {};
+            return {
+                ...ticket,
+                status: "RESERVED_WITH_PASSENGER_TRIP_INFO",
+                passenger_trip_info: {
+                    passenger_name: passenger_info.firstName || "",
+                    passenger_surname: passenger_info.lastName || ""
+                }
+            };
+        });
+        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        for(const ticket of completedTicketsWithPassengerTripInfo)
+        {
+            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+        }
+        localStorage.setItem("potentialTicketsCart", JSON.stringify({
+            potentialTicketsList: completedTicketsWithPassengerTripInfo}));
+        console.log(completedTicketsWithPassengerTripInfo);
+        navigate("/ticket-booking-completion");
+    }
     useEffect(() => {
         form.setFieldsValue({
             passengers: tickets.map(() => ({ firstName: "", lastName: "" })),
         });
         setCurrent(0);
-    }, [total, tickets, form]);
+    }, [total, form]);
     const go = async (delta) => {
         const target = Math.min(Math.max(current + delta, 0), total - 1);
         carouselRef.current?.goTo(target);
@@ -71,7 +97,7 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
                             >
                                 Далі
                             </Button>
-                            <Button type="primary" onClick={() => {}}>
+                            <Button type="primary" onClick={() => handleConfirm()}>
                                 Підтвердити
                             </Button>
                         </Space>
