@@ -38,6 +38,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
         const ticket_info = {
             id: ticket.id,
+            full_ticket_id: ticket.full_ticket_id,
             user_id: ticket.user_id,
             train_route_on_date_id: ticket.train_race_id,
             passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,

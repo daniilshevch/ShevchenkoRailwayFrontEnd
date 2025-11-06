@@ -67,7 +67,7 @@ function Navbar()
                             {
                                 key: "tickets",
                                 icon: <IdcardOutlined />,
-                                label: <Link to="/profile">Мої квитки</Link>,
+                                label: <Link to="/user-ticket-bookings  ">Мої квитки</Link>,
                             },
                             {
                                 key: "logout",

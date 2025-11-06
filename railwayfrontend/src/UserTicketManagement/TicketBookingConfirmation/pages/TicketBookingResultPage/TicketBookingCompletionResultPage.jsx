@@ -60,6 +60,7 @@ function TicketBookingCompletionResultPage()
         const token = localStorage.getItem("token");
         const ticket_info = {
             id: ticket.id,
+            full_ticket_id: ticket.full_ticket_id,
             user_id: ticket.user_id,
             train_route_on_date_id: ticket.train_race_id,
             passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
@@ -89,7 +90,8 @@ function TicketBookingCompletionResultPage()
         });
         if (!response.ok)
         {
-            console.log(response);
+            console.log(1000);
+            console.log(await response.text());
         }
         if(response.ok) {
             setBookingProgress(Math.round(((index + 1) / steps.length) * 100));

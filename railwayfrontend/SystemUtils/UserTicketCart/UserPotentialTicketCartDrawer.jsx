@@ -67,6 +67,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                 if (ticketBookingReservationStatus === "Booking_In_Progress") {
                     ticket.ticket_status = "RESERVED";
                     ticket.id = singleTicketBookingReservationResult.id;
+                    ticket.full_ticket_id = singleTicketBookingReservationResult.full_ticket_id;
                     ticket.user_id = singleTicketBookingReservationResult.user_id;
                     ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
                     ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;

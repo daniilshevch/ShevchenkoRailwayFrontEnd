@@ -24,6 +24,7 @@ import TicketBookingResultPage
     from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
 import TicketBookingCompletionResultPage
     from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
+import UserTicketsListPage from "./UserTicketManagement/TicketBookingList/pages/UserTicketsListPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -46,6 +47,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
                     <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
                     <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
+                    <Route path="/user-ticket-bookings" element = {<UserTicketsListPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
