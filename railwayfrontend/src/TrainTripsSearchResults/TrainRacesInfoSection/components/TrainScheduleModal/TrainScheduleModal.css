@@ -95,3 +95,86 @@
     position: relative;
     top: -12px; /* трохи вище точки */
 }
+
+.class-C.final-trip-stop .ant-timeline-item-head {
+    background-color: blue;
+    border: blue;
+    border-radius: 50%;
+}
+
+/* ... (твій існуючий CSS для модального вікна та прокрутки) ... */
+/* ... */
+.timeline-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 16px;
+    min-height: 36px; /* або більше, якщо часів два */
+    justify-content: center;
+    position: relative;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.arrival-time {
+    margin-bottom: -10px;
+    position: relative;
+    top: -12px; /* трохи вище точки */
+}
+
+/* КОМЕНТАР: Цей клас .timeline-stop-inline більше не використовується
+   у новому .js файлі, оскільки його замінив .timeline-stop-content
+*/
+.timeline-stop-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 4px; /* До речі, 4px - це дуже дрібно, можливо, це була помилка? */
+}
+
+
+/* === НОВІ СТИЛІ ДЛЯ ШАПКИ ТА ВМІСТУ === */
+
+.timeline-header-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.timeline-header-label {
+    width: 100px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.timeline-header-content-wrapper {
+    flex-grow: 1;
+    padding-left: 30px;
+    box-sizing: border-box;
+}
+
+.timeline-stop-content {
+    width: 100%;
+    min-height: 18px;
+    display: flex;
+    align-items: center;
+}
+.train-schedule-modal .ant-timeline-item-content {
+    margin-left: 30px !important;  /* Зменшуємо відступ контенту від точки */
+}
+
+/* Або можна зменшити відступ самої Timeline */
+.train-schedule-modal .ant-timeline {
+    padding-left: 0 !important;
+    margin-left: -275px !important;
+}
+
+/* Якщо потрібно зсунути весь Timeline вліво */
+.train-schedule-modal .ant-timeline.ant-timeline-label {
+    margin-left: -20px;  /* Експериментуйте зі значенням */
+}
