@@ -1,50 +1,73 @@
 ﻿import React from "react";
-import "./CarriageTypeButton.css";
+import "./CarriageTypeButton.css"; // Ми оновимо цей CSS
 import CarriageQualityClassButton from "../CarriageQualityClassButton/CarriageQualityClassButton.jsx";
 import { useNavigate } from 'react-router-dom';
+import { Card, Typography } from 'antd'; // 👈 Імпортуємо Card
+
+const { Title, Text } = Typography;
+
 const CARRIAGE_TYPES = {
     "Platskart": "Плацкарт",
     "Coupe": "Купе",
     "SV": "СВ",
     "Sitting": "Сидячий"
 };
-function CarriageTypeButton({trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo }) {
+
+function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo }) {
 
     const navigate = useNavigate();
-    const handleCarriageTypeClick = (carriageType, trainRaceId) =>
-    {
+
+    // Ця логіка залишається
+    const handleCarriageTypeClick = (carriageType, trainRaceId) => {
         localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
         navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}`);
     }
-    return (
-        <div className="carriage-type-wrapper">
-            <div className="carriage-type-button">
-                <div className="type-label">
-                    <button className="type-name-button" onClick={() => handleCarriageTypeClick(type, trainRaceId)}>{CARRIAGE_TYPES[type]}</button>
-                    <div className="places-summary">
-                        Місця: {classStats.free_places}/{classStats.total_places}
-                    </div>
-                    <div className="price-info">
-                        {classStats.min_price} грн
-                    </div>
-                </div>
 
-                <div className="subclass-buttons">
-                    {Object.entries(classStats.carriage_quality_class_dictionary).map(([qualityClass, data]) => (
-                        <CarriageQualityClassButton
-                            key={qualityClass}
-                            trainRaceId={trainRaceId}
-                            startStation={startStation}
-                            endStation={endStation}
-                            carriageType = {type}
-                            qualityClass={qualityClass}
-                            data={data}
-                            generalTrainRaceInfo={generalTrainRaceInfo}
-                        />
-                    ))}
-                </div>
-            </div>
+    // Створюємо кастомний заголовок для Card
+    const cardTitle = (
+        <div className="card-title-header">
+            <Title level={5} onClick={() => handleCarriageTypeClick(type, trainRaceId)} className="card-title-clickable">
+                {CARRIAGE_TYPES[type]}
+            </Title>
+
+            <Text type="secondary" className="card-title-places">
+                Місця: {classStats.free_places}/{classStats.total_places}
+            </Text>
+
+            <span className="card-title-price">
+                {classStats.min_price} грн
+            </span>
         </div>
+    );
+
+    // // Створюємо "extra" для Card
+    // const cardExtra = (
+    //     <Text type="secondary">
+    //         Місця: {classStats.free_places}/{classStats.total_places}
+    //     </Text>
+    // );
+
+    return (
+        <Card
+            title={cardTitle}
+            //extra={cardExtra}
+            className="carriage-type-card"
+        >
+            <div className="subclass-tags-wrapper">
+                {Object.entries(classStats.carriage_quality_class_dictionary).map(([qualityClass, data]) => (
+                    <CarriageQualityClassButton
+                        key={qualityClass}
+                        trainRaceId={trainRaceId}
+                        startStation={startStation}
+                        endStation={endStation}
+                        carriageType={type}
+                        qualityClass={qualityClass}
+                        data={data}
+                        generalTrainRaceInfo={generalTrainRaceInfo}
+                    />
+                ))}
+            </div>
+        </Card>
     );
 }
 

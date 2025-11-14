@@ -24,15 +24,15 @@
 }
 
 .seat-A.seat-free {
-    background-color: red;
+    background-color: #ff4d4f;
 }
 
 .seat-B.seat-free {
-    background-color: green;
+    background-color: #52c41a;
 }
 
 .seat-C.seat-free {
-    background-color: blue;
+    background-color: #1890ff;
 }
 
 

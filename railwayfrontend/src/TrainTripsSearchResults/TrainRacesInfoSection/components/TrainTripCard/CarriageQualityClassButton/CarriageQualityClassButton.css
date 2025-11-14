@@ -1,41 +1,89 @@
-﻿.class-button {
-    border: none;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 4px;
-    color: white;
-    font-size: 14px;
+﻿/* Це наш "елементик" в стилі antd */
+.quality-class-tag {
     cursor: pointer;
-    width: 110px; /* 🔸 Фіксована ширина */
-    height: 50px; /* 🔸 або max-height, якщо треба */
+    border-radius: 0;
+    padding: 2px 5px;
+    margin: 0;
+    /* Робимо текст вертикальним */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    white-space: normal; /* 🔸 дозволяє перенос рядків */
-    text-align: center; /* 🔸 для центрованого вигляду */
-    word-wrap: break-word;
 
-}
-    .class-button:hover {
-        opacity: 0.9;
-        transform: scale(1.03);
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        transition: all 0.2s ease;  
-    }
-/* Кольори */
-.quality-a {
-    background-color: #d9534f;
+    /* Задаємо розміри, щоб теги були однакового розміру */
+    /*min-width: 100px;*/
+    min-height: 50px;
+    flex: 1 1 0;
+    /* Ефекти */
+    transition: all 0.2s ease;
+    border-width: 1px;
+    border-style: solid;
 }
 
-.quality-b {
-    background-color: #5cb85c;
+.quality-class-tag:hover {
+    transform: scale(1.02);
+    filter: brightness(95%);
 }
 
-.quality-c {
-    background-color: #0275d8;
+.tag-class-name {
+    font-weight: bold;
+    font-size: 15px;
 }
 
-.quality-default {
-    background-color: #888888;
+.tag-class-info {
+    font-size: 13px;
+    white-space: normal;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* НАЙГОЛОВНІШЕ: Ваші "напівпрозорі" стилі.
+  Ми використовуємо border + світлий background
+*/
+.quality-tag-a {
+    border-color: #d9534f;
+    background: #fdf5f5;
+    color: #d9534f;
+}
+
+.quality-tag-b {
+    border-color: #5cb85c;
+    background: #f6fcf6;
+    color: #5cb85c;
+}
+
+.quality-tag-c {
+    border-color: #0275d8;
+    background: #f3f9ff;
+    color: #0275d8;
+}
+
+.quality-tag-default {
+    border-color: #888;
+    background: #f8f8f8;
+    color: #555;
+}
+
+.quality-tag-a {
+    border-color: #d9534f; /* Колір рамки (суцільний) */
+    background-color: rgba(217, 83, 79, 0.1); /* 👈 Напівпрозорий фон. Спробуйте 0.2, 0.3... */
+    color: #d9534f; /* Колір тексту (суцільний) */
+}
+
+.quality-tag-b {
+    border-color: #5cb85c;
+    background-color: rgba(92, 184, 92, 0.1); /* 👈 Змініть 0.2 на потрібний рівень */
+    color: #5cb85c;
+}
+
+.quality-tag-c {
+    border-color: #0275d8;
+    background-color: rgba(2, 117, 216, 0.1); /* 👈 Змініть 0.2 на потрібний рівень */
+    color: #0275d8;
+}
+
+.quality-tag-default {
+    border-color: #888;
+    background-color: rgba(136, 136, 136, 0.2); /* 👈 Змініть 0.2 на потрібний рівень */
+    color: #555;
 }

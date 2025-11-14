@@ -171,7 +171,7 @@
 /* Або можна зменшити відступ самої Timeline */
 .train-schedule-modal .ant-timeline {
     padding-left: 0 !important;
-    margin-left: -275px !important;
+    margin-left: -287px !important;
 }
 
 /* Якщо потрібно зсунути весь Timeline вліво */
