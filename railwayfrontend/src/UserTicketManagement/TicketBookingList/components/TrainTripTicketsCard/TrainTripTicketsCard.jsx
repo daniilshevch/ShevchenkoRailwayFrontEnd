@@ -11,6 +11,7 @@ import changeTrainRouteIdIntoUkrainian from "../../../../../SystemUtils/Interpre
 import changeTrainRouteBrandedNameIntoUkrainian from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainBrandedNamesDictionary.js";
 
 import SingleTicketLabel from '../SingleTicketLabel/SingleTicketLabel.jsx';
+import TicketBookingModal from "../TicketBookingModal/TicketBookingModal.jsx";
 
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
@@ -161,10 +162,17 @@ function isCheapestTag(is_fastest, is_cheapest) {
 
 function TrainTripTicketsCard({ train }) {
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
+    const [isTicketBookingModalVisible, setIsTicketBookingModalVisible] = useState(false);
+    const [initialTicketBookingIndex, setInitialTicketBookingIndex] = useState(0);
 
     const t = useNormalizedTrain(train);
     const departure = formatTimeDate(t.depISO);
     const arrival   = formatTimeDate(t.arrISO);
+
+    const handleTicketClick = (index) => {
+        setInitialTicketBookingIndex(index);
+        setIsTicketBookingModalVisible(true);
+    };
 
     return (
         <div className="train-card">
@@ -223,8 +231,8 @@ function TrainTripTicketsCard({ train }) {
 
             <div className="tickets-row">
                 {t.ticket_bookings_list && t.ticket_bookings_list.length > 0 ? (
-                    t.ticket_bookings_list.map(ticket => (
-                        <SingleTicketLabel key={ticket.full_ticket_id} t={ticket} />
+                    t.ticket_bookings_list.map((ticket,index) => (
+                        <SingleTicketLabel key={ticket.full_ticket_id} t={ticket} onClick={() => handleTicketClick(index)}/>
                     ))
                 ) : (
                     <span className="tickets-empty">Квитків у цьому поїзді немає</span>
@@ -239,6 +247,12 @@ function TrainTripTicketsCard({ train }) {
                 trainRouteId={changeTrainRouteIdIntoUkrainian(t.train_route_id)}
                 startingStationUkrainianTitle={stationTitleIntoUkrainian(t.full_route_starting_station_title)}
                 endingStationUkraininTitle={stationTitleIntoUkrainian(t.full_route_ending_station_title)}
+            />
+            <TicketBookingModal
+                visible={isTicketBookingModalVisible}
+                onClose={() => setIsTicketBookingModalVisible(false)}
+                tickets={t.ticket_bookings_list}
+                initialIndex={initialTicketBookingIndex}
             />
         </div>
     );

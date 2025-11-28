@@ -20,36 +20,38 @@ import TicketBookingArrangementPage
 import SingleTicketBookingConfirmationInfoComponent
     from "./UserTicketManagement/TicketBookingConfirmation/components/SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {ticket} from "../DevelopmentHelpingTools/TestData.js";
-import TicketBookingResultPage
-    from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
 import TicketBookingCompletionResultPage
     from "./UserTicketManagement/TicketBookingConfirmation/pages/TicketBookingResultPage/TicketBookingCompletionResultPage.jsx";
 import UserTicketsListPage from "./UserTicketManagement/TicketBookingList/pages/UserTicketsListPage.jsx";
+import {GoogleTest} from "../DevelopmentHelpingTools/GoogleTest.jsx";
+import {GoogleAuthHandler} from "./RegistrationAndLogin/components/GoogleAuthHandler.jsx";
       
 
 createRoot(document.getElementById('root')).render(
     //<StrictMode>
         <BrowserRouter>
-        <Routes>
-            <Route path = "/test">
-                <Route path = "date-slider" element={<DateSlider />}></Route>
-                <Route path = "filter" element = {<CarriageTypeAndQualityFilter groupedSeats={grouped_carriage_statistics_list} />}></Route>
-                <Route path = "ticket" element = {<SingleTicketBookingConfirmationInfoComponent ticket={ticket} /> }></Route>
-            </Route>
-            <Route path = "/login" element = {<LoginPage />} />
-            <Route path = "/register" element = {<RegisterPage />} />
-            <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
-            <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
-            <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
-                <Route element = {<GeneralLayout />}>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/:train_race_id/:start/:end/carriages" element={<CarriageListPage />} />
-                    <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
-                    <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
-                    <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
-                    <Route path="/user-ticket-bookings" element = {<UserTicketsListPage />} />
+            <GoogleAuthHandler></GoogleAuthHandler>
+            <Routes>
+                <Route path = "/test">
+                    <Route path = "date-slider" element={<DateSlider />}></Route>
+                    <Route path = "filter" element = {<CarriageTypeAndQualityFilter groupedSeats={grouped_carriage_statistics_list} />}></Route>
+                    <Route path = "ticket" element = {<SingleTicketBookingConfirmationInfoComponent ticket={ticket} /> }></Route>
+                    <Route path = "google" element = {<GoogleTest></GoogleTest>}></Route>
                 </Route>
-            </Routes>
+                <Route path = "/login" element = {<LoginPage />} />
+                <Route path = "/register" element = {<RegisterPage />} />
+                <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
+                <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
+                <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                    <Route element = {<GeneralLayout />}>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/:train_race_id/:start/:end/carriages" element={<CarriageListPage />} />
+                        <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
+                        <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
+                        <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
+                        <Route path="/user-ticket-bookings" element = {<UserTicketsListPage />} />
+                    </Route>
+                </Routes>
         </BrowserRouter>
     //</StrictMode>
 );

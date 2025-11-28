@@ -1,68 +1,103 @@
 ﻿import React from "react";
 import { Tag, Tooltip } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import {
+    changeCarriageTypeIntoUkrainian
+} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 
-// Яскраві кольори для кожного типу вагона
-const qualityClassColor = (t) => {
-    switch (t) {
-        case "A": return "red";      // насичений фіолетовий
-        case "B": return "green";   // яскравий синій
-        case "C": return "blue"; // індиго
-        default: return "#595959";        // темно-сірий
+const getQualityStyles = (qualityClass) => {
+    switch (qualityClass) {
+        case "A": return { color: "#cf1322", bg: "#fff1f0", border: "#ffa39e" };
+        case "B": return { color: "#389e0d", bg: "#f6ffed", border: "#b7eb8f" };
+        case "C": return { color: "#096dd9", bg: "#e6f7ff", border: "#91d5ff" };
+        default:  return { color: "#595959", bg: "#fafafa", border: "#d9d9d9" };
     }
 };
 
-export default function SingleTicketLabel({ t }) {
+export default function SingleTicketLabel({ t, onClick }) {
+    const styles = getQualityStyles(t.carriage_quality_class);
+
     const passengerFullName = [t.passenger_name, t.passenger_surname]
         .filter(Boolean)
         .join(" ");
 
-    const seatLabel = `Вагон ${t.carriage_position_in_squad}(К) • Місце ${t.place_in_carriage} `;
-    console.log(t.carriage_quality_class);
     return (
         <Tooltip
             title={(
                 <>
-                    <div>Тип: {t.carriage_type}</div>
-                    {passengerFullName && <div>Пасажир: {passengerFullName}</div>}
-                    <div>Статус: {t.ticket_status}</div>
+                    <div><strong>Тип:</strong> {t.carriage_type}</div>
+                    {passengerFullName && <div><strong>Пасажир:</strong> {passengerFullName}</div>}
+                    <div><strong>Статус:</strong> {t.ticket_status}</div>
                 </>
             )}
         >
             <Tag
+                onClick={onClick}
                 style={{
-                    marginBottom: 8,
-                    padding: "6px 12px",
                     display: "inline-flex",
                     flexDirection: "column",
-                    alignItems: "center",
                     justifyContent: "center",
-                    lineHeight: "18px",
-                    whiteSpace: "normal",
-                    color: "white", // білий текст
-                    fontWeight: 500,
-                    textAlign: "center",
-                    border: "none",
-                    minWidth: 130,
-                    backgroundColor: qualityClassColor(t.carriage_quality_class), // насичений фон
-                    borderRadius: 8,
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
+                    padding: "6px 10px",
+                    margin: "0 8px 8px 0",
+                    backgroundColor: styles.bg,
+                    border: `1px solid ${styles.border}`,
+                    borderRadius: "6px",
+                    cursor: "default",
+                    minWidth: "200px"
                 }}
             >
-                <span style={{ fontSize: 14, fontWeight: 600 }}>
-                    {seatLabel}
-                </span>
-                {passengerFullName && (
-                    <span
-                        style={{
-                            fontSize: 12,
-                            opacity: 0.9,
-                            marginTop: 2,
-                            color: "white",
-                        }}
-                    >
-                        {passengerFullName}
+                <div style={{
+                    fontSize: "15px",
+                    fontWeight: 700,
+                    color: styles.color,
+                    marginBottom: "4px",
+                    borderBottom: `1px solid ${styles.border}88`,
+                    paddingBottom: "4px"
+                }}>
+                    Вагон {t.carriage_position_in_squad}
+                    <span style={{ opacity: 0.6, margin: "0 4px", fontWeight: 400 }}>|</span>
+                    Місце {t.place_in_carriage}
+                </div>
+
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%"
+                }}>
+                    <span style={{
+                        fontSize: "10px",
+                        textTransform: "uppercase",
+                        fontWeight: 700,
+                        color: styles.color,
+                        opacity: 0.7,
+                        letterSpacing: "0.5px",
+                        marginRight: "10px"
+                    }}>
+                        {changeCarriageTypeIntoUkrainian(t.carriage_type)}
                     </span>
-                )}
+
+                    {passengerFullName && (
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "12px",
+                            color: styles.color,
+                            opacity: 0.9,
+                            maxWidth: "130px"
+                        }}>
+                            <UserOutlined style={{ marginRight: "2px", fontSize: "15px" }} />
+                            <span style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                fontWeight: 700
+                            }}>
+                                {passengerFullName}
+                            </span>
+                        </div>
+                    )}
+                </div>
             </Tag>
         </Tooltip>
     );

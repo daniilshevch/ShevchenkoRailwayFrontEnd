@@ -27,14 +27,26 @@ function Navbar()
                         "Authorization": `Bearer ${localStorage.getItem("token")}`,
                     }
                 });
-                if(!response.ok) throw new Error("Помилка при завантаженні зображення");
-                const imageBlob = await response.blob();
-                const imageUrl = URL.createObjectURL(imageBlob);
-                setProfileImageUrl(imageUrl);
+
+                if(!response.ok) throw new Error("Помилка завантаження");
+
+                // Перевіряємо тип контенту
+                const contentType = response.headers.get("content-type");
+
+                if (contentType && contentType.includes("application/json")) {
+                    // ВАРІАНТ 1: Прийшов JSON (це посилання на Google)
+                    const data = await response.json();
+                    setProfileImageUrl(data.imageUrl); // Просто ставимо URL в src
+                } else {
+                    // ВАРІАНТ 2: Прийшла картинка (Blob з нашої бази)
+                    const imageBlob = await response.blob();
+                    const imageUrl = URL.createObjectURL(imageBlob);
+                    setProfileImageUrl(imageUrl);
+                }
             }
             catch(error)
             {
-                console.warn("Не вдалося завантажити зображення профілю:", error);
+                console.warn("Не вдалося завантажити зображення:", error);
                 setProfileImageUrl("/unknown.jpg");
             }
         };

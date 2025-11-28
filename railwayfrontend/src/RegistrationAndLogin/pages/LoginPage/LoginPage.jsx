@@ -1,11 +1,14 @@
 ﻿import React from 'react';
-import { Form, Input, Button, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import "./LoginPage.css"
-import {SERVER_URL} from "../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+import { Form, Input, Button, message, Divider } from 'antd';
+import { GoogleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
+import "./LoginPage.css";
+import { SERVER_URL } from "../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+
 const LoginPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
+
     const handleLogin = async () => {
         try {
             const values = await form.validateFields();
@@ -16,48 +19,84 @@ const LoginPage = () => {
                 },
                 body: JSON.stringify(values),
             });
-            if(!response.ok)
-            {
-                throw new Error("Невірні облікові дані");
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || "Невірні облікові дані");
             }
+
             const data = await response.json();
             localStorage.setItem('token', data.token);
+            if (data.user_Id) localStorage.setItem('userId', data.user_Id);
+
             message.success("Вхід успішно виконано");
             navigate('/');
-        }
-        catch  {
-            message.error("Помилка входу");
+        } catch (error) {
+            message.error(error.message || "Помилка входу");
         }
     };
+
+    const handleGoogleLogin = () => {
+        const currentUrl = window.location.origin;
+        window.location.href = `${SERVER_URL}/Client-API/login-with-google?returnUrl=${currentUrl}`;
+    };
+
     return (
         <div className="login-page">
+            <div className="login-overlay"></div>
             <div className="login-form-container">
-                <h2>Вхід</h2>
-                <Form form = {form} layout="vertical">
+                <div className="login-header">
+                    <h2>Ласкаво просимо</h2>
+                    <p className="login-subtitle">Увійдіть, щоб продовжити подорож</p>
+                </div>
+
+                <Form form={form} layout="vertical" size="large">
                     <Form.Item
                         name="email"
-                        label="Email"
                         rules={[{ required: true, type: 'email', message: 'Введіть коректний email' }]}
                     >
-                        <Input />
+                        <Input
+                            prefix={<UserOutlined className="site-form-item-icon" />}
+                            placeholder="Email"
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="password"
-                        label="Пароль"
                         rules={[{ required: true, message: 'Введіть пароль' }]}
                     >
-                        <Input.Password />
+                        <Input.Password
+                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            placeholder="Пароль"
+                        />
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" onClick={handleLogin} block>
+                        <Button type="primary" onClick={handleLogin} block className="login-btn">
                             Увійти
                         </Button>
                     </Form.Item>
                 </Form>
+
+                <div className="social-login-section">
+                    <Divider plain>Або увійти через</Divider>
+
+                    <Button
+                        icon={<GoogleOutlined />}
+                        onClick={handleGoogleLogin}
+                        block
+                        className="google-btn"
+                    >
+                        Google
+                    </Button>
+                </div>
+
+                <div className="register-prompt">
+                    Немає акаунту? <Link to="/register">Зареєструватися</Link>
+                </div>
             </div>
         </div>
     );
 }
+
 export default LoginPage;
