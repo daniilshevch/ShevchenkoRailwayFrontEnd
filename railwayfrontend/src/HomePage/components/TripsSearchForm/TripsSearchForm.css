@@ -1,123 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- Основний контейнер (Ефект скла) --- */
 .trips-search-form {
-    position: absolute; /* поверх фонового зображення */
-    top: 32%; /* по вертикалі */
-    left: 16.5%; /* по горизонталі */
-    transform: translate(-50%, -50%); /* щоб відцентрувати */
-    z-index: 2; /* вище, ніж шпалери */
-    background-color: rgba(255, 255, 255, 0.95); /* напівпрозорий фон для читабельності */
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
+    position: absolute;
+    top: 45%;
+    left: 15%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+
+    /* Матове скло */
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    padding: 32px;
+    border-radius: 20px;
+    max-width: 420px;
     width: 100%;
-}
-.trips-search-form .ant-select.ant-select-auto-complete,
-.ant-select-selector,
-.ant-select-selection-search-input {
-    font-weight: 500 !important;
-    font-size: 15px !important;
-    font-family: 'Segoe UI', sans-serif;
-    color: #333 !important;
-}
-.trips-search-form .ant-form-item-label > label {
-    font-weight: 620;
-    font-size: 15px;
-    color: #333;
-    letter-spacing: 0.5px;
-}
-.trips-search-form .ant-select-selection-item {
-    font-weight: 600;
-    font-size: 18px;
-    color: #999;
-    font-family: 'Segoe UI', sans-serif;
-}
-.trips-search-form .ant-input,
-.trips-search-form .ant-select-selector {
-    font-weight: 600;
-    font-size: 15px;
-    font-family: 'Segoe UI', sans-serif;
-    color: #999;
-}
-.trips-search-form .ant-picker-input > input::placeholder {
-    font-weight: 500;
-    font-size: 15px;
-    color: #999;
-    letter-spacing: 0.3px;
-}
-.trips-search-form .ant-btn-primary {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-.trips-search-form .ant-select-item-option-content {
-    font-size: 15px;
-    font-weight: 500;
-    font-family: 'Segoe UI', sans-serif;
-}
-.trips-search-form .ant-select-selection-placeholder {
-    font-weight: 500;
-    font-size: 15px;
-    color: #999;
-}
-.trips-autocomplete-dropdown {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 5px 0;
-}
-.trips-autocomplete-dropdown .ant-select-item-option {
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-    font-family: 'Segoe UI', sans-serif;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-.trips-autocomplete-dropdown .ant-select-item-option-active {
-    background-color: #e6f7ff !important;
-    color: #1890ff !important;
-    font-weight: 600;
-}
-.trips-autocomplete-dropdown .ant-select-item-option-selected {
-    background-color: #f0f8ff !important;
-    color: #096dd9 !important;
-    font-weight: 600;
+
+    /* Глибока тінь */
+    box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 5px 15px rgba(0, 0, 0, 0.05),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
 }
 
+.form-header h3 {
+    margin: 0 0 24px 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: left;
+    letter-spacing: -0.5px;
+}
+
+/* --- Стилізація полів вводу --- */
+.trips-search-form .ant-form-item-label > label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 4px;
+}
+
+.trips-search-form .ant-input-affix-wrapper,
+.trips-search-form .ant-picker {
+    background-color: #f7f9fc;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 10px 16px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ховер та Фокус на полях */
+.trips-search-form .ant-input-affix-wrapper:hover,
+.trips-search-form .ant-picker:hover {
+    background-color: #fff;
+    border-color: #d9d9d9;
+}
+
+.trips-search-form .ant-input-affix-wrapper-focused,
+.trips-search-form .ant-picker-focused {
+    background-color: #fff;
+    border-color: #0052cc; /* Глибокий синій */
+    box-shadow: 0 0 0 4px rgba(0, 82, 204, 0.1);
+}
+
+.trips-search-form input {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 15px;
+    background-color: transparent !important;
+}
+
+.input-icon {
+    color: #a0aec0;
+    font-size: 18px;
+    margin-right: 8px;
+    transition: color 0.3s;
+}
+
+/* Коли поле активне, іконка синіє */
+.trips-search-form .ant-input-affix-wrapper-focused .input-icon,
+.trips-search-form .ant-picker-focused .input-icon {
+    color: #0052cc;
+}
+
+/* --- Кнопка Swap (Зміни місць) --- */
 .stations-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
-.stations-container .swap-button {
+.swap-row {
     position: absolute;
-    right: 0px;
-    top: 60%;
-    transform: translateY(-50%);
-    border: 1px solid #d9d9d9;
+    right: -10px;
+    top: 55%;
+    transform: translateY(-80%);
+    z-index: 20;
+}
+
+.swap-button {
     background: #fff;
-    transition: all .2s ease;
-    z-index: 5;
-}
-.swap-button .anticon {
-    transform: rotate(90deg);
-    transition: transform 0.3s ease;
-}
-
-.stations-container .swap-button:hover {
-    border-color: #1677ff;
-    color: #1677ff;
-    box-shadow: 0 2px 8px rgba(22,119,255,0.15);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    color: #0052cc;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.trips-search-form .ant-picker-input > input {
+.swap-button:hover {
+    border-color: #0052cc;
+    background: #0052cc;
+    color: #fff;
+    transform: rotate(180deg);
+    box-shadow: 0 6px 16px rgba(0, 82, 204, 0.3);
+}
+
+/* --- Головна кнопка пошуку --- */
+.search-submit-btn {
+    margin-top: 12px;
+    height: 52px;
+    border-radius: 12px;
     font-weight: 600;
-    font-size: 15px;
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
+    font-size: 16px;
+    background: linear-gradient(135deg, #0052cc 0%, #003d99 100%);
+    border: none;
+    box-shadow: 0 8px 20px rgba(0, 82, 204, 0.25);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.trips-search-form .ant-picker-input > input::placeholder {
+.search-submit-btn:hover {
+    background: linear-gradient(135deg, #0065ff 0%, #0052cc 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 82, 204, 0.35);
+}
+
+.trips-autocomplete-dropdown .ant-select-dropdown {
+    padding: 8px; /* Відступ обгортки */
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+/* Стиль кожного рядка (звичайний) */
+.trips-autocomplete-dropdown .ant-select-item-option {
+    padding: 12px 16px !important; /* ВЕРТИКАЛЬНИЙ ВІДСТУП: робить рядок "ширшим" */
+    font-size: 15px !important;    /* Нормальний розмір шрифту (було 10px) */
     font-weight: 500;
-    font-size: 15px;
-    font-family: 'Segoe UI', sans-serif;
-    color: #999;
+    color: #333;
+    border-radius: 8px;
+    margin-bottom: 4px; /* Відступ між пунктами */
+    transition: all 0.2s ease;
+
+    /* Центрування тексту по вертикалі */
+    display: flex;
+    align-items: center;
+    min-height: 48px; /* Гарантована мінімальна висота */
+}
+
+/* АКТИВНИЙ ЕЛЕМЕНТ (наведення мишкою) */
+.trips-autocomplete-dropdown .ant-select-item-option-active {
+    background-color: #e6f7ff !important;
+    color: #0052cc !important;
+    font-weight: 600;
+    /* height: 30px; <--- ЦЕ БУЛО ЗАЙВЕ, видаляємо */
+}
+
+/* ОБРАНИЙ ЕЛЕМЕНТ */
+.trips-autocomplete-dropdown .ant-select-item-option-selected {
+    background-color: #daedff !important;
+    color: #003eb3 !important;
+    font-weight: 700;
+}
+
+
+/* --- Кнопка Пошуку (Fix мигання) --- */
+.search-submit-btn {
+    margin-top: 12px;
+    height: 52px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+
+    /* Градієнт */
+    background: linear-gradient(135deg, #0052cc 0%, #003d99 100%);
+    border: none;
+    box-shadow: 0 8px 20px rgba(0, 82, 204, 0.25);
+    letter-spacing: 0.5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    /* Прибираємо перехід кольору, залишаємо тільки тінь і рух */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Прибираємо стандартну анімацію "хвилі" Ant Design, яка викликає глюки */
+.search-submit-btn::after {
+    display: none !important;
+}
+
+/* Ховер */
+.search-submit-btn:hover {
+    background: linear-gradient(135deg, #0065ff 0%, #0052cc 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 82, 204, 0.35);
+}
+
+/* Активний стан (коли натиснули) - щоб не ставала білою/синьою */
+.search-submit-btn:active,
+.search-submit-btn:focus {
+    background: linear-gradient(135deg, #003d99 0%, #002966 100%) !important;
+    transform: translateY(0);
+    color: white !important; /* Щоб текст не міняв колір */
+    box-shadow: 0 4px 10px rgba(0, 82, 204, 0.2);
 }

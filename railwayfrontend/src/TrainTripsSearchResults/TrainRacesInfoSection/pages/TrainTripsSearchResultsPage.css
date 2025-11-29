@@ -1,31 +1,50 @@
 .train-trips-page {
-    min-height: 100vh;
-    background-image: url('/public/background_images/tickets.jpg');
+    height: 100vh; /* Фіксуємо висоту на розмір екрану */
+    overflow: hidden; /* Забороняємо глобальний скрол */
+
+    /* Твій фон */
+    background-image: url('/public/background_images/trips_search.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    padding: 70px 0;
+
+    /* Важливо: трохи зменшити верхній відступ, щоб контент вліз */
+    padding-top: 55px;
+    box-sizing: border-box; /* Щоб padding не додавав зайвої висоти */
 }
+
+/* 2. Розраховуємо висоту списку так, щоб він вліз ідеально */
 .train-cards-container {
+    /* Твої старі стилі лишаємо без змін (щоб нічого не поїхало вбік) */
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
+    margin: 10px auto; /* auto центрує по горизонталі */
     width: 90%;
     max-width: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    /* === МАГІЯ ТУТ === */
+    /* 100vh (весь екран)
+       - 80px (твоє верхнє меню навігації)
+       - 250px (висота форми пошуку + слайдера дат + відступи)
+       = те, що залишилось для списку.
+    */
+    height: 700px;
+    padding: 20px 20px 150px 20px;
+    /* Вмикаємо внутрішній скрол */
+    overflow-y: auto;
 }
 
 
 .search-form-wrapper{
-    width: 90%;
+    width: 100%;
     margin: 0 auto 8px;
     background: rgba(255,255,255,.85);
-    border-radius: 12px;
+    border-radius: 0px;
     box-shadow: 0 4px 16px rgba(0,0,0,.08);
     padding: 8px 12px;
 }
@@ -55,5 +74,16 @@
     text-align: center;
     margin-top: 8px;
     line-height: 1.6;
+}
+.date-slider {
+    display: flex;
+
+    justify-content: flex-end;
+
+    /* Розміри та відступи, щоб вирівняти з картками поїздів */
+    width: 100%;
+    margin: 10px auto; /* auto центрує сам контейнер по горизонталі */
+
+    flex-shrink: 0; /* Не дозволяє блоку стискатися */
 }
 

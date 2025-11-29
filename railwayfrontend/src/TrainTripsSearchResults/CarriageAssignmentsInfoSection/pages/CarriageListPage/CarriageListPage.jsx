@@ -226,7 +226,7 @@ function CarriageListPage()
         }
     }, [searchParams]);
     return (
-        <>
+        <div className = "main-layout-container">
             {contextHolder}
             <TrainRaceInfoHeader
                 trainRouteId={changeTrainRouteIdIntoUkrainian(trainRouteId)}
@@ -277,7 +277,7 @@ function CarriageListPage()
                 startingStationUkrainianTitle={stationTitleIntoUkrainian(fullRouteStartingStationTitle)}
                 endingStationUkraininTitle={stationTitleIntoUkrainian(fullRouteEndingStationTitle)}
             />
-        </>
+        </div>
     )
 
 }
