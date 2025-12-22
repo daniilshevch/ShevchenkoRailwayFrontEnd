@@ -26,7 +26,7 @@ const getColorForQualityClass = (trainQualityClass) =>
     }
     else if(trainQualityClass === "B")
     {
-        return "green";
+        return "#389e0d";
     }
     else if(trainQualityClass === "C")
     {
@@ -111,7 +111,12 @@ const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQ
                                 {/* === ОНОВЛЕНИЙ БЛОК ВМІСТУ === */}
                                 <Row className="timeline-stop-content" gutter={0} align="middle">
                                     <Col span={10}>
-                                        <Text strong>{stationTitleIntoUkrainian(stop.station_title)}</Text>
+                                        <Text
+                                            strong
+                                            style={{ width: '80%' }} /* Розтягуємо на всю ширину колонки */
+                                            ellipsis={{
+                                                  tooltip: stationTitleIntoUkrainian(stop.station_title)
+                                            }}>{stationTitleIntoUkrainian(stop.station_title)}</Text>
                                     </Col>
                                     <Col span={7}>
                                         <Text type="secondary">

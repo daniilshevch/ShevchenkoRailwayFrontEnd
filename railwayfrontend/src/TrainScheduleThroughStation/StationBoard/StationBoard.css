@@ -1,0 +1,214 @@
+﻿/* --- ОСНОВНИЙ КОНТЕЙНЕР ТА ШАПКА --- */
+.board-container {
+    background-color: #1a1612;
+    border-radius: 24px;
+    padding: 30px;
+    color: #fff;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    min-height: 500px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Повернено center як було */
+    margin-bottom: 10px;
+}
+
+.station-title-in-schedule-board {
+    color: #fff !important;
+    margin: 0 !important;
+    display: inline-block;
+    margin-right: 15px !important;
+}
+
+/* --- ГОДИННИКИ (Збережена структура, повернуті стилі) --- */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.clocks-container {
+    display: flex;
+    gap: 30px;
+}
+
+.clock-wrapper {
+    text-align: right;
+}
+
+.digital-clock {
+    margin: 0 !important;
+    font-family: 'Courier New', monospace;
+    /* Розмір за замовчуванням від Title level={2} як було в оригіналі */
+}
+
+.clock-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: -5px;
+    text-transform: uppercase;
+}
+
+.clock-date {
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0.7;
+    display: block;
+    margin-top: -5px;
+    color: white;
+}
+
+/* Кольори годинників */
+.live-theme .clock-label,
+.live-theme .digital-clock {
+    color: #d4e157 !important; /* Жовтий */
+}
+
+.search-theme .clock-label,
+.search-theme .digital-clock {
+    color: #ff9800 !important; /* Помаранчевий */
+}
+
+/* --- ТАБЛИЦЯ ТА РЕЙСИ (Strictly Original) --- */
+.custom-board-table {
+    width: 100%;
+}
+
+.table-header {
+    display: flex;
+    color: #888;
+    font-size: 14px;
+    font-weight: 500;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 15px;
+}
+
+.table-row {
+    margin-bottom: 20px;
+}
+
+.row-main-info {
+    display: flex;
+    font-size: 18px; /* Повернено 18px */
+    font-weight: 500; /* Повернено 500 */
+}
+
+/* Ширина колонок */
+.col-id { width: 15%; font-family: monospace; }
+.col-route { width: 55%; color: #d4e157; }
+.col-time { width: 20%; text-align: right; font-family: monospace; }
+.col-platform { width: 10%; text-align: right; }
+
+.delay-info {
+    color: #ff9800;
+    font-size: 16px;
+    padding-left: 15%;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.column-header {
+    font-size: 18px; /* Повернено 18px */
+    font-weight: 800;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+}
+
+.departure-color, .departure-theme { color: #d4e157; border-color: #d4e157; }
+.arrival-color, .arrival-theme { color: #ff9800; border-color: #ff9800; }
+
+.icon-rotate-180 {
+    transform: rotate(90deg);
+}
+
+/* --- ПАНЕЛЬ КЕРУВАННЯ (Original sizes and colors) --- */
+.board-controls {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-label {
+    color: #888;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- КНОПКИ --- */
+.board-search-btn {
+    height: 50px !important;
+    background: #d4e157 !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    margin-top: 20px;
+}
+
+.board-search-btn:hover {
+    background: #e6ee9c !important;
+    transform: translateY(-2px);
+    transition: all 0.2s;
+}
+
+
+.dark-select,
+.dark-datepicker,
+.ant-input-number {
+    min-width: 180px;
+}
+
+.ant-picker.dark-datepicker,
+.ant-select.dark-select .ant-select-selector,
+.ant-input-number {
+    background-color: #3d352e !important; /* Повернено твій коричневий фон */
+    border: 1px solid #666 !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.ant-picker.dark-datepicker:hover,
+.ant-select.dark-select:hover .ant-select-selector,
+.ant-input-number:hover {
+    border-color: #d4e157 !important;
+    background-color: #453e38 !important;
+}
+
+.ant-picker.dark-datepicker input,
+.ant-select.dark-select,
+.ant-input-number-input {
+    color: white !important;
+}
+
+.ant-input-number-handler-wrap {
+    background: #444 !important;
+}
+
+/* --- ФУТЕР --- */
+.board-footer {
+    margin-top: 30px;
+    text-align: center;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.footer-info {
+    color: #555;
+    font-size: 12px;
+}

@@ -1,0 +1,10 @@
+/* Робимо так, щоб кастомний контент всередині Segmented займав весь простір */
+.carriage-custom-segmented .ant-segmented-item-label {
+    padding: 0 !important; /* Прибираємо стандартний відступ AntD */
+    overflow: visible;     /* Щоб Popover не обрізався, якщо що */
+}
+
+/* Гарантуємо, що внутрішній div розтягується на висоту */
+.carriage-custom-segmented .ant-segmented-item-label > div {
+    height: 100%;
+}

@@ -25,6 +25,10 @@ import TicketBookingCompletionResultPage
 import UserTicketsListPage from "./UserTicketManagement/TicketBookingList/pages/UserTicketsListPage.jsx";
 import {GoogleTest} from "../DevelopmentHelpingTools/GoogleTest.jsx";
 import {GoogleAuthHandler} from "./RegistrationAndLogin/components/GoogleAuthHandler.jsx";
+import UserSidePanel from "./UserProfile/UserSidePanel.jsx";
+import UserDataForm from "./UserProfile/UserDataForm.jsx";
+import UserProfilePage from "./UserProfile/pages/UserProfilePage.jsx";
+import StationBoard from "./TrainScheduleThroughStation/StationBoard/StationBoard.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -37,6 +41,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path = "filter" element = {<CarriageTypeAndQualityFilter groupedSeats={grouped_carriage_statistics_list} />}></Route>
                     <Route path = "ticket" element = {<SingleTicketBookingConfirmationInfoComponent ticket={ticket} /> }></Route>
                     <Route path = "google" element = {<GoogleTest></GoogleTest>}></Route>
+                    <Route path = "station-board" element = {<StationBoard></StationBoard>}></Route>
                 </Route>
                 <Route path = "/login" element = {<LoginPage />} />
                 <Route path = "/register" element = {<RegisterPage />} />
@@ -50,6 +55,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
                         <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
                         <Route path="/user-ticket-bookings" element = {<UserTicketsListPage />} />
+                        <Route path="/profile" element={<UserProfilePage/>} />
                     </Route>
                 </Routes>
         </BrowserRouter>

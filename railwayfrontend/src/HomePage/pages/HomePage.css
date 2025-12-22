@@ -1,17 +1,16 @@
 .home-container {
-    position: relative; /* важливо, щоб overlay позиціонувався відносно цього контейнера */
+    position: relative;
     width: 100%;
-    height: 700px; /* або 100vh, якщо хочеш на весь екран */
-    overflow: hidden;
+    /* Прибираємо height: 700px; */
+    min-height: 100vh; /* Займає мінімум всю висоту екрану */
+    overflow-y: auto;  /* Дозволяємо вертикальну прокрутку */
+    display: flex;
+    flex-direction: column; /* Елементи йдуть один за одним зверху вниз */
 }
 
-.overlay {
-    position: absolute;
-    top: 50%; /* вертикально по центру */
-    left: 50%; /* горизонтально по центру */
-    transform: translate(-50%, -50%); /* центрування */
-    z-index: 2; /* поверх каруселі */
-    background: rgba(0, 0, 0, 0.5); /* напівпрозорий фон, щоб форма була читабельна */
-    padding: 20px;
-    border-radius: 10px;
+/* Якщо ви хочете, щоб табло мало відступи від країв */
+.home-container > :last-child {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 0 20px; /* Щоб табло не прилипало до країв екрану */
 }

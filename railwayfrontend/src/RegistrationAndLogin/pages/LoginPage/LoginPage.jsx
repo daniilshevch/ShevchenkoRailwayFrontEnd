@@ -1,14 +1,15 @@
 ﻿import React from 'react';
 import { Form, Input, Button, message, Divider } from 'antd';
 import { GoogleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import "./LoginPage.css";
-import { SERVER_URL } from "../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+import { SERVER_URL } from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
-
+    const location = useLocation();
+    const fromPage = location.state?.from?.pathname || '/';
     const handleLogin = async () => {
         try {
             const values = await form.validateFields();
@@ -30,15 +31,17 @@ const LoginPage = () => {
             if (data.user_Id) localStorage.setItem('userId', data.user_Id);
 
             message.success("Вхід успішно виконано");
-            navigate('/');
+            navigate(fromPage, { replace: true });
         } catch (error) {
             message.error(error.message || "Помилка входу");
         }
     };
 
     const handleGoogleLogin = () => {
-        const currentUrl = window.location.origin;
-        window.location.href = `${SERVER_URL}/Client-API/login-with-google?returnUrl=${currentUrl}`;
+        const returnOrigin = window.location.origin;
+        const returnPath = fromPage === '/' ? '' : fromPage;
+        const fullReturnUrl = `${returnOrigin}${returnPath}`;
+        window.location.href = `${SERVER_URL}/Client-API/login-with-google?returnUrl=${fullReturnUrl}`;
     };
 
     return (

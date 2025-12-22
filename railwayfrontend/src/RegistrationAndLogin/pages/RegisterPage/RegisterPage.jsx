@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import "./RegisterPage.css";
-import { SERVER_URL } from "../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+import { SERVER_URL } from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 
 const { Title, Text } = Typography;
 const { Option } = Select;

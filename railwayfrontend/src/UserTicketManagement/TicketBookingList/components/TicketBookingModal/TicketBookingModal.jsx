@@ -1,11 +1,11 @@
 ﻿import React, { useState, useEffect } from "react";
-import { Modal, Button, Typography } from "antd";
+import { Modal, Button, Typography, Spin } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import SingleTicketBookingProfilePage from "../SingleTicketBookingProfilePage/SingleTicketBookingProfilePage.jsx"; // Імпортуємо сторінку
 
 const { Text } = Typography;
 
-export default function TicketBookingModal({ visible, onClose, tickets, initialIndex }) {
+export default function TicketBookingModal({ visible, onClose, tickets, initialIndex, onRefresh }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -36,7 +36,18 @@ export default function TicketBookingModal({ visible, onClose, tickets, initialI
             <div style={{ padding: "20px 0" }}>
 
                 {/* ВСТАВЛЯЄМО КОМПОНЕНТ СТОРІНКИ */}
-                <SingleTicketBookingProfilePage t={tickets[currentIndex]} />
+                {tickets[currentIndex] ? (
+                    <SingleTicketBookingProfilePage
+                        t={tickets[currentIndex]}
+                        key={tickets[currentIndex].full_ticket_id}
+                        onRefresh={onRefresh}
+                        onReturnClose={onClose}
+                    />
+                ) : (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <Spin tip="Оновлення даних..." />
+                    </div>
+                )}
 
                 {/* НАВІГАЦІЯ (Якщо квитків більше ніж 1) */}
                 {tickets.length > 1 && (

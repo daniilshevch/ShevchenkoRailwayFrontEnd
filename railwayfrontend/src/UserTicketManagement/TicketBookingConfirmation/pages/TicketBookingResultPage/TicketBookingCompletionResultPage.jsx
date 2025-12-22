@@ -3,7 +3,7 @@ import {
     initialPotentialTicketCartState,
     potentialTicketCartReducer
 } from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
-import { SERVER_URL } from "../../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+import { SERVER_URL } from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 import { Button, message, Typography, Progress, Spin } from 'antd';
 import {
     CheckCircleFilled,
@@ -56,6 +56,7 @@ function TicketBookingCompletionResultPage() {
             localStorage.setItem("potentialTicketsCart", JSON.stringify({
                 potentialTicketsList: potentialTicketCartState.potentialTicketsList
             }));
+            window.dispatchEvent(new Event('cartUpdated'));
         } catch (error) {
             console.error(error);
         }
@@ -95,7 +96,6 @@ function TicketBookingCompletionResultPage() {
                 },
                 body: JSON.stringify(booking_confirmation_body)
             });
-
             if (response.ok) {
                 setBookingProgress(Math.round(((index + 1) / steps.length) * 100));
             }

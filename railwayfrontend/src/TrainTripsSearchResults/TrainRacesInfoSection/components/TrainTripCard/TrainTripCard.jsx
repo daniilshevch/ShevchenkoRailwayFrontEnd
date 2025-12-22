@@ -71,7 +71,7 @@ function trainBrandedNameTag(branded_name)
             color: 'white',
             fontWeight: 'bold',
             borderRadius: '0px 0 12px 0',
-            padding: '2px 12px',
+            padding: '2px 15px',
             borderTop: '2px solid orange',
             borderBottom: '2px solid orange',
             borderLeft: '2px solid orange',
@@ -81,21 +81,29 @@ function trainBrandedNameTag(branded_name)
         </Tag>
     )
 }
-function isFastestTag(is_fastest)
+function isFastestTag(is_fastest, is_cheapest)
 {
     if(is_fastest === true)
     {
+        // Якщо є "найдешевший", закруглення 0 (квадрат). Якщо ні — закруглюємо кінець.
+        const borderRadius = is_cheapest ? '0' : '0 12px 0 0';
+
+        // ВАЖЛИВО: Якщо це останній елемент (немає is_cheapest), треба додати праву рамку!
+        const borderRight = is_cheapest ? 'none' : '2px solid #00CED1';
+
         return (
-            <Tag color='yellow' style={{
+            <Tag color='#40E0D0' style={{
                 color: 'white',
-                backgroundColor: 'orange',
+                backgroundColor: '#00CED1',
                 fontWeight: 'bold',
-                borderRadius: '0',
+                borderRadius: borderRadius,
                 padding: '2px 12px',
-                borderTop: `2px solid orange`,
-                borderBottom: `2px solid orange`,
+                borderTop: `2px solid #00CED1`,
+                borderBottom: `2px solid #00CED1`,
                 borderLeft: 'none',
-                borderRight: 'none'
+
+                // Використовуємо змінну для правої рамки
+                borderRight: borderRight
             }}>
                 Найшвидший
             </Tag>
@@ -111,7 +119,7 @@ function isCheapestTag(is_fastest, is_cheapest)
     let marginLeft = 0;
     if(!is_fastest)
     {
-        marginLeft = 8;
+        marginLeft = 0;
     }
 
     if(is_cheapest === true)
@@ -126,7 +134,7 @@ function isCheapestTag(is_fastest, is_cheapest)
                 borderTop: `2px solid purple`,
                 borderBottom: `2px solid purple`,
                 borderLeft: 'none',
-                borderRight: 'none',
+                borderRight: '2px solid purple',
                 marginLeft: `${marginLeft}px`
             }}>
                 Найдешевший
@@ -138,7 +146,7 @@ function isCheapestTag(is_fastest, is_cheapest)
         return null;
     }
 }
-function TrainTripCard({ train })
+function TrainTripCard({ train, showWithoutFreePlaces })
 {
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const departure = formatTimeDate(train.trip_starting_station_departure_time);
@@ -152,7 +160,7 @@ function TrainTripCard({ train })
                     <span className="train-branded-name">{trainBrandedNameTag(train.train_route_branded_name)}</span>
                 </div>
                 <div className="right-train-header-block">
-                    <span className="is-fastest">{isFastestTag(train.is_fastest)}</span>
+                    <span className="is-fastest">{isFastestTag(train.is_fastest, train.is_cheapest)}</span>
                     <span className="is-cheapest">{isCheapestTag(train.is_fastest, train.is_cheapest)}</span>
                 </div>
             </div>
@@ -207,7 +215,9 @@ function TrainTripCard({ train })
                             endStation={train.trip_ending_station_title}
                             type={type}
                             classStats={classStats}
-                            generalTrainRaceInfo={train} />
+                            generalTrainRaceInfo={train}
+                            showWithoutFreePlaces = {showWithoutFreePlaces}
+                        />
                     ))}
             </div>
             <TrainScheduleModal

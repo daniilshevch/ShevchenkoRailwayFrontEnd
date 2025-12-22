@@ -1,10 +1,9 @@
-﻿/* Це основний контейнер картки, бере стилі з вашого .carriage-type-wrapper */
-.carriage-type-card {
+﻿.carriage-type-card {
     margin-right: 10px;
     margin-left: 0;
     margin-top: 10px;
     flex: 1 1 300px;
-    max-width: 370px;
+    max-width: 375px;
     background-color: #fafafa; /* Легкий фон, "напівпрозорий" */
 }
 

@@ -1,5 +1,5 @@
 ﻿import React, {useEffect, useReducer} from "react";
-import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space } from "antd";
+import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space, Result } from "antd";
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
@@ -15,8 +15,9 @@ import {
     initialPotentialTicketCartState,
     potentialTicketCartReducer
 } from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
-import {SERVER_URL} from "../../../../../SystemUtils/ConnectionConfiguration/ConnectionConfiguration.js";
+import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 const { Text } = Typography;
+import { CloseCircleFilled } from '@ant-design/icons';
 function UpperOrLower(number)
 {
     if(number % 2 === 0)
@@ -67,6 +68,61 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
     if(!ticket)
     {
         return null;
+    }
+    if(ticket.ticket_status !== "RESERVED")
+    {
+        return         (
+            <Card
+            size="small"
+            title={`Квиток ${index + 1} із ${total}`}
+            extra={
+                <Space size={8}>
+                    <Popconfirm
+                        title="Скасувати бронь на цей квиток?"
+                        okText="Так"
+                        cancelText="Ні"
+                        onConfirm={() => {cancelTicketReservation(ticket)}}
+                    >
+                        <Button size="small" danger>Скасувати бронювання</Button>
+                    </Popconfirm>
+                </Space>
+            }
+        >
+            <div className="ticket-two-col">
+                <div className="ticket-two-col__left">
+                    <Descriptions size="small" column={1} bordered style={{ marginBottom: 16 }}>
+                        <Descriptions.Item label="Поїзд" span={2}>
+                            <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(ticket.train_race_id))}</Text><Text className={`train-class-section-${ticket.train_route_quality_class}`}>({ticket.train_route_quality_class})</Text><Text className="station-title"> ({stationTitleIntoUkrainian(ticket.full_route_starting_station)}</Text><Text className="arrow"> →</Text><Text className="station-title">{stationTitleIntoUkrainian(ticket.full_route_ending_station)})</Text>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Відправлення">
+                            <Text className="station-title">{stationTitleIntoUkrainian(ticket.trip_starting_station)}</Text><Text className="station-time"> ({formatDM_HM(ticket.trip_starting_station_departure_time)})</Text>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Прибуття">
+                            <Text className="station-title">{stationTitleIntoUkrainian(ticket.trip_ending_station)}</Text><Text className="station-time"> ({formatDM_HM(ticket.trip_ending_station_arrival_time)})</Text>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Вагон">
+                            <Text className="carriage-number">№{ticket.carriage_position_in_squad}</Text><Text className="carriage-section"> ({changeCarriageTypeIntoUkrainian(ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${ticket.carriage_quality_class}`}>{ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Місце у вагоні">
+                            <Text className="place-number">{ticket.place_in_carriage}, {UpperOrLower(ticket.place_in_carriage)}</Text>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Ціна">
+                            <Text className="place-number">{ticket.price} грн</Text>
+                        </Descriptions.Item>
+                    </Descriptions>
+                </div>
+                <div className="ticket-two-col__right" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* Використовуємо компонент Result */}
+                    <Result
+                        status="error"
+                        title="Бронювання не вдалось"
+                        subTitle="Ймовірно, інший пасажир зарезервував це місце перед вами"
+                        style={{ padding: '0', marginTop: 40 }} // Прибираємо зайві відступи, щоб він вліз у картку
+                    />
+                </div>
+            </div>
+        </Card>
+        )
     }
     return (
         <Card
@@ -133,6 +189,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                 </div>
             </div>
         </Card>
+
     );
 }
 export default SingleTicketBookingConfirmationInfoComponent;

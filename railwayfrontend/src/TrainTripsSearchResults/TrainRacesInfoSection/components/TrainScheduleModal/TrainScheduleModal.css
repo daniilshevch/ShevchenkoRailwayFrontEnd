@@ -14,7 +14,7 @@
     border-left: 3px solid red; /* або #1890ff — синя, або будь-який інший */
 }
 .class-B.trip-segment .ant-timeline-item-tail {
-    border-left: 3px solid #52c41a; /* або #1890ff — синя, або будь-який інший */
+    border-left: 3px solid #389e0d; /* або #1890ff — синя, або будь-який інший */
 }
 .class-C.trip-segment .ant-timeline-item-tail {
     border-left: 3px solid blue; /* або #1890ff — синя, або будь-який інший */
@@ -39,8 +39,8 @@
     border-radius: 50%;
 }
 .class-B.final-trip-stop .ant-timeline-item-head {
-    background-color: #52c41a;
-    border: #52c41a;
+    background-color: #389e0d;
+    border: #389e0d;
     border-radius: 50%;
 }
 .class-C.final-trip-stop .ant-timeline-item-head {

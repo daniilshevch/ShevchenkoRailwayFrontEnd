@@ -13,7 +13,7 @@ const CARRIAGE_TYPES = {
     "Sitting": "Сидячий"
 };
 
-function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo }) {
+function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo, showWithoutFreePlaces }) {
 
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
         navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}`);
     }
 
-    // Створюємо кастомний заголовок для Card
+
     const cardTitle = (
         <div className="card-title-header">
             <Title level={5} onClick={() => handleCarriageTypeClick(type, trainRaceId)} className="card-title-clickable">
@@ -64,6 +64,7 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
                         qualityClass={qualityClass}
                         data={data}
                         generalTrainRaceInfo={generalTrainRaceInfo}
+                        showWithoutFreePlaces = {showWithoutFreePlaces}
                     />
                 ))}
             </div>

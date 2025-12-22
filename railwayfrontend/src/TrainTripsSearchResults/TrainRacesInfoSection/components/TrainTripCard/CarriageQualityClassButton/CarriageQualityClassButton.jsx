@@ -3,8 +3,12 @@ import "./CarriageQualityClassButton.css"; // Ми оновимо цей CSS
 import { useNavigate } from 'react-router-dom';
 import { Tag } from 'antd'; // 👈 Імпортуємо Tag
 
-function CarriageQualityClassButton({ trainRaceId, startStation, endStation, carriageType, qualityClass, generalTrainRaceInfo, data }) {
+function CarriageQualityClassButton({ trainRaceId, startStation, endStation, carriageType, qualityClass, generalTrainRaceInfo, data, showWithoutFreePlaces }) {
 
+    if(showWithoutFreePlaces === false && data.free_places === 0)
+    {
+        return null;
+    }
     const navigate = useNavigate();
 
     const handleCarriageTypeAndQualityClassClick = (carriageType, qualityClass, trainRaceId) => {
@@ -14,6 +18,10 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
 
     // Функція для класів залишається
     const getColorClass = (qualityClass) => {
+        if(data.free_places === 0)
+        {
+            return "quality-tag-without-free-places"
+        }
         switch (qualityClass) {
             case "A": return "quality-tag-a";
             case "B": return "quality-tag-b";

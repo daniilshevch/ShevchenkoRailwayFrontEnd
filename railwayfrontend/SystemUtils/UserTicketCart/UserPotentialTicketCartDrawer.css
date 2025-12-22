@@ -29,8 +29,8 @@
     min-width: 80px;      /* опційно: щоб не “стрибало” при різних довжинах */
 }
 
-.ticket-price {
-    font-weight: 600;
+.ticket-price-in-drawer {
+    font-weight: 700;
     color: darkblue;
 }
 .cart-ticket:hover {

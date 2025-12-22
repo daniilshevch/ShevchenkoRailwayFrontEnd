@@ -52,7 +52,7 @@ function useNormalizedTrain(train) {
             full_route_ending_station_title: train.full_route_ending_station_title || endStation,
             ticket_bookings_list: train.ticket_bookings_list || [],
             train_schedule: train.train_schedule,
-            train_race_id: train.train_race_id
+            train_race_id: train.train_route_on_date_id
         };
     }, [train]);
 }
@@ -160,15 +160,35 @@ function isCheapestTag(is_fastest, is_cheapest) {
     return null;
 }
 
-function TrainTripTicketsCard({ train }) {
+function TrainTripTicketsCard({ train, onRefresh }) {
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const [isTicketBookingModalVisible, setIsTicketBookingModalVisible] = useState(false);
     const [initialTicketBookingIndex, setInitialTicketBookingIndex] = useState(0);
+    const [fetchedSchedule, setFetchedSchedule] = useState(null);
+    const [isScheduleLoading, setIsScheduleLoading] = useState(false);
 
     const t = useNormalizedTrain(train);
     const departure = formatTimeDate(t.depISO);
     const arrival   = formatTimeDate(t.arrISO);
 
+    const handleOpenSchedule = async () => {
+        setIsScheduleLoading(true);
+        try {
+            const url = `https://localhost:7230/Client-API/TrainSearch/get-train-schedule-for-train-race/${t.train_race_id}?starting_station_title=${t.startStation}&ending_station_title=${t.endStation}`;
+            const response = await fetch(url);
+
+            if (!response.ok) throw new Error("Не вдалося завантажити розклад");
+
+            const data = await response.json();
+            setFetchedSchedule(data); // Зберігаємо отриманий масив
+            setIsScheduleVisible(true); // Відкриваємо модалку
+        } catch (error) {
+            console.error(error);
+            message.error("Помилка при отриманні розкладу руху");
+        } finally {
+            setIsScheduleLoading(false);
+        }
+    };
     const handleTicketClick = (index) => {
         setInitialTicketBookingIndex(index);
         setIsTicketBookingModalVisible(true);
@@ -214,7 +234,7 @@ function TrainTripTicketsCard({ train }) {
 
             <div className="route-footer">
                 <div>
-                    <Button className="train-schedule-button" type="default" onClick={() => setIsScheduleVisible(true)}>
+                    <Button className="train-schedule-button" type="default" onClick={handleOpenSchedule} loading={isScheduleLoading}>
                         Розклад руху
                     </Button>
                 </div>
@@ -242,7 +262,7 @@ function TrainTripTicketsCard({ train }) {
             <TrainScheduleModal
                 visible={isScheduleVisible}
                 onClose={() => setIsScheduleVisible(false)}
-                trainStops={t.train_schedule}
+                trainStops={fetchedSchedule}
                 trainQualityClass={t.train_route_class}
                 trainRouteId={changeTrainRouteIdIntoUkrainian(t.train_route_id)}
                 startingStationUkrainianTitle={stationTitleIntoUkrainian(t.full_route_starting_station_title)}
@@ -253,6 +273,7 @@ function TrainTripTicketsCard({ train }) {
                 onClose={() => setIsTicketBookingModalVisible(false)}
                 tickets={t.ticket_bookings_list}
                 initialIndex={initialTicketBookingIndex}
+                onRefresh = {onRefresh}
             />
         </div>
     );

@@ -1,16 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Form, AutoComplete, DatePicker, Button, message, Input, ConfigProvider } from 'antd';
+import { Form, AutoComplete, DatePicker, Button, message, Input, ConfigProvider, Popover, Checkbox } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
 import locale from 'antd/locale/uk_UA';
-import { SwapOutlined, SearchOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
+import { SwapOutlined, SearchOutlined, EnvironmentOutlined, CalendarOutlined, FilterOutlined } from '@ant-design/icons';
 import { stationsList } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import './CompactTripsSearchForm.css';
 
 const options = stationsList.map((station) => ({ value: station.ukrainian, label: station.ukrainian }));
 
-const CompactTripSearchForm = ({ initialStartStation = "", initialEndStation = "", initialTripDate = "" }) => {
+const CompactTripSearchForm = ({
+                                   initialStartStation = "",
+                                   initialEndStation = "",
+                                   initialTripDate = "",
+                                   onShowTrainsWithoutFreePlacesChange
+}) => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
@@ -19,6 +24,7 @@ const CompactTripSearchForm = ({ initialStartStation = "", initialEndStation = "
     const endRef = useRef(null);
     const dateRef = useRef(null);
     const [dateOpen, setDateOpen] = useState(false);
+    const [showTrainsWithoutFreePlaces, setShowTrainsWithoutFreePlaces] = useState(false);
 
     useEffect(() => {
         form.setFieldsValue({
@@ -32,6 +38,13 @@ const CompactTripSearchForm = ({ initialStartStation = "", initialEndStation = "
         const startStationUkrainian = (form.getFieldValue("startStationUkrainian") || "").trim();
         const endStationUkrainian = (form.getFieldValue("endStationUkrainian") || "").trim();
         form.setFieldsValue({ startStationUkrainian: endStationUkrainian, endStationUkrainian: startStationUkrainian });
+    };
+    const handleShowTrainsWithoutFreePlacesChange = (e) => {
+        const checked = e.target.checked;
+        setShowTrainsWithoutFreePlaces(checked);
+        if (onShowTrainsWithoutFreePlacesChange) {
+            onShowTrainsWithoutFreePlacesChange(checked);
+        }
     };
 
     const onFinish = (values) => {
@@ -72,6 +85,8 @@ const CompactTripSearchForm = ({ initialStartStation = "", initialEndStation = "
                             date: initialTripDate ? dayjs(initialTripDate) : null
                         }}
                     >
+                        {/* ... (Інші Form.Item залишаються без змін) ... */}
+
                         <Form.Item
                             name="startStationUkrainian"
                             rules={[{ required: true, message: 'Вкажіть звідки' }]}
@@ -144,17 +159,64 @@ const CompactTripSearchForm = ({ initialStartStation = "", initialEndStation = "
                             />
                         </Form.Item>
 
+                        {/* --- ТУТ ОСНОВНІ ЗМІНИ --- */}
                         <Form.Item className="cts-submit">
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                icon={<SearchOutlined />}
-                                size="large"
-                                className="compact-search-btn"
-                            >
-                                Знайти
-                            </Button>
+                            {/* Обгортка div для горизонтального розміщення кнопок */}
+                            <div style={{ display: 'flex', gap: '8px' }}>
+
+                                <Popover
+                                    content={
+                                        <div style={{ padding: '4px 0' }}>
+                                            <Checkbox
+                                                checked={showTrainsWithoutFreePlaces}
+                                                onChange={handleShowTrainsWithoutFreePlacesChange}
+                                            >
+                                                Без вільних місць
+                                            </Checkbox>
+                                        </div>
+                                    }
+                                    trigger="hover"
+                                    placement="bottomRight"
+                                >
+                                    <Button
+                                        icon={<FilterOutlined />}
+                                        size="large"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            fontWeight: 500,
+
+                                            // Гібридна логіка:
+                                            // 1. Фон: Сірий (якщо вимкнено) / Світло-блакитний (якщо увімкнено)
+                                            backgroundColor: showTrainsWithoutFreePlaces ? '#e6f7ff' : '#f5f5f5',
+
+                                            // 2. Текст: Темно-сірий / Яскраво-синій
+                                            color: showTrainsWithoutFreePlaces ? '#0052cc' : '#595959',
+
+                                            // 3. Рамка: Прозора (щоб кнопка не "стрибала") / Синя
+                                            border: `1px solid ${showTrainsWithoutFreePlaces ? '#0052cc' : 'transparent'}`,
+
+                                            transition: 'all 0.3s' // Плавна анімація переходу кольорів
+                                        }}
+                                    >
+                                        Фільтри
+                                    </Button>
+                                </Popover>
+
+                                {/* Кнопка пошуку */}
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    icon={<SearchOutlined />}
+                                    size="large"
+                                    className="compact-search-btn"
+                                >
+                                    Знайти
+                                </Button>
+                            </div>
                         </Form.Item>
+                        {/* --- КІНЕЦЬ ЗМІН --- */}
+
                     </Form>
                 </div>
             </ConfigProvider>

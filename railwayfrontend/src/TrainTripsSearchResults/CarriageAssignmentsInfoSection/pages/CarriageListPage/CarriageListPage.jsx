@@ -36,6 +36,35 @@ function CarriageListPage()
     const [trainStops, setTrainStops] = useState(null);
     const [fullRouteStartingStationTitle, setFullRouteStartingStationTitle] = useState(null);
     const [fullRouteEndingStationTitle, setFullRouteEndingStationTitle] = useState(null);
+    const [showCarriagesWithoutFreePlaces, setShowCarriagesWithoutFreePlaces] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const refreshTrainData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/get-full-train-race-info-with-bookings/${train_race_id}/${start}/${end}`);
+            if (!response.ok) throw new Error("Помилка при оновленні даних");
+
+            const newData = await response.json();
+
+            // Оновлюємо сховище
+            localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
+
+            // Оновлюємо статистику (для хедера фільтрів)
+            setCarriageStats(newData.grouped_carriage_statistics_list);
+
+            // Повідомляємо useEffect, що дані оновилися і треба перерахувати фільтри
+            setRefreshTrigger(prev => prev + 1);
+
+            messageApi.success("Дані успішно оновлено");
+        } catch (error) {
+            console.error(error);
+            messageApi.error("Не вдалося оновити дані про місця");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
@@ -55,7 +84,11 @@ function CarriageListPage()
         return dict;
     }, [searchParams]);
     const initialSelectedTypes = useMemo(() => Object.keys(initialSelectedSubtypes), [initialSelectedSubtypes]);
-    const handleFilterChange = ({ queryParams }) => {
+    const handleFilterChange = ({ queryParams, showCarriagesWithoutFreePlaces: showFull }) => {
+        if(showFull !== undefined)
+        {
+            setShowCarriagesWithoutFreePlaces(showFull)
+        }
         const current = searchParams.getAll("type");
         const same =
             current.length === queryParams.length &&
@@ -91,6 +124,7 @@ function CarriageListPage()
         {
             localStorage.setItem("potentialTicketsCart", JSON.stringify({
                 potentialTicketsList: potentialTicketCartState.potentialTicketsList}));
+            window.dispatchEvent(new Event('cartUpdated'));
         }
         catch(error)
         {
@@ -224,7 +258,17 @@ function CarriageListPage()
                 console.error(error);
             }
         }
-    }, [searchParams]);
+    }, [searchParams, refreshTrigger]);
+    const displayedCarriages = useMemo(() => {
+        if (!carriages) return null;
+
+        return carriages.filter(carriage => {
+            if (showCarriagesWithoutFreePlaces) {
+                return true;
+            }
+            return carriage.free_places > 0;
+        });
+    }, [carriages, showCarriagesWithoutFreePlaces]);
     return (
         <div className = "main-layout-container">
             {contextHolder}
@@ -242,6 +286,8 @@ function CarriageListPage()
                 initialSelectedTypes={initialSelectedTypes}
                 initialSelectedSubtypes={initialSelectedSubtypes}
                 onChange={handleFilterChange}
+                onRefresh={refreshTrainData}
+                isLoading={isLoading}
             ></CarriageFilteringHeader>
             {/*<CarriageTypeAndQualityFilter*/}
             {/*    groupedSeats={carriageStats}*/}
@@ -253,7 +299,7 @@ function CarriageListPage()
                 {carriages ? (
                     <>
                         <CarriageListLayout
-                            carriages={carriages}
+                            carriages={displayedCarriages}
                             onSeatClick={onSeatClickAction}
                             startStation={start}
                             endStation={end}

@@ -1,0 +1,1 @@
+﻿export const EAGER_BOOKINGS_SEARCH_MODE = true;

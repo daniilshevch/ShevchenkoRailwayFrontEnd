@@ -1,3 +1,50 @@
 * {
     box-sizing: border-box;
 }
+/* 1. Основний контейнер повідомлення (біла хмаринка) */
+.ant-message-notice-content {
+    background-color: rgba(255, 255, 255, 0.98) !important; /* Чистий світлий фон */
+    backdrop-filter: blur(10px); /* Ефект матового скла */
+    border: 1px solid rgba(0, 0, 0, 0.05) !important; /* Ледь помітна рамка */
+    border-radius: 12px !important; /* М'які кути */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important; /* Глибока м'яка тінь */
+    padding: 10px 24px !important;
+}
+
+/* 2. Стилізація тексту та іконок всередині */
+.ant-message-custom-content {
+    display: flex !important;
+    align-items: center !important;
+    font-weight: 500 !important;
+    color: #2c3e50 !important; /* Темно-сірий текст для читабельності */
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+}
+
+/* 3. Кастомізація статусів через акцентні лінії (Left Border) */
+
+/* Успіх - Жовто-зелений (під колір твого табло) */
+.ant-message-success .ant-message-custom-content {
+    border-left: 4px solid #d4e157;
+    padding-left: 14px;
+    margin-left: -10px;
+}
+
+/* Помилка - Помаранчево-червоний */
+.ant-message-error .ant-message-custom-content {
+    border-left: 4px solid #ff4d4f;
+    padding-left: 14px;
+    margin-left: -10px;
+}
+
+/* Інфо - Синій */
+.ant-message-info .ant-message-custom-content {
+    border-left: 4px solid #1890ff;
+    padding-left: 14px;
+    margin-left: -10px;
+}
+
+/* 4. Збільшуємо іконки, щоб вони виглядали солідніше */
+.ant-message-custom-content .anticon {
+    font-size: 18px !important;
+    margin-right: 12px !important;
+}
