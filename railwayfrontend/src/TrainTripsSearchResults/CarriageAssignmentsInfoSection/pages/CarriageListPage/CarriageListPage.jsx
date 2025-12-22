@@ -17,11 +17,13 @@ import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import {
+    CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE,
     REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 import {
     EAGER_BOOKINGS_SEARCH_MODE
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
+import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -52,7 +54,7 @@ function CarriageListPage()
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     //Завантаження даних з сервера
-    const loadTrainDataFromServer = async ( lazy_load_mode = false,  refresh_mode = false) => {
+    const loadTrainDataFromServer = async (lazy_load_mode = false,  refresh_mode = false) => {
         setIsLoading(true);
         try {
             const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(train_race_id, start, end));
@@ -239,10 +241,46 @@ function CarriageListPage()
             potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
         }
     }
+    async function cancelTicketReservation(ticket)
+    {
+        const token = localStorage.getItem("token");
+        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+        const ticket_info = {
+            id: ticket.id,
+            full_ticket_id: ticket.full_ticket_id,
+            user_id: ticket.user_id,
+            train_route_on_date_id: ticket.train_race_id,
+            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+            passenger_carriage_id: ticket.passenger_carriage_id,
+            starting_station_title: ticket.trip_starting_station,
+            ending_station_title: ticket.trip_ending_station,
+            place_in_carriage: ticket.place_in_carriage,
+            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+            booking_initialization_time: ticket.booking_initialization_time,
+            booking_expiration_time: ticket.booking_expiration_time
+        };
+        const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(ticket_info)
+        });
+        if (!response.ok)
+        {
+            console.log(response);
+        }
+    }
     const removePotentialTicketFromCart = (potentialTicket) =>
     {
         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+        if(potentialTicket.ticket_status === "RESERVED")
+        {
+            cancelTicketReservation(potentialTicket);
+        }
     }
+
 
 
 
@@ -333,12 +371,6 @@ function CarriageListPage()
                 onRefresh={() => loadTrainDataFromServer(false, true)}
                 isLoading={isLoading}
             ></CarriageFilteringHeader>
-            {/*<CarriageTypeAndQualityFilter*/}
-            {/*    groupedSeats={carriageStats}*/}
-            {/*    initialSelectedTypes={initialSelectedTypes}*/}
-            {/*    initialSelectedSubtypes={initialSelectedSubtypes}*/}
-            {/*    onChange={handleFilterChange}*/}
-            {/*></CarriageTypeAndQualityFilter>*/}
             <div className="carriage-list-page">
                 {carriages ? (
                     <>
