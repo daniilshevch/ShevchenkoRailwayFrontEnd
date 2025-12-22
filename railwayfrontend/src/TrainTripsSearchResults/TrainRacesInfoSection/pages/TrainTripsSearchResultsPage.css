@@ -1,41 +1,27 @@
 .train-trips-page {
-    height: 100vh; /* Фіксуємо висоту на розмір екрану */
-    overflow: hidden; /* Забороняємо глобальний скрол */
-
-    /* Твій фон */
+    height: 100vh;
+    overflow: hidden;
     background-image: url('/public/background_images/trips_search.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-
-    /* Важливо: трохи зменшити верхній відступ, щоб контент вліз */
     padding-top: 55px;
-    box-sizing: border-box; /* Щоб padding не додавав зайвої висоти */
+    box-sizing: border-box;
 }
 
-/* 2. Розраховуємо висоту списку так, щоб він вліз ідеально */
 .train-cards-container {
-    /* Твої старі стилі лишаємо без змін (щоб нічого не поїхало вбік) */
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
-    margin: 10px auto; /* auto центрує по горизонталі */
-    width: 90%;
+    margin: 10px auto;
+    width: 100%;
     max-width: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-
-    /* === МАГІЯ ТУТ === */
-    /* 100vh (весь екран)
-       - 80px (твоє верхнє меню навігації)
-       - 250px (висота форми пошуку + слайдера дат + відступи)
-       = те, що залишилось для списку.
-    */
     height: 700px;
     padding: 20px 20px 150px 20px;
-    /* Вмикаємо внутрішній скрол */
     overflow-y: auto;
 }
 
@@ -77,13 +63,9 @@
 }
 .date-slider {
     display: flex;
-
     justify-content: flex-end;
-
-    /* Розміри та відступи, щоб вирівняти з картками поїздів */
     width: 100%;
-    margin: 10px auto; /* auto центрує сам контейнер по горизонталі */
-
-    flex-shrink: 0; /* Не дозволяє блоку стискатися */
+    margin: 10px auto;
+    flex-shrink: 0;
 }
 

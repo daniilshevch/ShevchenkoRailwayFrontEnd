@@ -41,21 +41,18 @@
 .right-train-header-block {
     margin-top: -20px;
     margin-right: -30px;
-    /* Додаємо Flexbox для ідеального стикування */
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Притискаємо до правого краю */
-    gap: 0; /* Гарантуємо відсутність проміжків */
+    justify-content: flex-end;
+    gap: 0;
 }
 
-/* ВАЖЛИВО: Прибираємо стандартні відступи Ant Design тегів всередині цього блоку */
 .right-train-header-block .ant-tag {
     margin: 0 !important;
 }
 
-/* Переконайся, що спани-обгортки теж не мають відступів */
 .is-fastest, .is-cheapest {
-    display: flex; /* Щоб спан обтягував тег без зайвих пікселів */
+    display: flex;
     margin: 0;
     padding: 0;
 }

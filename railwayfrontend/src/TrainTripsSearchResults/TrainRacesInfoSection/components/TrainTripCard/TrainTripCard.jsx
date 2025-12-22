@@ -85,10 +85,7 @@ function isFastestTag(is_fastest, is_cheapest)
 {
     if(is_fastest === true)
     {
-        // Якщо є "найдешевший", закруглення 0 (квадрат). Якщо ні — закруглюємо кінець.
         const borderRadius = is_cheapest ? '0' : '0 12px 0 0';
-
-        // ВАЖЛИВО: Якщо це останній елемент (немає is_cheapest), треба додати праву рамку!
         const borderRight = is_cheapest ? 'none' : '2px solid #00CED1';
 
         return (
@@ -101,8 +98,6 @@ function isFastestTag(is_fastest, is_cheapest)
                 borderTop: `2px solid #00CED1`,
                 borderBottom: `2px solid #00CED1`,
                 borderLeft: 'none',
-
-                // Використовуємо змінну для правої рамки
                 borderRight: borderRight
             }}>
                 Найшвидший
@@ -121,7 +116,6 @@ function isCheapestTag(is_fastest, is_cheapest)
     {
         marginLeft = 0;
     }
-
     if(is_cheapest === true)
     {
         return (
@@ -179,7 +173,6 @@ function TrainTripCard({ train, showWithoutFreePlaces })
                     </div>
                     <SpeedometerComponent speed = {train.average_speed_on_trip} />
                 </div>
-                {/*<SpeedometerComponent speed = {train.average_speed_on_trip} />*/}
                 <div className="time-block right">
                     <div className="time">{arrival.time}</div>
                     <div className="date">{arrival.day}</div>
