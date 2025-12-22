@@ -16,6 +16,7 @@ import {
 
 const antIcon = <SyncOutlined spin style={{ fontSize: 40 }} />;
 
+//Refactored
 function TrainTripsSearchResultsPage() {
     const [messageApi, contextHolder] = message.useMessage();
     const { start, end } = useParams();

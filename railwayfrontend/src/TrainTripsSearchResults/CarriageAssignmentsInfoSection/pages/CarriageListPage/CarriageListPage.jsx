@@ -16,6 +16,12 @@ import TrainScheduleModal from "../../../TrainRacesInfoSection/components/TrainS
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
+import {
+    REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL
+} from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
+import {
+    EAGER_BOOKINGS_SEARCH_MODE
+} from "../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -25,39 +31,48 @@ function CarriageListPage()
 {
     const [messageApi, contextHolder] = message.useMessage();
     const [searchParams, setSearchParams] = useSearchParams();
+    const {train_race_id, start, end} = useParams();
+
+    //Стани даних
     const [carriageStats, setCarriageStats] = useState({});
     const [carriages, setCarriages] = useState(null);
-    const {train_race_id, start, end} = useParams();
     const [startingStationDepartureTime, setStartingStationDepartureTime] = useState(null);
     const [endingStationArrivalTime, setEndingStationArrivalTime] = useState(null);
     const [trainRouteId, setTrainRouteId] = useState(null);
     const [trainRouteClass, setTrainRouteClass] = useState(null);
-    const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const [trainStops, setTrainStops] = useState(null);
     const [fullRouteStartingStationTitle, setFullRouteStartingStationTitle] = useState(null);
     const [fullRouteEndingStationTitle, setFullRouteEndingStationTitle] = useState(null);
+    const [fullTrainData, setFullTrainData] = useState(null);
+
+    //Стани UI
+    const [isScheduleVisible, setIsScheduleVisible] = useState(false);
     const [showCarriagesWithoutFreePlaces, setShowCarriagesWithoutFreePlaces] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-    const refreshTrainData = async () => {
+    //Завантаження даних з сервера
+    const loadTrainDataFromServer = async ( lazy_load_mode = false,  refresh_mode = false) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/get-full-train-race-info-with-bookings/${train_race_id}/${start}/${end}`);
-            if (!response.ok) throw new Error("Помилка при оновленні даних");
-
+            const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(train_race_id, start, end));
+            if (!response.ok) {
+                throw new Error("Помилка при оновленні даних");
+            }
             const newData = await response.json();
-
-            // Оновлюємо сховище
-            localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
-
-            // Оновлюємо статистику (для хедера фільтрів)
-            setCarriageStats(newData.grouped_carriage_statistics_list);
-
-            // Повідомляємо useEffect, що дані оновилися і треба перерахувати фільтри
+            if(EAGER_BOOKINGS_SEARCH_MODE) {
+                localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
+            }
+            //setCarriageStats(newData.grouped_carriage_statistics_list);
+            applyTrainData(newData);
             setRefreshTrigger(prev => prev + 1);
-
-            messageApi.success("Дані успішно оновлено");
+            if(refresh_mode) {
+                messageApi.success("Дані успішно оновлено");
+            }
+            if(lazy_load_mode)
+            {
+                messageApi.success("Успішно завантажені доступні місця з серверу");
+            }
         } catch (error) {
             console.error(error);
             messageApi.error("Не вдалося оновити дані про місця");
@@ -66,6 +81,51 @@ function CarriageListPage()
         }
     };
 
+    //Універсальна функція оновлення станів з отриманого об'єкта
+    const applyTrainData = useCallback((data) => {
+        setCarriageStats(data.grouped_carriage_statistics_list);
+        setStartingStationDepartureTime(data.trip_starting_station_departure_time);
+        setEndingStationArrivalTime(data.trip_ending_station_arrival_time);
+        setTrainRouteClass(data.train_route_class);
+        setTrainRouteId(data.train_route_id);
+        setTrainStops(data.train_schedule);
+        setFullRouteStartingStationTitle(data.full_route_starting_station_title);
+        setFullRouteEndingStationTitle(data.full_route_ending_station_title);
+        setFullTrainData(data);
+        return data;
+    }, []);
+
+    //Ініціалізація інформації про доступні для покупки місця в поїзді
+    useEffect(() => {
+        const trainData = localStorage.getItem("generalTrainRaceData");
+        let useCache = false;
+        if(EAGER_BOOKINGS_SEARCH_MODE && trainData)
+        {
+            try
+            {
+                const parsedTrainData = JSON.parse(trainData);
+                if(String(parsedTrainData.train_race_id) === String(train_race_id))
+                {
+                    applyTrainData(parsedTrainData);
+                    setRefreshTrigger(prev => prev + 1);
+                    useCache = true;
+                }
+                else
+                {
+                    console.warn("Дані в localStorage не відповідають запиту");
+                }
+            }
+            catch(error)
+            {
+                console.error(error.message);
+            }
+        }
+        if(!useCache)
+        {
+            loadTrainDataFromServer(true, false);
+        }
+    }, [train_race_id, applyTrainData]);
+    
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
         const tokens = searchParams.getAll("type");
@@ -186,31 +246,15 @@ function CarriageListPage()
 
 
 
-
     useEffect(() => {
         const typeParams = searchParams.getAll("type");
-        const trainData = localStorage.getItem("generalTrainRaceData");
-        if (trainData)
+        const trainDataObject = fullTrainData;
+        if (trainDataObject)
         {
             try
             {
-                const trainDataObject = JSON.parse(trainData);
                 const carriage_statistics_list = trainDataObject.carriage_statistics_list;
                 const groupedCarriageStatisticsList = trainDataObject.grouped_carriage_statistics_list;
-                setCarriageStats(groupedCarriageStatisticsList);
-                const tripStartingStationDepartureTime = trainDataObject.trip_starting_station_departure_time;
-                setStartingStationDepartureTime(tripStartingStationDepartureTime);
-                const tripEndingStationArrivalTime = trainDataObject.trip_ending_station_arrival_time;
-                setEndingStationArrivalTime(tripEndingStationArrivalTime);
-                const trainRouteQualityClass = trainDataObject.train_route_class;
-                const trainRouteId = trainDataObject.train_route_id;
-                setTrainRouteClass(trainRouteQualityClass);
-                setTrainRouteId(trainRouteId);
-                setTrainStops(trainDataObject.train_schedule);
-                setFullRouteStartingStationTitle(trainDataObject.full_route_starting_station_title);
-                setFullRouteEndingStationTitle(trainDataObject.full_route_ending_station_title)
-                console.log(groupedCarriageStatisticsList);
-                console.log(typeParams);
                 let carriagesList = [];
                 if (typeParams.length > 0) {
                     for (const type of typeParams) {
@@ -286,7 +330,7 @@ function CarriageListPage()
                 initialSelectedTypes={initialSelectedTypes}
                 initialSelectedSubtypes={initialSelectedSubtypes}
                 onChange={handleFilterChange}
-                onRefresh={refreshTrainData}
+                onRefresh={() => loadTrainDataFromServer(false, true)}
                 isLoading={isLoading}
             ></CarriageFilteringHeader>
             {/*<CarriageTypeAndQualityFilter*/}

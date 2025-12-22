@@ -16,6 +16,7 @@ const CARRIAGE_TYPES = {
     "Sitting": "Сидячий"
 };
 
+//Refactored
 function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo, showWithoutFreePlaces }) {
 
     const navigate = useNavigate();

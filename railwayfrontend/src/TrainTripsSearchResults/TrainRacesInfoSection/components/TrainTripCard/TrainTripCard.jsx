@@ -7,6 +7,8 @@ import TrainScheduleModal from '../TrainScheduleModal/TrainScheduleModal.jsx';
 import SpeedometerComponent from './SpeedometerComponent/SpeedometerComponent.jsx';
 import changeTrainRouteIdIntoUkrainian from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import changeTrainRouteBrandedNameIntoUkrainian from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainBrandedNamesDictionary.js";
+
+//Refactored
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
     const time = date.toLocaleTimeString("uk-UA", { hour: '2-digit', minute: '2-digit' });

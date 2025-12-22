@@ -6,6 +6,7 @@ import {
     EAGER_BOOKINGS_SEARCH_MODE
 } from "../../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js"; // 👈 Імпортуємо Tag
 
+//Refactored
 function CarriageQualityClassButton({ trainRaceId, startStation, endStation, carriageType, qualityClass, generalTrainRaceInfo, data, showWithoutFreePlaces }) {
     const navigate = useNavigate();
     if(showWithoutFreePlaces === false && data.free_places === 0)
