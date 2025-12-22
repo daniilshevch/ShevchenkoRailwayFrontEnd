@@ -4,10 +4,8 @@
     margin-top: 10px;
     flex: 1 1 300px;
     max-width: 375px;
-    background-color: #fafafa; /* Легкий фон, "напівпрозорий" */
+    background-color: #fafafa;
 }
-
-/* Стилізуємо кастомний заголовок, який ми створили */
 .card-title-header {
     display: flex;
     justify-content: space-between;
@@ -17,11 +15,12 @@
 
 .card-title-clickable {
     cursor: pointer;
-    margin-bottom: 0 !important; /* Перебити стиль antd Title */
-    color: #1677ff !important; /* Зробити схожим на посилання */
+    margin-bottom: 0 !important;
+    color: #1677ff !important;
 }
 .card-title-clickable:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .card-title-price {
@@ -30,17 +29,16 @@
     color: #333;
 }
 
-/* Контейнер для тегів, замість .subclass-buttons */
 .subclass-tags-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 0; /* Даємо простір між тегами */
+    gap: 0;
 }
 .carriage-type-card .ant-card-body {
-    padding: 0px;
+    padding: 0;
 }
 .carriage-type-card .ant-card-head {
-    min-height: auto; /* Прибирає мінімальну висоту */
-    padding-top: 10px;    /* Зменшує верхній відступ */
-    padding-bottom: 10px; /* Зменшує нижній відступ */
+    min-height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

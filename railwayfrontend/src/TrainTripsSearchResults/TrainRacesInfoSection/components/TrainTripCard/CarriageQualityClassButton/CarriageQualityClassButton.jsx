@@ -1,22 +1,24 @@
 ﻿import React from 'react';
 import "./CarriageQualityClassButton.css"; // Ми оновимо цей CSS
 import { useNavigate } from 'react-router-dom';
-import { Tag } from 'antd'; // 👈 Імпортуємо Tag
+import { Tag } from 'antd';
+import {
+    EAGER_BOOKINGS_SEARCH_MODE
+} from "../../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js"; // 👈 Імпортуємо Tag
 
 function CarriageQualityClassButton({ trainRaceId, startStation, endStation, carriageType, qualityClass, generalTrainRaceInfo, data, showWithoutFreePlaces }) {
-
+    const navigate = useNavigate();
     if(showWithoutFreePlaces === false && data.free_places === 0)
     {
         return null;
     }
-    const navigate = useNavigate();
-
     const handleCarriageTypeAndQualityClassClick = (carriageType, qualityClass, trainRaceId) => {
-        localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
+        if(EAGER_BOOKINGS_SEARCH_MODE) {
+            localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
+        }
         navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}~${qualityClass}`);
     }
 
-    // Функція для класів залишається
     const getColorClass = (qualityClass) => {
         if(data.free_places === 0)
         {

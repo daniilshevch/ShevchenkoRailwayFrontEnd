@@ -2,7 +2,10 @@
 import "./CarriageTypeButton.css"; // Ми оновимо цей CSS
 import CarriageQualityClassButton from "../CarriageQualityClassButton/CarriageQualityClassButton.jsx";
 import { useNavigate } from 'react-router-dom';
-import { Card, Typography } from 'antd'; // 👈 Імпортуємо Card
+import { Card, Typography } from 'antd';
+import {
+    EAGER_BOOKINGS_SEARCH_MODE
+} from "../../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js"; // 👈 Імпортуємо Card
 
 const { Title, Text } = Typography;
 
@@ -16,10 +19,10 @@ const CARRIAGE_TYPES = {
 function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo, showWithoutFreePlaces }) {
 
     const navigate = useNavigate();
-
-    // Ця логіка залишається
     const handleCarriageTypeClick = (carriageType, trainRaceId) => {
-        localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
+        if(EAGER_BOOKINGS_SEARCH_MODE) {
+            localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
+        }
         navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}`);
     }
 
@@ -29,28 +32,18 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
             <Title level={5} onClick={() => handleCarriageTypeClick(type, trainRaceId)} className="card-title-clickable">
                 {CARRIAGE_TYPES[type]}
             </Title>
-
             <Text type="secondary" className="card-title-places">
                 Місця: {classStats.free_places}/{classStats.total_places}
             </Text>
-
             <span className="card-title-price">
                 {classStats.min_price} грн
             </span>
         </div>
     );
 
-    // // Створюємо "extra" для Card
-    // const cardExtra = (
-    //     <Text type="secondary">
-    //         Місця: {classStats.free_places}/{classStats.total_places}
-    //     </Text>
-    // );
-
     return (
         <Card
             title={cardTitle}
-            //extra={cardExtra}
             className="carriage-type-card"
         >
             <div className="subclass-tags-wrapper">
@@ -71,5 +64,4 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
         </Card>
     );
 }
-
 export default CarriageTypeButton;
