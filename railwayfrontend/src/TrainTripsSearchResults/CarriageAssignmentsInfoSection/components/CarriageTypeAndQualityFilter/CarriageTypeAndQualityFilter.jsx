@@ -1,12 +1,11 @@
 ﻿import React, { useMemo, useState, useEffect } from "react";
 import { Segmented, Popover, Checkbox, Tag, Space, theme } from "antd";
-import { DownOutlined } from "@ant-design/icons"; // FilterOutlined та Button більше не треба тут
+import { DownOutlined } from "@ant-design/icons";
 import {
     changeCarriageTypeIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import "./CarriageTypeAndQualityFilter.css";
 
-// Кольори для класів (без змін)
 const getSubtypeColor = (subtype) => {
     switch (subtype) {
         case 'A': return '#ff4d4f'; // Яскравий червоний
@@ -14,6 +13,15 @@ const getSubtypeColor = (subtype) => {
         case 'C': return '#1677ff'; // Яскравий синій
         case 'S': return '#722ed1'; // Фіолетовий
         default: return '#8c8c8c';
+    }
+};
+const getLightSubtypeColor = (subtype) => {
+    switch (subtype) {
+        case 'A': return '#ffccc7'; // Світло-червоний (більш насичений)
+        case 'B': return '#d9f7be'; // Світло-зелений (більш насичений)
+        case 'C': return '#bae7ff'; // Світло-синій (більш насичений)
+        case 'S': return '#efdbff'; // Світло-фіолетовий (більш насичений)
+        default: return '#f5f5f5';
     }
 };
 
@@ -24,13 +32,9 @@ export default function CarriageTypeAndQualityFilter({
                                                          onChange
                                                      }) {
     const { token } = theme.useToken();
-
     const carriageTypes = useMemo(() => Object.keys(groupedSeats), [groupedSeats]);
     const [selectedTypes, setSelectedTypes] = useState(() => initialSelectedTypes);
     const [initiallyLoaded, setInitiallyLoaded] = useState(false);
-
-    // Логіку showCarriagesWithoutFreePlaces ЗВІДСИ ВИДАЛЕНО
-
     const [selectedSubtypes, setSelectedSubtypes] = useState(() => {
         const checkedSubtypes = {};
         for (const type of initialSelectedTypes) {
@@ -39,17 +43,14 @@ export default function CarriageTypeAndQualityFilter({
         }
         return checkedSubtypes;
     });
-
     const getQueryStringParams = (typesArray, subtypesDictionary) => {
         return typesArray.map(type => {
             const subtypes = subtypesDictionary[type] || [];
             return subtypes.length ? `${type}~${subtypes.join("*")}` : type;
         })
     };
-
     const implementCarriageFilteringChanges = (nextTypes, nextSubtypes) => {
         const queryParams = getQueryStringParams(nextTypes, nextSubtypes);
-        // Ми більше не передаємо showCarriagesWithoutFreePlaces звідси
         onChange?.({
             selectedTypes: nextTypes,
             selectedSubtypes: nextSubtypes,
@@ -95,7 +96,8 @@ export default function CarriageTypeAndQualityFilter({
             key: qualityClass,
             free_places: statsForQualityClass.free_places,
             total_places: statsForQualityClass.total_places,
-            min_price: statsForQualityClass.min_price
+            min_price: statsForQualityClass.min_price,
+            carriage_statistics_list: statsForQualityClass.carriage_statistics_list
         }));
     };
 
@@ -122,23 +124,39 @@ export default function CarriageTypeAndQualityFilter({
         const sortedSelected = [...currentSelected].sort();
 
         const content = (
-            <div style={{ width: 220 }}>
+            <div style={{ width: 250 }}>
                 <div style={{ marginBottom: 8, fontWeight: 600, borderBottom: `1px solid ${token.colorBorderSecondary}`, paddingBottom: 4 }}>
                     {changeCarriageTypeIntoUkrainian(type)}
                 </div>
                 <Checkbox.Group
-                    style={{ display: "flex", flexDirection: "column", gap: 6 }}
+                    style={{ display: "flex", flexDirection: "column", gap: 0 }} // Змінив gap на 0
                     value={selectedSubtypes[type]}
                     onChange={(vals) => handleSubtypesChange(type, vals)}
                 >
-                    {allAvailableOptions.map((c) => (
-                        <Checkbox key={c.key} value={c.key} style={{ marginLeft: 0 }}>
-                            <Space>
-                                <Tag color={getSubtypeColor(c.key)} style={{ margin: 0, width: 24, textAlign: 'center', padding: 0 }}>{c.key}</Tag>
-                                <span style={{ fontSize: 12, color: token.colorTextSecondary }}>({c.free_places} місць)</span>
-                            </Space>
-                        </Checkbox>
-                    ))}
+                    {allAvailableOptions.map((c) => {
+                        const isSelected = currentSelected.includes(c.key);
+                        return (
+                            <div
+                                key={c.key}
+                                style={{
+                                    backgroundColor: isSelected ? getLightSubtypeColor(c.key) : 'transparent',
+                                    padding: '6px 8px', // Внутрішні відступи для фону
+                                    margin: '0 -4px',   // Трохи виходимо за межі для краси
+                                    borderRadius: 4,
+                                    transition: 'background-color 0.2s'
+                                }}
+                            >
+                                <Checkbox value={c.key} style={{ marginLeft: 0, width: '100%' }}>
+                                    <Space>
+                                        <Tag color={getSubtypeColor(c.key)} style={{ margin: 0, width: 24, textAlign: 'center', padding: 0 }}>{c.key}</Tag>
+                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.carriage_statistics_list.length} вагон(и),</span>
+                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.free_places} місць,</span>
+                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.min_price} грн</span>
+                                    </Space>
+                                </Checkbox>
+                            </div>
+                        );
+                    })}
                 </Checkbox.Group>
             </div>
         );

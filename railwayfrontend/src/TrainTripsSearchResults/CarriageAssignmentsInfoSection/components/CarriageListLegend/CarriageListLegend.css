@@ -1,0 +1,94 @@
+﻿.carriage-legend {
+    background: #fff;
+    padding: 12px 24px; /* Зменшено вертикальний падінг */
+    border-radius: 12px;
+    margin-top: 15px;
+    border: 1px solid #f0f0f0;
+    max-width: 1450px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.legend-main-title {
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    font-size: 16px !important;
+}
+
+.legend-layout {
+    display: flex;
+    align-items: flex-start;
+}
+
+.legend-left-side {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Мінімальний відступ між стрічками класів */
+}
+
+.legend-class-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.legend-visuals {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 85px; /* Фіксована ширина для вирівнювання тексту */
+}
+
+.legend-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1; /* Стискаємо текст по вертикалі */
+}
+
+.class-title {
+    font-size: 14px;
+}
+
+.class-desc {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.legend-divider-vertical {
+    height: 100px !important;
+    margin: 0 30px !important;
+}
+
+.legend-right-side {
+    flex: 1.2;
+}
+
+.status-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-label {
+    font-size: 13px;
+}
+
+/* Зберігаємо оригінальний розмір місця з твоєї системи */
+.seat-sample {
+    width: 35px !important;
+    height: 35px !important;
+    font-size: 12px !important;
+    border-radius: 5px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}

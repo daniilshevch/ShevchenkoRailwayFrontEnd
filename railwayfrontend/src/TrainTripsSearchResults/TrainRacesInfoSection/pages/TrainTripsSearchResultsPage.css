@@ -20,8 +20,8 @@
     width: 100%;
     max-width: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    height: 700px;
-    padding: 20px 20px 150px 20px;
+    height: 545px;
+    padding: 20px 20px 10px 20px;
     overflow-y: auto;
 }
 
@@ -65,7 +65,7 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    margin: 10px auto;
+    margin: 0 auto;
     flex-shrink: 0;
 }
 

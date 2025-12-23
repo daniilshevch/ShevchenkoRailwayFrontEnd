@@ -9,6 +9,10 @@ const defineTripStopType = (train_stop) => {
     {
         return "final-trip-stop";
     }
+    else if(train_stop.is_start_trip_stop)
+    {
+        return "starting-trip-stop";
+    }
     else if(train_stop.is_part_of_trip && !train_stop.is_final_trip_stop)
     {
         return "trip-segment";
@@ -57,6 +61,8 @@ const getTrainStopDuration = (train_stop, stopDuration) => {
     }
 
 }
+
+//Refactored
 const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQualityClass, startingStationUkrainianTitle, endingStationUkraininTitle }) => {
     if(trainStops && trainStops.length > 0) {
         return (
@@ -81,7 +87,6 @@ const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQ
                         </Row>
                     </div>
                 </div>
-                {/* === КІНЕЦЬ ШАПКИ === */}
 
                 <Timeline mode="left">
                     {trainStops.map((stop, index) => {
@@ -108,30 +113,26 @@ const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQ
                                 }
                                 className={`${defineTripStopType(stop)} class-${trainQualityClass}`}
                             >
-                                {/* === ОНОВЛЕНИЙ БЛОК ВМІСТУ === */}
                                 <Row className="timeline-stop-content" gutter={0} align="middle">
                                     <Col span={10}>
                                         <Text
                                             strong
-                                            style={{ width: '80%' }} /* Розтягуємо на всю ширину колонки */
+                                            style={{ width: '80%' }}
                                             ellipsis={{
                                                   tooltip: stationTitleIntoUkrainian(stop.station_title)
                                             }}>{stationTitleIntoUkrainian(stop.station_title)}</Text>
                                     </Col>
                                     <Col span={7}>
                                         <Text type="secondary">
-                                            {/* Показуємо тривалість, якщо вона є (не на першій/останній станції) */}
                                             {getTrainStopDuration(stop, stopDuration)}
                                         </Text>
                                     </Col>
                                     <Col span={7}>
                                         <Text type="secondary">
-                                            {/* Показуємо відстань */}
                                             <Text strong>{stopDistanceFromStartingStation != null ? `${stopDistanceFromStartingStation} км` : '—'}</Text>
                                         </Text>
                                     </Col>
                                 </Row>
-                                {/* === КІНЕЦЬ ОНОВЛЕНОГО БЛОКУ === */}
                             </Timeline.Item>
                         );
                     })}
@@ -153,5 +154,4 @@ const TrainScheduleModal = ({ visible, onClose, trainStops, trainRouteId, trainQ
         );
     }
 };
-
 export default TrainScheduleModal;

@@ -24,6 +24,7 @@ import {
     EAGER_BOOKINGS_SEARCH_MODE
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
 import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
+import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -381,6 +382,7 @@ function CarriageListPage()
                             endStation={end}
                             isSeatSelectedInPotentialTicketCart = {isSeatSelectedInPotentialTicketCart}
                         />
+                        <CarriageListLegend></CarriageListLegend>
                         <UserPotentialTicketCartDrawer
                             cartState={potentialTicketCartState}
                             removePotentialTicketFromCart={removePotentialTicketFromCart}
