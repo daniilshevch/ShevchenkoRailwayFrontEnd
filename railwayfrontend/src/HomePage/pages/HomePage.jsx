@@ -32,7 +32,6 @@ function HomePage()
                 </div>
             </div>
 
-            {/* Секція табло (з'явиться нижче) */}
             <div id="schedule-board" className="board-section" style={{ padding: '40px 100px' }}>
                 <StationBoard />
             </div>
