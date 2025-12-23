@@ -1,20 +1,29 @@
-﻿/* Новий клас для головного контейнера, що тримає хедери і контент */
-.main-layout-container {
-    height: 100vh; /* Фіксуємо висоту на весь екран */
+﻿.main-layout-container {
+    height: 100vh;
     display: flex;
-    flex-direction: column; /* Елементи йдуть зверху вниз */
-    overflow: hidden; /* Прибираємо скрол всієї сторінки */
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .carriage-list-page {
-    /* min-height: 100vh;  <-- ПРИБИРАЄМО або замінюємо */
-    flex: 1; /* Займає весь вільний простір, що залишився після хедерів */
-    overflow-y: auto; /* Вмикає скрол ТІЛЬКИ для цього блоку */
-
-    /* Твої старі стилі фону залишаємо */
+    flex: 1;
+    overflow-y: auto;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
     padding: 40px 0 0px;
+}
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 50px 0;
+}
+
+.loading-container .ant-spin-text {
+    margin-top: 20px;
+    font-size: 16px;
 }

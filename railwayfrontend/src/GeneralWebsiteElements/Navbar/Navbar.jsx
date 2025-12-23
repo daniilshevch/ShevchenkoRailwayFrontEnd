@@ -77,8 +77,8 @@ function Navbar() {
             <nav className="navbar">
                 <ul>
                     <li><Link className="nav-button" to="/">ГОЛОВНА</Link></li>
-                    <li><Link className="nav-button" to="/">ПОШУК КВИТКІВ</Link></li>
-                    <li><Link className="nav-button" to="/">РОЗКЛАД РУХУ</Link></li>
+                    <li><Link className="nav-button" to="/#ticket-search">ПОШУК КВИТКІВ</Link></li>
+                    <li><Link className="nav-button" to="/#schedule-board">РОЗКЛАД РУХУ</Link></li>
                 </ul>
             </nav>
 

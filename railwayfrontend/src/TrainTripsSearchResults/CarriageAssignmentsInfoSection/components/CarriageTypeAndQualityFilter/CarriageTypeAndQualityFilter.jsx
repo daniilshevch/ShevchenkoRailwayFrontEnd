@@ -24,7 +24,165 @@ const getLightSubtypeColor = (subtype) => {
         default: return '#f5f5f5';
     }
 };
+const getPluralCarriage = (count) => {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    // Виключення для 11-14 (11 вагонів, 12 вагонів...)
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+        return `${count} вагонів`;
+    }
+    // Якщо закінчується на 1 (1, 21, 31...)
+    if (lastDigit === 1) {
+        return `${count} вагон`;
+    }
+    // Якщо закінчується на 2, 3, 4 (2, 23, 44...)
+    if (lastDigit >= 2 && lastDigit <= 4) {
+        return `${count} вагони`;
+    }
+    // Всі інші випадки (0, 5-9, 10, 15-20...)
+    return `${count} вагонів`;
+};
+const TypeLabel = React.memo(({
+                                  type,
+                                  selectedSubtypes,
+                                  allAvailableOptions,
+                                  handleSubtypesChange,
+                                  token
+                              }) => {
+    const currentSelected = selectedSubtypes[type] || [];
+    const totalOptionsCount = allAvailableOptions.length;
+    const isAllSelected = totalOptionsCount > 0 && currentSelected.length >= totalOptionsCount;
+    const isActive = currentSelected.length > 0;
+    const sortedSelected = [...currentSelected].sort();
 
+    const content = (
+        <div style={{ width: 250 }} onClick={(e) => e.stopPropagation()}>
+            <div style={{
+                marginBottom: 12,
+                fontWeight: 600,
+                borderBottom: `1px solid ${token.colorBorderSecondary}`,
+                paddingBottom: 6,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <span style={{ fontSize: 14 }}>{changeCarriageTypeIntoUkrainian(type)}</span>
+                <Checkbox
+                    style={{ fontSize: 12 }}
+                    indeterminate={currentSelected.length > 0 && currentSelected.length < totalOptionsCount}
+                    onChange={(e) => {
+                        const allKeys = allAvailableOptions.map(c => c.key);
+                        handleSubtypesChange(type, e.target.checked ? allKeys : []);
+                    }}
+                    checked={isAllSelected}
+                >
+                    {!isAllSelected ? "Обрати все": "Прибрати все"}
+                </Checkbox>
+            </div>
+
+            <Checkbox.Group
+                style={{ display: "flex", flexDirection: "column", gap: 0 }}
+                value={currentSelected}
+                onChange={(vals) => handleSubtypesChange(type, vals)}
+            >
+                {allAvailableOptions.map((c) => {
+                    const isSelected = currentSelected.includes(c.key);
+                    return (
+                        <div
+                            key={c.key}
+                            style={{
+                                backgroundColor: isSelected ? getLightSubtypeColor(c.key) : 'transparent',
+                                padding: '6px 8px',
+                                margin: '0 -4px',
+                                borderRadius: 4,
+                                transition: 'background-color 0.2s'
+                            }}
+                        >
+                            <Checkbox value={c.key} style={{ marginLeft: 0, width: '100%' }}>
+                                <Space>
+                                    <Tag color={getSubtypeColor(c.key)} style={{ margin: 0, width: 24, textAlign: 'center', padding: 0 }}>{c.key}</Tag>
+                                    <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>
+                                        {getPluralCarriage(c.carriage_statistics_list.length)}, {c.free_places} місць, {c.min_price} грн
+                                    </span>
+                                </Space>
+                            </Checkbox>
+                        </div>
+                    );
+                })}
+            </Checkbox.Group>
+        </div>
+    );
+
+    return (
+        <Popover
+            content={content}
+            trigger="hover"
+            placement="bottom"
+        >
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                    padding: '4px 11px',
+                    backgroundColor: isActive ? '#e6f4ff' : 'transparent',
+                    color: isActive ? '#1677ff' : 'inherit',
+                    borderRadius: 0,
+                    transition: 'background-color 0.3s'
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <span style={{ fontWeight: 500 }}>{changeCarriageTypeIntoUkrainian(type)}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 2, marginTop: 2 }}>
+                    {isAllSelected ? (
+                        <div style={{
+                            backgroundColor: '#eb2f96',
+                            color: 'white',
+                            padding: '0 8px',
+                            height: 18,
+                            borderRadius: 12,
+                            fontSize: 10,
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            lineHeight: 1,
+                            border: '1px solid white'
+                        }}>
+                            Всі
+                        </div>
+                    ) : sortedSelected.length > 0 ? (
+                        sortedSelected.map(sub => (
+                            <div
+                                key={sub}
+                                style={{
+                                    width: 18,
+                                    height: 18,
+                                    borderRadius: '50%',
+                                    backgroundColor: getSubtypeColor(sub),
+                                    color: 'white',
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    border: '1px solid white'
+                                }}
+                            >
+                                {sub}
+                            </div>
+                        ))
+                    ) : (
+                        <DownOutlined style={{ fontSize: 10, color: token.colorTextQuaternary }} />
+                    )}
+                </div>
+            </div>
+        </Popover>
+    );
+});
 export default function CarriageTypeAndQualityFilter({
                                                          groupedSeats = {},
                                                          initialSelectedTypes,
@@ -114,127 +272,13 @@ export default function CarriageTypeAndQualityFilter({
         });
     };
 
-    const TypeLabel = ({ type }) => {
-        const currentSelected = selectedSubtypes[type] || [];
-        const allAvailableOptions = getClassEntries(type);
-        const totalOptionsCount = allAvailableOptions.length;
-
-        const isAllSelected = totalOptionsCount > 0 && currentSelected.length >= totalOptionsCount;
-        const isActive = currentSelected.length > 0;
-        const sortedSelected = [...currentSelected].sort();
-
-        const content = (
-            <div style={{ width: 250 }}>
-                <div style={{ marginBottom: 8, fontWeight: 600, borderBottom: `1px solid ${token.colorBorderSecondary}`, paddingBottom: 4 }}>
-                    {changeCarriageTypeIntoUkrainian(type)}
-                </div>
-                <Checkbox.Group
-                    style={{ display: "flex", flexDirection: "column", gap: 0 }} // Змінив gap на 0
-                    value={selectedSubtypes[type]}
-                    onChange={(vals) => handleSubtypesChange(type, vals)}
-                >
-                    {allAvailableOptions.map((c) => {
-                        const isSelected = currentSelected.includes(c.key);
-                        return (
-                            <div
-                                key={c.key}
-                                style={{
-                                    backgroundColor: isSelected ? getLightSubtypeColor(c.key) : 'transparent',
-                                    padding: '6px 8px', // Внутрішні відступи для фону
-                                    margin: '0 -4px',   // Трохи виходимо за межі для краси
-                                    borderRadius: 4,
-                                    transition: 'background-color 0.2s'
-                                }}
-                            >
-                                <Checkbox value={c.key} style={{ marginLeft: 0, width: '100%' }}>
-                                    <Space>
-                                        <Tag color={getSubtypeColor(c.key)} style={{ margin: 0, width: 24, textAlign: 'center', padding: 0 }}>{c.key}</Tag>
-                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.carriage_statistics_list.length} вагон(и),</span>
-                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.free_places} місць,</span>
-                                        <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>{c.min_price} грн</span>
-                                    </Space>
-                                </Checkbox>
-                            </div>
-                        );
-                    })}
-                </Checkbox.Group>
-            </div>
-        );
-
-        return (
-            <Popover content={content} trigger="hover" placement="bottom">
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 8,
-                        padding: '4px 11px',
-                        backgroundColor: isActive ? '#e6f4ff' : 'transparent',
-                        color: isActive ? '#1677ff' : 'inherit',
-                        borderRadius: 0,
-                        transition: 'background-color 0.3s'
-                    }}
-                >
-                    <span style={{ fontWeight: 500 }}>{changeCarriageTypeIntoUkrainian(type)}</span>
-
-                    <div
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ display: "flex", alignItems: "center", gap: 2, marginTop: 2 }}
-                    >
-                        {isAllSelected ? (
-                            <div style={{
-                                backgroundColor: '#eb2f96',
-                                color: 'white',
-                                padding: '0 8px',
-                                height: 18,
-                                borderRadius: 12,
-                                fontSize: 10,
-                                fontWeight: 700,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                lineHeight: 1,
-                                border: '1px solid white'
-                            }}>
-                                Всі
-                            </div>
-                        ) : sortedSelected.length > 0 ? (
-                            sortedSelected.map(sub => (
-                                <div
-                                    key={sub}
-                                    style={{
-                                        width: 18,
-                                        height: 18,
-                                        borderRadius: '50%',
-                                        backgroundColor: getSubtypeColor(sub),
-                                        color: 'white',
-                                        fontSize: 10,
-                                        fontWeight: 700,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        border: '1px solid white'
-                                    }}
-                                >
-                                    {sub}
-                                </div>
-                            ))
-                        ) : (
-                            <DownOutlined style={{ fontSize: 10, color: token.colorTextQuaternary }} />
-                        )}
-                    </div>
-                </div>
-            </Popover>
-        );
-    };
-
     const segmentedItems = carriageTypes.map((carriageType) => ({
         value: carriageType,
-        label: <TypeLabel type={carriageType} />
+        label: <TypeLabel type={carriageType}
+                          selectedSubtypes={selectedSubtypes}
+                          allAvailableOptions={getClassEntries(carriageType)}
+                          handleSubtypesChange={handleSubtypesChange}
+                          token={token}/>
     }));
 
     if (carriageTypes.length === 0) return null;

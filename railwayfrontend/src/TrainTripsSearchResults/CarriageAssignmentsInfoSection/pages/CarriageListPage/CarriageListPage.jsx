@@ -1,7 +1,7 @@
 ﻿import React, {useEffect, useReducer, useState, useMemo, useCallback    } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CarriageListLayout from '../../components/CarriageListLayout/CarriageListLayout.jsx';
-import {message} from 'antd';
+import {message, Spin} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer.jsx";
@@ -107,7 +107,12 @@ function CarriageListPage()
             try
             {
                 const parsedTrainData = JSON.parse(trainData);
-                if(String(parsedTrainData.train_race_id) === String(train_race_id))
+                let isSameTrainRace = String(parsedTrainData.train_race_id) === String(train_race_id);
+                let isSameStartStation = String(parsedTrainData.trip_starting_station_title) === String(start);
+                let isSameEndStation = String(parsedTrainData.trip_ending_station_title) === String(end);
+
+
+                if(isSameTrainRace && isSameStartStation && isSameEndStation)
                 {
                     applyTrainData(parsedTrainData);
                     setRefreshTrigger(prev => prev + 1);
@@ -127,7 +132,7 @@ function CarriageListPage()
         {
             loadTrainDataFromServer(true, false);
         }
-    }, [train_race_id, applyTrainData]);
+    }, [train_race_id, start, end, applyTrainData]);
     
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
@@ -373,7 +378,12 @@ function CarriageListPage()
                 isLoading={isLoading}
             ></CarriageFilteringHeader>
             <div className="carriage-list-page">
-                {carriages ? (
+                {!carriages ? (
+                        <div className="loading-container">
+                        <Spin size="large" tip="Завантаження доступних вагонів..." />
+                        </div>
+                    )
+                    :(
                     <>
                         <CarriageListLayout
                             carriages={displayedCarriages}
@@ -388,9 +398,8 @@ function CarriageListPage()
                             removePotentialTicketFromCart={removePotentialTicketFromCart}
                         />
                     </>
-                ) : (
-                <p>Завантаження...</p>
-            )}
+                )
+            }
             </div>
             <TrainScheduleModal
                 visible={isScheduleVisible}
