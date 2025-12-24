@@ -13,6 +13,9 @@ import {
     ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
+import {
+    changeTicketBookingServerStatusIntoUkrainian
+} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 const { confirm } = Modal;
 
 const { Title, Text } = Typography;
@@ -32,7 +35,23 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
         return new Date(dateStr).toLocaleString("uk-UA", {
             day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
         });
-    };
+    }
+    const colorForTicketStatus = (status) => {
+        switch (status) {
+            case "Booking_In_Progress":
+                return "grey";
+            case "Booked_And_Active":
+                return "green";
+            case "Booked_And_Used":
+                return "orange";
+            case "Archieved":
+                return "purple";
+            case "Returned":
+                return "red";
+            default:
+                return "black";
+        }
+    }
     const handleDownloadPDF = async () => {
         const token = localStorage.getItem("token");
         try
@@ -209,11 +228,8 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
                                 style={{ width: "100%", maxWidth: "220px", height: "auto", display: "block" }}
                             />
                         </div>
-                        <Text type="secondary" style={{ marginTop: "10px", fontSize: "12px" }}>
-                            ID: {t.full_ticket_id.split('-')[0]}...
-                        </Text>
-                        <Tag color={ticketStatus === "Booked_And_Active" ? "green" : "red"} style={{ marginTop: 8 }}>
-                            {ticketStatus}
+                        <Tag color={colorForTicketStatus(ticketStatus)} style={{ marginTop: 20, fontWeight: "bold", fontSize: 13 }}>
+                            {changeTicketBookingServerStatusIntoUkrainian(ticketStatus)}
                         </Tag>
                     </Col>
 
@@ -250,20 +266,29 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
                         <Row gutter={[12, 12]}>
                             <Col span={12}>
                                 <div style={{ background: "#f5f5f5", padding: "8px", borderRadius: "6px" }}>
-                                    <Text type="secondary" style={{ fontSize: "11px" }}>ВАГОН</Text>
-                                    <div style={{ fontSize: "20px", fontWeight: "bold", color: "#1890ff" }}>
+                                    <Text type="secondary" style={{ fontSize: "13px", fontWeight: 500 }}>ВАГОН</Text>
+                                    <div style={{ fontSize: "28px", fontWeight: "bold", color: "#1890ff", lineHeight: "1.2" }}>
                                         {t.carriage_position_in_squad}
                                     </div>
-                                    <div style={{ fontSize: "11px" }}>{changeCarriageTypeIntoUkrainian(t.carriage_type)}</div>
+                                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#434343" }}>
+                                        {changeCarriageTypeIntoUkrainian(t.carriage_type)}
+                                        <span style={{
+                                            color: getBorderColor(t.carriage_quality_class),
+                                            marginLeft: "6px",
+                                            fontWeight: "700"
+                                        }}>
+                    • Клас {t.carriage_quality_class}
+                </span>
+                                    </div>
                                 </div>
                             </Col>
                             <Col span={12}>
                                 <div style={{ background: "#f5f5f5", padding: "8px", borderRadius: "6px" }}>
-                                    <Text type="secondary" style={{ fontSize: "11px" }}>МІСЦЕ</Text>
-                                    <div style={{ fontSize: "20px", fontWeight: "bold", color: "#1890ff" }}>
+                                    <Text type="secondary" style={{ fontSize: "13px", fontWeight    : 500 }}>МІСЦЕ</Text>
+                                    <div style={{ fontSize: "28px", fontWeight: "bold", color: "#1890ff", lineHeight: "1.2" }}>
                                         {t.place_in_carriage}
                                     </div>
-                                    <div style={{ fontSize: "11px" }}>Клас {t.carriage_quality_class}</div>
+                                    <div style={{ fontSize: "13px", fontWeight: 700 }}>{t.place_in_carriage % 2 === 0 ? "Верхнє" : "Нижнє"}</div>
                                 </div>
                             </Col>
                         </Row>
@@ -276,7 +301,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
                             alignItems: "flex-end" // Вирівнювання по низу, щоб кнопка була на рівні імені
                         }}>
                             <div>
-                                <Text type="secondary" style={{ fontSize: "12px" }}><UserOutlined /> Пасажир</Text>
+                                <Text type="secondary" style={{ fontSize: "14px", fontWeight: 700 }}><UserOutlined /> Пасажир</Text>
                                 <div style={{ fontSize: "16px", fontWeight: "bold" }}>{passengerName}</div>
                             </div>
 

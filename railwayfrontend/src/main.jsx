@@ -54,7 +54,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="/search-trips/:start/:end" element={<TrainTripsSearchResultsPage />} />
                         <Route path="/ticket-booking" element = {<TicketBookingArrangementPage />} />
                         <Route path="/ticket-booking-completion" element={<TicketBookingCompletionResultPage />} />
-                        <Route path="/user-ticket-bookings" element = {<UserTicketsListPage />} />
+                        <Route path="/user-ticket-bookings/:status" element = {<UserTicketsListPage />} />
                         <Route path="/profile" element={<UserProfilePage/>} />
                     </Route>
                 </Routes>

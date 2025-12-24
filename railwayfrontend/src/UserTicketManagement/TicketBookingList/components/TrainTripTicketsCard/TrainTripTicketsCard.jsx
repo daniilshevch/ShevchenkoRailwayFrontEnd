@@ -45,14 +45,14 @@ function useNormalizedTrain(train) {
             train_route_id: train.train_route_id,
             train_route_class: train.train_route_class,
             train_route_branded_name: train.train_route_branded_name,
-            average_speed_on_trip: train.average_speed_on_trip,
+            speed_on_trip: train.speed_on_trip,
             is_fastest: train.is_fastest,
             is_cheapest: train.is_cheapest,
             full_route_starting_station_title: train.full_route_starting_station_title || startStation,
             full_route_ending_station_title: train.full_route_ending_station_title || endStation,
             ticket_bookings_list: train.ticket_bookings_list || [],
             train_schedule: train.train_schedule,
-            train_race_id: train.train_route_on_date_id
+            train_race_id: train.train_route_on_date_id,
         };
     }, [train]);
 }
@@ -221,8 +221,8 @@ function TrainTripTicketsCard({ train, onRefresh }) {
                 {parseInt(t.duration.split(":")[1], 10)} хв
             </span>
                     </div>
-                    {typeof t.average_speed_on_trip !== "undefined" && (
-                        <SpeedometerComponent speed={t.average_speed_on_trip} />
+                    {typeof t.speed_on_trip !== "undefined" && (
+                        <SpeedometerComponent speed={t.speed_on_trip} />
                     )}
                 </div>
                 <div className="time-block right">
@@ -234,7 +234,7 @@ function TrainTripTicketsCard({ train, onRefresh }) {
 
             <div className="route-footer">
                 <div>
-                    <Button className="train-schedule-button" type="default" onClick={handleOpenSchedule} loading={isScheduleLoading}>
+                    <Button className="train-schedule-button" type="default" onClick={handleOpenSchedule}>
                         Розклад руху
                     </Button>
                 </div>

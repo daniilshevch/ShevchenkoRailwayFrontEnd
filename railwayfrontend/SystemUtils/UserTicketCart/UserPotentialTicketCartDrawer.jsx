@@ -9,7 +9,7 @@ import {formatDM_HM} from "../InterpreterMethodsAndDictionaries/TimeFormaters.js
 import {SERVER_URL} from "../ServerConnectionConfiguration/ConnectionConfiguration.js";
 import {useNavigate, useLocation} from "react-router-dom";
 import {
-    changeTicketBookingStatusIntoUkrainian
+    changeTicketBookingCartStatusIntoUkrainian
 } from "../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "./UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../LoginRequiredModal/LoginRequiredModal.jsx";
@@ -25,10 +25,8 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         const token = localStorage.getItem('token');
 
         if (!token) {
-            // Якщо токена немає, відкриваємо модалку
             setIsLoginModalOpen(true);
         } else {
-            // Якщо токен є, продовжуємо процес
             INITIALIZE_TICKET_BOOKING_PROCESS();
         }
     };
@@ -157,7 +155,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                             <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
                                             <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
                                             <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text> |&nbsp;
-                                            <b>Статус:</b> <Text className="place-number">{changeTicketBookingStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
+                                            <b>Статус:</b> <Text className="place-number">{changeTicketBookingCartStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
                                         </div>
                                         <div className="cart-ticket-route">
                                             <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>

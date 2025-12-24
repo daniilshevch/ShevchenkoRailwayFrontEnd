@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+﻿import {Link, useNavigate} from 'react-router-dom';
 import "./Navbar.css";
 import { getCurrentUser } from "../../../SystemUtils/UserDefinerService/UserDefiner.js";
 import { Dropdown, Badge, Avatar, Typography } from 'antd';
@@ -11,6 +11,7 @@ function Navbar() {
     const [user, setUser] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [cartCount, setCartCount] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const currentUser = getCurrentUser();
@@ -63,7 +64,7 @@ function Navbar() {
 
     const menuItems = [
         { key: "profile", icon: <UserOutlined />, label: <Link to="/profile">Профіль</Link> },
-        { key: "tickets", icon: <IdcardOutlined />, label: <Link to="/user-ticket-bookings">Мої квитки</Link> },
+        { key: "tickets", icon: <IdcardOutlined />, label: <Link to="/user-ticket-bookings/active">Мої квитки</Link> },
         { type: 'divider' },
         { key: "logout", icon: <LoginOutlined />, label: "Вийти", onClick: handleLogout, danger: true },
     ];
@@ -71,7 +72,7 @@ function Navbar() {
     return (
         <header className="navbar-wrapper">
             {/* Старий логотип */}
-            <img src="/background_images/images.png" alt="railway-logo" className="logo-image" />
+            <img src="/background_images/44.png" alt="railway-logo" className="logo-image" />
 
             {/* Стара навігація */}
             <nav className="navbar">
@@ -86,7 +87,7 @@ function Navbar() {
             <div className="profile-area">
                 {cartCount > 0 && (
                     <div className="cart-badge-wrapper">
-                        <Badge count={cartCount} size="small" offset={[5, 0]}>
+                        <Badge count={cartCount} size="small" offset={[5, 0]} onClick={() => navigate("/user-ticket-bookings/in-progress")}>
                             <ShoppingCartOutlined className="navbar-cart-icon" />
                         </Badge>
                     </div>
