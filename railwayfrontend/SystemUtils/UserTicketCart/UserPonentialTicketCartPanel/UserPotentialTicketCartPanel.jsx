@@ -1,18 +1,20 @@
 ﻿import { Button, Divider, Space, Typography, Tooltip, Badge, Alert } from "antd";
-import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import React, { useReducer, useState } from "react";
+import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined, UndoOutlined } from "@ant-design/icons";
+import React, { useReducer, useState, useEffect } from "react";
 import { stationTitleIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, { getTrainRouteIdFromTrainRaceId } from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import { changeCarriageTypeIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
-import "../UserPotentialTicketCartDrawer.css";
+import "../UserPotentialTicketCartDrawer/UserPotentialTicketCartDrawer.css";
 import { formatDM_HM } from "../../InterpreterMethodsAndDictionaries//TimeFormaters.js";
 import { SERVER_URL } from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import { changeTicketBookingCartStatusIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 import { initialPotentialTicketCartState, potentialTicketCartReducer } from "./../UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
+import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
 const { Text, Title } = Typography;
+
 
 function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart }) {
     const navigate = useNavigate();
@@ -28,69 +30,88 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
             INITIALIZE_TICKET_BOOKING_PROCESS();
         }
     };
+    const returnToTrainTripBooking = (train_race_id, starting_station, ending_station) => {
+        navigate(`/${train_race_id}/${starting_station}/${ending_station}/carriages`);
+    }
 
     const handleLoginRedirect = () => {
         setIsLoginModalOpen(false);
         navigate('/login', { state: { from: location } });
     };
 
-    const INITIALIZE_TICKET_BOOKING_PROCESS = async () => {
+    const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
         const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
         const token = localStorage.getItem('token');
         const ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
+        //console.log("BOOKINGS IN CART");
+        //console.log(ticketBookings);
+        const ticketBookingsDtoForFetch = [];
+        for(const ticket of ticketBookings)
+        {
+            const ticketDto = {
+                train_route_on_date_id: ticket.train_race_id,
+                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                starting_station_title: ticket.trip_starting_station,
+                ending_station_title: ticket.trip_ending_station,
+                place_in_carriage: ticket.place_in_carriage
+            };
+            ticketBookingsDtoForFetch.push(ticketDto);
+        }
+        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(ticketBookingsDtoForFetch),
+        });
+        if(!response.ok)
+        {
+            throw new Error("Невірні облікові дані");
+        }
+        const ticketListReservationResult =  await response.json();
 
-        const ticketBookingsDtoForFetch = ticketBookings.map(ticket => ({
-            train_route_on_date_id: ticket.train_race_id,
-            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-            starting_station_title: ticket.trip_starting_station,
-            ending_station_title: ticket.trip_ending_station,
-            place_in_carriage: ticket.place_in_carriage
-        }));
 
-        try {
-            const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(ticketBookingsDtoForFetch),
-            });
-
-            if (!response.ok) throw new Error("Помилка ініціалізації");
-
-            const ticketListReservationResult = await response.json();
-
-            for (const ticket of ticketBookings) {
-                if (ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
-                    const res = ticketListReservationResult.find(r =>
-                        r.train_route_on_date_id === ticket.train_race_id &&
-                        r.place_in_carriage === ticket.place_in_carriage
-                    );
-
-                    if (res?.ticket_status === "Booking_In_Progress") {
-                        Object.assign(ticket, {
-                            ticket_status: "RESERVED",
-                            id: res.id,
-                            full_ticket_id: res.full_ticket_id,
-                            booking_expiration_time: res.booking_expiration_time
-                        });
-                    } else {
-                        ticket.ticket_status = "BOOKING_FAILED";
-                    }
+        for(const ticket of ticketBookings)
+        {
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+                console.log("FROM BACK");
+                console.log("IN LOCAL STORAGE");
+                console.log(ticketBookings);
+                const singleTicketBookingReservationResult = ticketListReservationResult.find(ticket_booking =>
+                    ticket_booking.train_route_on_date_id === ticket.train_race_id &&
+                    ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
+                    ticket_booking.starting_station_title === ticket.trip_starting_station &&
+                    ticket_booking.ending_station_title === ticket.trip_ending_station &&
+                    ticket_booking.place_in_carriage === ticket.place_in_carriage);
+                const ticketBookingReservationStatus = singleTicketBookingReservationResult?.ticket_status;
+                console.log(`STATUS: ${ticketBookingReservationStatus}`);
+                if (ticketBookingReservationStatus === "Booking_In_Progress") {
+                    ticket.ticket_status = "RESERVED";
+                    ticket.id = singleTicketBookingReservationResult.id;
+                    ticket.full_ticket_id = singleTicketBookingReservationResult.full_ticket_id;
+                    ticket.user_id = singleTicketBookingReservationResult.user_id;
+                    ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
+                    ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;
+                    ticket.booking_expiration_time = singleTicketBookingReservationResult.booking_expiration_time;
+                } else {
+                    ticket.ticket_status = "BOOKING_FAILED";
                 }
             }
-
-            potentialTicketCartDispatch({ type: "CLEAR_CART" });
-            ticketBookings.forEach(t => potentialTicketCartDispatch({ type: "ADD_TICKET", ticket: t }));
-
-            localStorage.setItem("potentialTicketsCart", JSON.stringify({ potentialTicketsList: ticketBookings }));
-            window.dispatchEvent(new Event('cartUpdated'));
-            navigate('/ticket-booking');
-        } catch (error) {
-            console.error(error);
         }
-    };
+        console.log("TICKET BOOKINGS");
+        console.log(ticketBookings);
+        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        for(const ticket of ticketBookings)
+        {
+            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+        }
+        localStorage.setItem("potentialTicketsCart", JSON.stringify({
+            potentialTicketsList: ticketBookings}));
+        window.dispatchEvent(new Event('cartUpdated'));
+        console.log("DATA");
+        navigate('/ticket-booking');
+    }
 
     const tickets = cartState.potentialTicketsList;
 
@@ -119,7 +140,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(2, 1fr)',
-                        gap: '16px'
+                        gap: '10px'
                     }}>
                         {tickets.map((potential_ticket, index) => (
                             <div
@@ -132,10 +153,20 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                         <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
                                         <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
                                         <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text> |&nbsp;
-                                        <b>Статус:</b> <Text className="place-number">{changeTicketBookingCartStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
                                     </div>
                                     <div className="cart-ticket-route">
                                         <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>
+                                    </div>
+                                    <div>
+                                        <b>Статус бронювання:</b> <Text className="place-number">{changeTicketBookingCartStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
+                                        {potential_ticket.ticket_status === "RESERVED" && potential_ticket.booking_expiration_time && (
+                                            <TicketTimer
+                                                expirationTime={potential_ticket.booking_expiration_time}
+                                                onExpire={() => {
+                                                    console.log("Час резерву вийшов для квитка", potential_ticket.id);
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                                 <div className="cart-ticket-actions">
@@ -144,6 +175,23 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                     </Text>
                                     <Button danger size="small" onClick={() => removePotentialTicketFromCart(potential_ticket)}>
                                         Скасувати
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        icon={<UndoOutlined />}
+                                        style={{
+                                            width: '100%',
+                                            fontSize: '12px',
+                                            color: '#1677ff',
+                                            borderColor: '#1677ff'
+                                        }}
+                                        onClick={() => returnToTrainTripBooking(
+                                            potential_ticket.train_race_id,
+                                            potential_ticket.trip_starting_station,
+                                            potential_ticket.trip_ending_station
+                                        )}
+                                    >
+                                        До броні
                                     </Button>
                                 </div>
                             </div>

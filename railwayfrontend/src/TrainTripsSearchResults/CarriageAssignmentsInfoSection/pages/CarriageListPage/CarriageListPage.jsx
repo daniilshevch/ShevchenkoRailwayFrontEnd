@@ -4,7 +4,7 @@ import CarriageListLayout from '../../components/CarriageListLayout/CarriageList
 import {message, Spin} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
-import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer.jsx";
+import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer/UserPotentialTicketCartDrawer.jsx";
 import CarriageTypeAndQualityFilter
     from "../../components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
 import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
@@ -275,14 +275,26 @@ function CarriageListPage()
         });
         if (!response.ok)
         {
+            try {
+                const errorData = await response.json();
+                console.error("Докладна помилка (JSON):", errorData);
+                // Наприклад, якщо сервер шле { message: "Текст помилки" }
+                alert(errorData.message || "Сталася помилка");
+            } catch (e) {
+                // Якщо це не JSON, спробуємо просто як текст
+                const errorText = await response.text();
+                console.error("Докладна помилка (Text):", errorText);
+            }
             console.log(response);
         }
     }
     const removePotentialTicketFromCart = (potentialTicket) =>
     {
+        console.log("REMOVE OF TEMPORARY TICKET BOOKING CANCELLATION");
         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
         if(potentialTicket.ticket_status === "RESERVED")
         {
+            console.log("RESERVED section");
             cancelTicketReservation(potentialTicket);
         }
     }

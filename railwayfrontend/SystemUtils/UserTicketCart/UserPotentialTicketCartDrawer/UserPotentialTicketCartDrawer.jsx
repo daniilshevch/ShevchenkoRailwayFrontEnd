@@ -1,18 +1,19 @@
 ﻿import {Button, Divider, Drawer, Space, Typography, Tooltip, Badge} from "antd";
 import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import React, {useReducer, useState} from "react";
-import {stationTitleIntoUkrainian} from "../InterpreterMethodsAndDictionaries/StationsDictionary.js";
-import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
-import {changeCarriageTypeIntoUkrainian} from "../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
+import {stationTitleIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
+import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
+import {changeCarriageTypeIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import "./UserPotentialTicketCartDrawer.css";
-import {formatDM_HM} from "../InterpreterMethodsAndDictionaries/TimeFormaters.js";
-import {SERVER_URL} from "../ServerConnectionConfiguration/ConnectionConfiguration.js";
+import {formatDM_HM} from "../../InterpreterMethodsAndDictionaries/TimeFormaters.js";
+import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 import {useNavigate, useLocation} from "react-router-dom";
 import {
     changeTicketBookingCartStatusIntoUkrainian
-} from "../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
-import {initialPotentialTicketCartState, potentialTicketCartReducer} from "./UserPotentialTicketCartSystem.js";
-import LoginRequiredModal from "../LoginRequiredModal/LoginRequiredModal.jsx";
+} from "../../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
+import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../UserPotentialTicketCartSystem.js";
+import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
+import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
 const { Text } = Typography;
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
@@ -152,10 +153,18 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                 >
                                     <div className="cart-ticket-info">
                                         <div className="cart-ticket-header">
-                                            <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
+                                            <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text>|&nbsp;
                                             <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
                                             <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text> |&nbsp;
                                             <b>Статус:</b> <Text className="place-number">{changeTicketBookingCartStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
+                                            {potential_ticket.ticket_status === "RESERVED" && potential_ticket.booking_expiration_time && (
+                                                <TicketTimer
+                                                    expirationTime={potential_ticket.booking_expiration_time}
+                                                    onExpire={() => {
+                                                        console.log("Час резерву вийшов для квитка", potential_ticket.id);
+                                                    }}
+                                                />
+                                            )}
                                         </div>
                                         <div className="cart-ticket-route">
                                             <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>
