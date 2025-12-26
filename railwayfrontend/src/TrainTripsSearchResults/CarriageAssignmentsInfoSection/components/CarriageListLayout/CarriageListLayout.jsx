@@ -2,7 +2,7 @@ import React from 'react';
 import CarriageCard from '../CarriageCard/CarriageCard.jsx';
 import './CarriageListLayout.css';
 
-function CarriageListLayout({ carriages, onSeatClick, startStation, endStation, isSeatSelectedInPotentialTicketCart })
+function CarriageListLayout({ carriages, onSeatClick, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart })
 {
     return (
         <div className="carriage-list">
@@ -14,6 +14,7 @@ function CarriageListLayout({ carriages, onSeatClick, startStation, endStation, 
                     startStation={startStation}
                     endStation={endStation}
                     isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                    getTicketFromCart = {getTicketFromCart}
                 />
             ))}
         </div>

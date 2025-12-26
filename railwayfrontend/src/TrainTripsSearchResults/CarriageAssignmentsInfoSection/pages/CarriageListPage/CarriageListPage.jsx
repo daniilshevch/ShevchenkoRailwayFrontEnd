@@ -214,7 +214,14 @@ function CarriageListPage()
         {
             return selectedPotentialTicketSeats.has(seatKeyCodeForCart(train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station));
         }, [train_race_id, selectedPotentialTicketSeats]);
-
+    const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) => {
+        return potentialTicketCartState.potentialTicketsList.find(t =>
+            t.carriage_position_in_squad === carriage_position_in_squad &&
+            t.place_in_carriage === place_in_carriage &&
+            t.trip_starting_station === trip_starting_station &&
+            t.trip_ending_station === trip_ending_station
+        );
+    };
     const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) => {
         const potentialTicket = {
             train_race_id: train_race_id,
@@ -403,6 +410,7 @@ function CarriageListPage()
                             startStation={start}
                             endStation={end}
                             isSeatSelectedInPotentialTicketCart = {isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                         <CarriageListLegend></CarriageListLegend>
                         <UserPotentialTicketCartDrawer

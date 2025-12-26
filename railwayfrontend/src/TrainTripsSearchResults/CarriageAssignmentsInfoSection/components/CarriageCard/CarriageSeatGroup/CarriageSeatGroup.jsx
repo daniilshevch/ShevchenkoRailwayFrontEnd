@@ -1,7 +1,7 @@
 import React from 'react';
 import CarriageSeat from '../CarriageSeat/CarriageSeat.jsx';
 import './CarriageSeatGroup.css';
-function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart  })
+function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, carriageNumber, onSeatClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart  })
 {
     const renderPlatskartSeats = () =>
     {
@@ -24,6 +24,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>

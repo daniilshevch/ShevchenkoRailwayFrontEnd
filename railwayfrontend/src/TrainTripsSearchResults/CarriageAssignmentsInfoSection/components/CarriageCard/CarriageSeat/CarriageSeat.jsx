@@ -1,7 +1,7 @@
 import React from 'react';
 import './CarriageSeat.css';
 
-function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, carriageNumber, onClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart})
+function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, carriageNumber, onClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart})
 {
     const isSelectedInPotentialCart = isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation);
     let baseClass = "";
@@ -12,6 +12,10 @@ function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, 
     else if(isFree && isSelectedInPotentialCart)
     {
         baseClass = "seat-selected-in-potential-cart";
+    }
+    else if(!isFree && isSelectedInPotentialCart)
+    {
+        baseClass = "seat-selected-in-potential-cart-and-reserved";
     }
     else
     {

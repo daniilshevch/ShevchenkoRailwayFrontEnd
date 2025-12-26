@@ -17,6 +17,35 @@
     border-color: #faad14;
     color: #000;
 }
+.seat-selected-in-potential-cart-and-reserved {
+    position: relative; /* Потрібно для іконки */
+    background-color: #faad14;; /* AntD Purple */
+    border: 2px solid #52c41a;; /* Трохи темніша рамка */
+    color: #fff;
+    font-weight: 700;
+    /* Легке світіння */
+    box-shadow: 0 0 8px rgba(114, 46, 209, 0.6);
+    transition: all 0.3s ease;
+}
+
+/* Додаємо галочку в кутку */
+.seat-selected-in-potential-cart-and-reserved::after {
+    content: '✓'; /* Юнікод галочка */
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 10px;
+    color: #722ed1;
+    background-color: #52c41a; /* Зелений фон для галочки (успіх) */
+    border: 2px solid #fff; /* Біла обводка, щоб відділити від фіолетового */
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
 .seat-taken {
     background-color: #ccc;
     color: #666;
@@ -65,4 +94,18 @@
     border-color: #faad14;
     color: #000;
 }
+.seat-type-SV.seat-selected-in-potential-cart-and-reserved {
+    position: relative; /* Потрібно для іконки */
+    background-color: #faad14; /* AntD Purple */
+    border: 2px solid #52c41a; /* Трохи темніша рамка */
+    color: #fff;
+    font-weight: 700;
+    height: 70px;
+    /* Легке світіння */
+    box-shadow: 0 0 8px rgba(114, 46, 209, 0.6);
+    transition: all 0.3s ease;
+}
+
+
+
 
