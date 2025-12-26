@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useReducer, useState } from "react";
+import {useNavigate} from "react-router-dom";
 import {
     initialPotentialTicketCartState,
     potentialTicketCartReducer
@@ -27,6 +28,27 @@ import {
 import dayjs from 'dayjs';
 const { Text, Title } = Typography;
 
+const getClassTagStyle = (qualityClass) => {
+    const classLetter = qualityClass?.toUpperCase();
+
+    // Визначаємо кольори (використовуємо стандартну палітру Ant Design для гарного вигляду)
+    const colors = {
+        'A': { text: '#cf1322', bg: '#fff1f0', border: '#ffa39e' }, // Червоний
+        'B': { text: '#389e0d', bg: '#f6ffed', border: '#b7eb8f' }, // Зелений
+        'C': { text: '#096dd9', bg: '#e6f7ff', border: '#91d5ff' }, // Синій
+        'S': { text: '#531dab', bg: '#f9f0ff', border: '#d3adf7' }, // Фіолетовий
+    };
+
+    const style = colors[classLetter] || { text: '#595959', bg: '#fafafa', border: '#d9d9d9' };
+
+    return {
+        color: style.text,
+        backgroundColor: style.bg,
+        borderColor: style.border,
+        borderWidth: '1px',
+        borderStyle: 'solid'
+    };
+};
 function TicketBookingCompletionResultPage() {
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [bookingProgress, setBookingProgress] = useState(0);
@@ -34,7 +56,9 @@ function TicketBookingCompletionResultPage() {
     const [running, setRunning] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(0);
     const [bookingStatus, setBookingStatus] = useState([]);
+    const [statusLabel, setStatusLabel] = useState("Очікування");
     const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
 
     useEffect(() => {
         try {
@@ -42,9 +66,10 @@ function TicketBookingCompletionResultPage() {
             if (potentialTicketsCart) {
                 const parsed = JSON.parse(potentialTicketsCart);
                 const list = parsed?.potentialTicketsList ?? parsed?.potentialTickets ?? [];
-                setSteps(list);
-                setBookingStatus(list.map(() => "pending"));
-                potentialTicketCartDispatch({ type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: JSON.parse(potentialTicketsCart) });
+                const reservedOnly = list.filter(t => t.ticket_status === "RESERVED");
+                setSteps(reservedOnly) ;
+                setBookingStatus(reservedOnly.map(() => "pending"));
+                potentialTicketCartDispatch({ type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: {potentialTicketsList: reservedOnly} });
             }
         } catch (error) {
             console.error(error);
@@ -61,81 +86,97 @@ function TicketBookingCompletionResultPage() {
             console.error(error);
         }
     }, [potentialTicketCartState.potentialTicketsList]);
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (running) {
+                e.preventDefault();
+                e.returnValue = "Бронювання ще триває. Якщо ви закриєте сторінку, дані в кошику можуть не оновитися!";
+            }
+        };
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    }, [running]);
 
-    const completeTicketBookingProcess = async (ticket, userInfo, index) => {
+
+    const startBooking = async () => {
+        setRunning(true);
+        // Встановлюємо всі квитки в статус "processing" одночасно
+        setBookingStatus(steps.map(() => "processing"));
+        setStatusLabel("Перевірка доступності...");
+        setBookingProgress(20);
+        await new Promise(r => setTimeout(r, 800));
+        setStatusLabel("Перевірка доступності...");
+        setBookingProgress(20);
+        await new Promise(r => setTimeout(r, 800));
+
         const token = localStorage.getItem("token");
-        const ticket_info = {
-            id: ticket.id,
-            full_ticket_id: ticket.full_ticket_id,
-            user_id: ticket.user_id,
-            train_route_on_date_id: ticket.train_race_id,
-            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-            passenger_carriage_id: ticket.passenger_carriage_id,
-            starting_station_title: ticket.trip_starting_station,
-            ending_station_title: ticket.trip_ending_station,
-            place_in_carriage: ticket.place_in_carriage,
-            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
-            booking_initialization_time: ticket.booking_initialization_time,
-            booking_expiration_time: ticket.booking_expiration_time
-        };
-        const user_and_trip_info = {
-            passenger_name: userInfo.passenger_name,
-            passenger_surname: userInfo.passenger_surname
-        };
-        const booking_confirmation_body = {
-            ticket_booking_dto: ticket_info,
-            user_info_dto: user_and_trip_info
+
+        const ticket_completion_info_list = steps.map(ticket => ({
+            mediator_ticket_booking: {
+                id: ticket.id,
+                full_ticket_id: ticket.full_ticket_id,
+                user_id: ticket.user_id,
+                train_route_on_date_id: ticket.train_race_id,
+                passenger_carriage_id: ticket.passenger_carriage_id,
+                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                place_in_carriage: ticket.place_in_carriage,
+                starting_station_title: ticket.trip_starting_station,
+                ending_station_title: ticket.trip_ending_station,
+                ticket_status: "Booking_In_Progress",
+                booking_initialization_time: ticket.booking_initialization_time,
+                booking_expiration_time: ticket.booking_expiration_time
+            },
+            passenger_info: {
+                passenger_name: ticket.passenger_trip_info.passenger_name,
+                passenger_surname: ticket.passenger_trip_info.passenger_surname
+            }
+        }));
+
+        const final_payload = {
+            ticket_completion_info_list: ticket_completion_info_list
         };
 
         try {
-            const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Complete-Ticket-Booking`, {
+            const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Complete-Multiple-Ticket-Bookings-As-Transaction`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(booking_confirmation_body)
+                body: JSON.stringify(final_payload)
             });
+
             if (response.ok) {
-                setBookingProgress(Math.round(((index + 1) / steps.length) * 100));
+                setBookingProgress(80);
+                setStatusLabel("Надсилаємо на пошту...");
+                localStorage.removeItem("potentialTicketsCart");
+                window.dispatchEvent(new Event('cartUpdated'));
+                await new Promise(r => setTimeout(r, 1600));
+                setBookingStatus(steps.map(() => "finish"));
+                setBookingProgress(100);
+                messageApi.success("Всі квитки успішно оформлено! Електронні квитки надіслано на пошту.");
+
+                // Очищення кошика після успіху
+                setTimeout(() => {
+                    potentialTicketCartDispatch({ type: "CLEAR_CART" });
+                    // Можна додати редирект на сторінку "Мої квитки"
+                }, 1500);
+            } else {
+                // Помилка транзакції: отримуємо текст помилки від сервера
+                const errorData = await response.json().catch(() => ({}));
+                const errorMsg = errorData.message || "Транзакція не вдалася. Перевірте статус бронювань.";
+
+                setBookingStatus(steps.map(() => "error"));
+                setBookingProgress(0);
+                messageApi.error(errorMsg);
             }
-            return response.ok;
         } catch (e) {
-            return false;
+            setBookingStatus(steps.map(() => "error"));
+            messageApi.error("Помилка з'єднання із сервером");
+        } finally {
+            setRunning(false);
         }
     };
-
-    const startBooking = async () => {
-        setRunning(true);
-        // Скидаємо статуси перед запуском, якщо це повторна спроба
-        setBookingStatus(steps.map(() => "pending"));
-
-        for (let i = 0; i < steps.length; i++) {
-            setCurrentIndex(i);
-            // Ставимо статус "processing" для поточного
-            setBookingStatus(prev => {
-                const newStatus = [...prev];
-                newStatus[i] = "processing";
-                return newStatus;
-            });
-
-            const ticket = steps[i];
-            const userInfo = ticket.passenger_trip_info;
-
-            await new Promise(r => setTimeout(r, 800));
-
-            const success = await completeTicketBookingProcess(ticket, userInfo, i);
-
-            setBookingStatus(prev => {
-                const newStatus = [...prev];
-                newStatus[i] = success ? "finish" : "error";
-                return newStatus;
-            });
-        }
-        setRunning(false);
-        messageApi.success("Всі квитки успішно оформлено!");
-        potentialTicketCartDispatch({ type: "CLEAR_CART" });
-    }
 
     return (
         <div className="booking-page-wrapper">
@@ -143,47 +184,77 @@ function TicketBookingCompletionResultPage() {
             <div className="booking-glass-container">
                 <div className="booking-summary-panel">
                     <div className="summary-content">
-                        <Title level={2} style={{ color: '#0052cc', marginTop: 0 }}>Оформлення</Title>
-                        <Text type="secondary" className="summary-subtitle">Перевірка даних та оплата замовлення</Text>
+                        <Title level={2} style={{ color: '#0052cc', marginTop: 0 }}>
+                            {bookingProgress === 100 ? "Готово!" : "Оформлення"}
+                        </Title>
+                        <Text type="secondary" className="summary-subtitle">
+                            {bookingProgress === 100 ? "Квитки збережено у вашому кабінеті і надіслано на електронну пошту" : "Уважно перевірте дані ваших квитків перед оплатою"}
+                        </Text>
 
                         <div className="progress-section">
                             <Progress
                                 type="circle"
                                 percent={bookingProgress}
                                 strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
-                                width={140}
+                                width={200}
                                 format={(percent) => (
-                                    <div className="progress-text">
-                                        <div className="progress-value">{percent === 100 ? "Готово!" : `${percent}%`}</div>
-                                        <div className="progress-label">
-                                            {percent === 0 ? "Очікування" : percent === 100 ? "Успішно" : "Обробка..."}
+                                    <div className={`progress-text-wrapper ${running ? 'pulsing' : ''}`}>
+                                        <div className="progress-value">
+                                            {percent === 100 ? <CheckCircleFilled style={{ color: '#52c41a' }} /> : `${percent}%`}
+                                        </div>
+                                        <div className="progress-label-dynamic">
+                                            {statusLabel}
                                         </div>
                                     </div>
                                 )}
                             />
                         </div>
 
-                        <div className="total-price-block">
-                            <Text className="total-label">До сплати:</Text>
-                            <Title level={2} className="total-value">{potentialTicketCartState.totalSum} ₴</Title>
+                        {/* СЕКЦІЯ ТРАНСФОРМАЦІЇ: Ціна -> Успіх */}
+                        <div className="status-display-area">
+                            {bookingProgress === 100 ? (
+                                <div className="payment-success-msg fade-in">
+                                    <div className="success-icon-bg">
+                                        <CreditCardOutlined style={{ color: '#52c41a' }} />
+                                    </div>
+                                    <Text strong style={{ fontSize: 16 }}>Оплачено успішно</Text>
+                                </div>
+                            ) : (
+                                <div className="total-price-block">
+                                    <Text className="total-label">До сплати:</Text>
+                                    <Title level={2} className="total-value">{potentialTicketCartState.totalSum} ₴</Title>
+                                </div>
+                            )}
                         </div>
 
-                        <Button
-                            type="primary"
-                            size="large"
-                            onClick={startBooking}
-                            disabled={running || steps.length === 0 || bookingProgress === 100}
-                            className="pay-button"
-                            icon={running ? <Spin /> : <CreditCardOutlined />}
-                        >
-                            {running ? "Обробка..." : bookingProgress === 100 ? "Замовлення оплачено" : "Оплатити замовлення"}
-                        </Button>
+                        {/* КНОПКА: Оплатити -> Мої квитки */}
+                        {bookingProgress === 100 ? (
+                            <Button
+                                type="primary"
+                                size="large"
+                                onClick={() => navigate('/user-ticket-bookings/active')}
+                                className="pay-button success-btn fade-in"
+                                icon={<RightOutlined />}
+                            >
+                                До моїх квитків
+                            </Button>
+                        ) : (
+                            <Button
+                                type="primary"
+                                size="large"
+                                onClick={startBooking}
+                                disabled={running || steps.length === 0}
+                                className="pay-button"
+                                icon={running ? <Spin size="small" /> : <CreditCardOutlined />}
+                            >
+                                {running ? "Обробка..." : "Оплатити замовлення"}
+                            </Button>
+                        )}
                     </div>
                 </div>
 
                 <div className="booking-tickets-list">
                     <Title level={4} style={{ marginBottom: 20, paddingLeft: 10 }}>Ваші квитки ({steps.length})</Title>
-
                     <div className="tickets-scroll-area">
                         {steps.map((ticket, idx) => {
                             const status = bookingStatus[idx];
@@ -233,10 +304,10 @@ function TicketBookingCompletionResultPage() {
 
                                             {/* СЕРЕДИНА (Стрілочка і номер потяга) */}
                                             <div className="route-visual">
-                                                <Text type="secondary" style={{fontSize: 12}}>
-                                                    {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(ticket.train_race_id))}
+                                                <Text type="secondary" style={{fontSize: 13, fontWeight: '500'}}>
+                                                    {changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(ticket.train_race_id))} {stationTitleIntoUkrainian(ticket.full_route_starting_station)} - {stationTitleIntoUkrainian(ticket.full_route_ending_station)}
                                                 </Text>
-                                                <div className="line-with-arrow"><RightOutlined /></div>
+                                                <div className="line-with-arrow"></div>
                                             </div>
 
                                             {/* ПРАВА СТОРОНА (Прибуття) */}
@@ -263,8 +334,11 @@ function TicketBookingCompletionResultPage() {
                                             <div className="detail-tag">
                                                 Місце <span className="value">{ticket.place_in_carriage}</span>
                                             </div>
-                                            <div className="detail-tag class-tag">
-                                                {changeCarriageTypeIntoUkrainian(ticket.carriage_type)} {ticket.carriage_quality_class}
+                                            <div className="detail-tag">
+                                                {changeCarriageTypeIntoUkrainian(ticket.carriage_type)}
+                                            </div>
+                                            <div className="detail-tag class-tag" style={getClassTagStyle(ticket.carriage_quality_class)}>
+                                                Клас {ticket.carriage_quality_class}
                                             </div>
                                             <div className="ticket-price">
                                                 {ticket.price} ₴

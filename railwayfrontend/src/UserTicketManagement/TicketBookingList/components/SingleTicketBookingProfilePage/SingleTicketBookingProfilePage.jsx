@@ -39,7 +39,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
     const colorForTicketStatus = (status) => {
         switch (status) {
             case "Booking_In_Progress":
-                return "grey";
+                return "cyan";
             case "Booked_And_Active":
                 return "green";
             case "Booked_And_Used":
@@ -47,7 +47,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
             case "Archieved":
                 return "purple";
             case "Returned":
-                return "red";
+                return "default";
             default:
                 return "black";
         }
@@ -185,7 +185,11 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
     const passengerName = [t.passenger_name, t.passenger_surname].filter(Boolean).join(" ");
 
     // Колір бордера
-    const getBorderColor = (quality) => {
+    const getBorderColor = (quality, status = null) => {
+        if(status === "Returned")
+        {
+            return "grey";
+        }
         switch (quality) {
             case "A": return "#cf1322";
             case "B": return "#389e0d";
@@ -198,7 +202,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
         <>
             {contextHolder}
             <div style={{
-                border: `2px solid ${getBorderColor(t.carriage_quality_class)}`,
+                border: `2px solid ${getBorderColor(t.carriage_quality_class, t.ticket_status)}`,
                 borderRadius: "12px",
                 padding: "20px",
                 position: "relative",
@@ -210,7 +214,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
                     position: "absolute",
                     top: 0, left: 0, bottom: 0,
                     width: "8px",
-                    backgroundColor: getBorderColor(t.carriage_quality_class)
+                    backgroundColor: getBorderColor(t.carriage_quality_class, t.ticket_status)
                 }} />
 
                 <Row gutter={[24, 24]} align="middle">
@@ -314,9 +318,9 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
                                         borderRadius: "10px",       // Сильне заокруглення
                                         padding: "0 24px",          // Ширша кнопка
                                         height: "40px",             // Трохи вища
-                                        border: `1px solid ${getBorderColor(t.carriage_quality_class)}`,// Ніжний бордер
+                                        border: `1px solid ${getBorderColor(t.carriage_quality_class, t.ticket_status)}`,// Ніжний бордер
                                         background: "white",      // Світло-блакитний фон (дуже сучасно)
-                                        color: getBorderColor(t.carriage_quality_class),           // Синій текст
+                                        color: getBorderColor(t.carriage_quality_class, t.ticket_status),           // Синій текст
                                         fontWeight: "600",
                                         boxShadow: "0 2px 5px rgba(24, 144, 255, 0.15)", // Легка кольорова тінь
                                         transition: "all 0.3s ease" // Плавна анімація

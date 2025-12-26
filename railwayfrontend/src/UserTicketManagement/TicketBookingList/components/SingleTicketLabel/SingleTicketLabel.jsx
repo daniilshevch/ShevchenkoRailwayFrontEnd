@@ -5,7 +5,11 @@ import {
     changeCarriageTypeIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 
-const getQualityStyles = (qualityClass) => {
+const getQualityStyles = (qualityClass, status = null) => {
+    if(status === "Returned")
+    {
+        return { color: "#8c8c8c", bg: "#f5f5f5", border: "#d9d9d9" };
+    }
     switch (qualityClass) {
         case "A": return { color: "#cf1322", bg: "#fff1f0", border: "#ffa39e" };
         case "B": return { color: "#389e0d", bg: "#f6ffed", border: "#b7eb8f" };
@@ -15,7 +19,7 @@ const getQualityStyles = (qualityClass) => {
 };
 
 export default function SingleTicketLabel({ t, onClick }) {
-    const styles = getQualityStyles(t.carriage_quality_class);
+    const styles = getQualityStyles(t.carriage_quality_class, t.ticket_status);
 
     const passengerFullName = [t.passenger_name, t.passenger_surname]
         .filter(Boolean)
