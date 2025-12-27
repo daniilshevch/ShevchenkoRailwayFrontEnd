@@ -12,7 +12,12 @@ import {
     CloseCircleFilled,
     UserOutlined,
     RightOutlined,
-    CreditCardOutlined
+    CreditCardOutlined,
+    SolutionOutlined,
+    SignatureOutlined,
+    SearchOutlined, // Додано
+    MailOutlined,   // Додано
+    LoadingOutlined // Додано
 } from '@ant-design/icons';
 import "./TicketBookingCompletionResultPage.css";
 import {
@@ -56,7 +61,11 @@ function TicketBookingCompletionResultPage() {
     const [running, setRunning] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(0);
     const [bookingStatus, setBookingStatus] = useState([]);
-    const [statusLabel, setStatusLabel] = useState("Очікування");
+    const [statusLabel, setStatusLabel] = useState(<>
+        Очікуємо на Ваше
+        <br />
+        підтвердження...
+    </>);
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
 
@@ -102,13 +111,15 @@ function TicketBookingCompletionResultPage() {
         setRunning(true);
         // Встановлюємо всі квитки в статус "processing" одночасно
         setBookingStatus(steps.map(() => "processing"));
-        setStatusLabel("Перевірка доступності...");
+        setStatusLabel(<>
+            Перевіряємо доступність
+            <br />
+            місць...
+        </>);
         setBookingProgress(20);
-        await new Promise(r => setTimeout(r, 800));
-        setStatusLabel("Перевірка доступності...");
-        setBookingProgress(20);
-        await new Promise(r => setTimeout(r, 800));
-
+        await new Promise(r => setTimeout(r, 1500));
+        setStatusLabel("Оформлюємо квитки на Вас...");
+        setBookingProgress(40);
         const token = localStorage.getItem("token");
 
         const ticket_completion_info_list = steps.map(ticket => ({
@@ -147,11 +158,20 @@ function TicketBookingCompletionResultPage() {
             });
 
             if (response.ok) {
+                setBookingProgress(60);
+                setStatusLabel("Встановлюємо зв'язок з банком...");
+                await new Promise(r => setTimeout(r, 1200));
                 setBookingProgress(80);
                 setStatusLabel("Надсилаємо на пошту...");
                 localStorage.removeItem("potentialTicketsCart");
                 window.dispatchEvent(new Event('cartUpdated'));
                 await new Promise(r => setTimeout(r, 1600));
+                setStatusLabel(
+                    <>
+                    Оформлено успішно!
+                    <br />
+                    Бажаємо Вам гарної поїздки!
+                </>);
                 setBookingStatus(steps.map(() => "finish"));
                 setBookingProgress(100);
                 messageApi.success("Всі квитки успішно оформлено! Електронні квитки надіслано на пошту.");
@@ -164,7 +184,7 @@ function TicketBookingCompletionResultPage() {
             } else {
                 // Помилка транзакції: отримуємо текст помилки від сервера
                 const errorData = await response.json().catch(() => ({}));
-                const errorMsg = errorData.message || "Транзакція не вдалася. Перевірте статус бронювань.";
+                const errorMsg = errorData.message || "Транзакція не вдалася. Перевірте статус бронювань(можливо, термін резервації одного з квитків закінчився)";
 
                 setBookingStatus(steps.map(() => "error"));
                 setBookingProgress(0);
@@ -196,17 +216,36 @@ function TicketBookingCompletionResultPage() {
                                 type="circle"
                                 percent={bookingProgress}
                                 strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
-                                width={200}
-                                format={(percent) => (
-                                    <div className={`progress-text-wrapper ${running ? 'pulsing' : ''}`}>
-                                        <div className="progress-value">
-                                            {percent === 100 ? <CheckCircleFilled style={{ color: '#52c41a' }} /> : `${percent}%`}
+                                width={270}
+                                format={(percent) => {
+                                    // Функція для вибору іконки
+                                    const getIcon = () => {
+                                        if (percent === 100) return <CheckCircleFilled style={{ color: '#52c41a', fontSize: '60px' }} />;
+                                        if (percent >= 80) return <MailOutlined style={{ color: '#1890ff', fontSize: '60px' }} />;
+                                        if (percent >= 60)  return <CreditCardOutlined style={{ color: '#1890ff', fontSize: '60px' }} />;
+                                        if (percent >= 40) return <SignatureOutlined style={{ color: '#1890ff', fontSize: '60px' }} />;
+                                        if (percent >= 20) return <SearchOutlined style={{ color: '#1890ff', fontSize: '60px' }} />;
+                                        if (running) return <SearchOutlined style={{ color: '#1890ff', fontSize: '60px' }} />;
+                                        return <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: '60px' }} />;
+                                    };
+
+                                    return (
+                                        <div className={`progress-text-wrapper ${running ? 'pulsing' : ''}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            <div className="progress-icon-center" style={{ marginBottom: '10px' }}>
+                                                {getIcon()}
+                                            </div>
+                                            <div className="progress-label-dynamic" style={{
+                                                fontWeight: 700,
+                                                whiteSpace: 'pre-line',
+                                                fontSize: '14px',
+                                                lineHeight: '1.4',
+                                                padding: '0 20px'
+                                            }}>
+                                                {statusLabel}
+                                            </div>
                                         </div>
-                                        <div className="progress-label-dynamic">
-                                            {statusLabel}
-                                        </div>
-                                    </div>
-                                )}
+                                    );
+                                }}
                             />
                         </div>
 

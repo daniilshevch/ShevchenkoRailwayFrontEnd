@@ -74,7 +74,9 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                 ending_station_title: ticket.trip_ending_station,
                 place_in_carriage: ticket.place_in_carriage
             };
-            ticketBookingsDtoForFetch.push(ticketDto);
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+                ticketBookingsDtoForFetch.push(ticketDto);
+            }
         }
         const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
             method: 'POST',
@@ -163,23 +165,27 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                         gridTemplateColumns: 'repeat(2, 1fr)',
                         gap: '10px'
                     }}>
-                        {tickets.map((potential_ticket, index) => (
+                        {tickets.map((potential_ticket, index) => {
+                            let statusClass = "status-pending";
+                            if (potential_ticket.ticket_status === "RESERVED") statusClass = "status-reserved";
+                            if (potential_ticket.ticket_status === "BOOKING_FAILED") statusClass = "status-failed";
+                            if (potential_ticket.ticket_status === "EXPIRED") statusClass = "status-expired";
+                            return (
                             <div
                                 key={index}
-                                className="cart-ticket"
+                                className={`cart-ticket ticket-status-marker ${statusClass} ${potential_ticket.ticket_status === 'EXPIRED' ? 'ticket-expired' : ''}`}
                                 style={{ margin: 0, width: '100%' }} // Картка з Drawer
                             >
-
                                 <div className="cart-ticket-info">
-                                    <div className="cart-ticket-header">
+                                    <div className="cart-ticket-header" style = {{marginLeft: 10}}>
                                         <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
                                         <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;
                                         <b>Місце:</b> <Text className="place-number">{potential_ticket.place_in_carriage}</Text> |&nbsp;
                                     </div>
-                                    <div className="cart-ticket-route">
+                                    <div className="cart-ticket-route" style = {{marginLeft: 10}}>
                                         <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>
                                     </div>
-                                    <div>
+                                    <div style = {{marginLeft: 10}}>
                                         <b>Статус бронювання:</b> <Text className="place-number">{changeTicketBookingCartStatusIntoUkrainian(potential_ticket.ticket_status)}</Text>
                                         {potential_ticket.ticket_status === "RESERVED" && potential_ticket.booking_expiration_time && (
                                             <TicketTimer
@@ -222,7 +228,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                     </Button>
                                 </div>
                             </div>
-                        ))}
+                        )})}
                     </div>
 
                     {/* Панель підсумку знизу (горизонтальна) */}

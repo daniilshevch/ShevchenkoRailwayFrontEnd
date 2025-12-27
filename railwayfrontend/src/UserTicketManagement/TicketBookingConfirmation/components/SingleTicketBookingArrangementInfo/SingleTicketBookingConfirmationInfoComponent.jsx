@@ -17,8 +17,8 @@ import {
     potentialTicketCartReducer
 } from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
-const { Text } = Typography;
-import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined } from '@ant-design/icons';
+const { Text, Title } = Typography;
+import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 function UpperOrLower(number)
 {
     if(number % 2 === 0)
@@ -112,21 +112,45 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                             </Descriptions.Item>
                         </Descriptions>
                     </div>
-                    <div className="ticket-two-col__right" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {/* Використовуємо компонент Result */}
-                        <div className="ticket-two-col__right">
-                            <Result
-                                icon={<ClockCircleOutlined style={{ color: '#faad14' }} />}
-                                title="Час резерву вийшов"
-                                subTitle="Це місце повернуто у вільний продаж"
-                                extra={
-                                    <Button type="primary" icon={<UndoOutlined />} onClick={() => navigate(-1)}>
-                                        Обрати заново
+                    <div className="ticket-two-col__right" style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '16px',
+                        minWidth: '240px'
+                    }}>
+                        <Result
+                            style={{ padding: 0, marginTop: -10 }}
+                            icon={<ClockCircleOutlined style={{ color: '#faad14', fontSize: '64px' }} />}
+                            title={
+                                <Title level={4} style={{ margin: '-20px 0 -5px 0', color: '#faad14', fontSize: '20px', lineHeight: '1.3' }}>
+                                    Час резерву вийшов
+                                </Title>
+                            }
+                            subTitle={
+                                <Text type="secondary" style={{ fontSize: '13px', fontWeight: 500, display: 'block', marginTop: '0px', marginBottom: '0px' }}>
+                                    Тимчасова резервація квитка для Вашої покупки закінчилась. Поверніться до списку вагонів, видаліть місце з кошику
+                                    та спробуйте повторно його забронювати. Або оберіть інші місця.
+                                </Text>
+                            }
+                            extra={
+                                <div style={{ marginTop: '-15px' }}>
+                                    <Button
+                                        type="primary"
+                                        ghost
+                                        size="middle"
+                                        icon={<ArrowLeftOutlined />}
+                                        style={{ borderRadius: '6px', fontSize: '14px', color: '#faad14',
+                                            // Колір рамки
+                                            borderColor: '#faad14', }}
+                                        onClick={() => navigate(-1)}
+                                    >
+                                        До списку вагонів
                                     </Button>
-                                }
-                                style={{ padding: '0', marginTop: 20 }}
-                            />
-                        </div>
+                                </div>
+                            }
+                        />
                     </div>
                 </div>
             </Card>
@@ -174,13 +198,42 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                         </Descriptions.Item>
                     </Descriptions>
                 </div>
-                <div className="ticket-two-col__right" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {/* Використовуємо компонент Result */}
+                <div className="ticket-two-col__right" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '16px', // Збільшено внутрішній відступ
+                    minWidth: '240px' // Збільшено мінімальну ширину
+                }}>
                     <Result
-                        status="error"
-                        title="Бронювання не вдалось"
-                        subTitle="Ймовірно, інший пасажир зарезервував це місце перед вами"
-                        style={{ padding: '0', marginTop: 40 }} // Прибираємо зайві відступи, щоб він вліз у картку
+                        style={{ padding: 0, marginTop: -10 }}
+                        // Збільшено розмір іконки до 64px
+                        icon={<CloseCircleFilled style={{ color: '#ff4d4f', fontSize: '64px' }} />}
+                        title={
+                            <Title level={4} style={{ margin: '-20px 0 -5px 0', color: '#cf1322', fontSize: '20px', lineHeight: '1.3' }}>
+                                Місце вже зайняте
+                            </Title>
+                        }
+                        subTitle={
+                            <Text type="secondary" style={{ fontSize: '13px', fontWeight: 500, display: 'block', marginTop: '0px', marginBottom: '0px' }}>
+                                Інший пасажир встиг забронювати місце раніше за вас. Поверніться до списку вагонів, видаліть місце з кошику
+                                та спробуйте повторно його забронювати. Або оберіть інші місця.
+                            </Text>
+                        }
+                        extra={
+                            <div style={{ marginTop: '-15px' }}>
+                                <Button
+                                    danger
+                                    size="middle"
+                                    icon={<ArrowLeftOutlined />}
+                                    style={{ borderRadius: '6px', fontSize: '14px' }}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    До списку вагонів
+                                </Button>
+                            </div>
+                        }
                     />
                 </div>
             </div>

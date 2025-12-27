@@ -48,6 +48,8 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         const ticketBookingsDtoForFetch = [];
         for(const ticket of ticketBookings)
         {
+            //ДОДАНО для перевірки статусу
+
             const ticketDto = {
                 train_route_on_date_id: ticket.train_race_id,
                 passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
@@ -55,7 +57,10 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                 ending_station_title: ticket.trip_ending_station,
                 place_in_carriage: ticket.place_in_carriage
             };
-            ticketBookingsDtoForFetch.push(ticketDto);
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED")
+            {
+                ticketBookingsDtoForFetch.push(ticketDto);
+            }
         }
         const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
             method: 'POST',

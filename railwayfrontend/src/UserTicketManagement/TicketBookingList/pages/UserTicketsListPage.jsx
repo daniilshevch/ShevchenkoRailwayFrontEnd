@@ -241,7 +241,7 @@ export default function UserTicketsListPage() {
 
     return (
         <div style={backgroundStyle}>
-            <div style={{ maxWidth: 1300, margin: "0 auto", paddingLeft: 16, paddingRight: 16 }}>
+            <div style={{ maxWidth: 1300, margin: "0 auto", paddingLeft: 16, paddingRight: 16,  }}>
                 <div style={contentContainerStyle}>
 
                     {/* Секція перемикача */}
