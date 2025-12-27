@@ -42,6 +42,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>
@@ -59,6 +60,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>
@@ -88,6 +90,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>
@@ -105,6 +108,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>
@@ -131,6 +135,7 @@ function CarriageSeatGroup({ seatsInGroup, carriageType, carriageQualityClass, c
                             startStation={startStation}
                             endStation={endStation}
                             isSeatSelectedInPotentialTicketCart={isSeatSelectedInPotentialTicketCart}
+                            getTicketFromCart = {getTicketFromCart}
                         />
                     ))}
                 </div>

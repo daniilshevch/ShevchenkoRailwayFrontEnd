@@ -216,6 +216,7 @@ function CarriageListPage()
         }, [train_race_id, selectedPotentialTicketSeats]);
     const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) => {
         return potentialTicketCartState.potentialTicketsList.find(t =>
+            t.train_race_id === train_race_id &&
             t.carriage_position_in_squad === carriage_position_in_squad &&
             t.place_in_carriage === place_in_carriage &&
             t.trip_starting_station === trip_starting_station &&

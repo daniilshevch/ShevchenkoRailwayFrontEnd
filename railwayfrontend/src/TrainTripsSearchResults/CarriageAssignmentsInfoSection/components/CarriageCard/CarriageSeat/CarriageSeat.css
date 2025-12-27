@@ -46,6 +46,36 @@
     justify-content: center;
     font-weight: 900;
 }
+.seat-selected-in-potential-cart-and-reserved-but-booking-failed {
+    position: relative; /* Потрібно для іконки */
+    background-color: #faad14;; /* AntD Red (червоний) */
+    border: 2px solid #f5222d; /* Трохи темніша червона рамка */
+    color: #fff;
+    font-weight: 700;
+    /* Легке червоне світіння */
+    box-shadow: 0 0 8px rgba(255, 77, 79, 0.6);
+    transition: all 0.3s ease;
+    cursor: pointer; /* Показуємо, що на нього можна клікнути */
+}
+/* Додаємо червоний хрестик в кутку */
+.seat-selected-in-potential-cart-and-reserved-but-booking-failed::after {
+    content: '✕'; /* Юнікод хрестик (Multiplication X) */
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 10px;
+    color: #fff; /* Білий хрестик */
+    background-color: #ff4d4f; /* Червоний фон для іконки */
+    border: 2px solid #fff; /* Біла обводка */
+    border-radius: 50%; /* Робимо круглим */
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    z-index: 2; /* Щоб іконка була поверх місця */
+}
 .seat-taken {
     background-color: #ccc;
     color: #666;
@@ -105,6 +135,19 @@
     box-shadow: 0 0 8px rgba(114, 46, 209, 0.6);
     transition: all 0.3s ease;
 }
+.seat-type-SV.seat-selected-in-potential-cart-and-reserved-but-booking-failed {
+    position: relative; /* Потрібно для іконки */
+    background-color: #faad14;; /* AntD Red (червоний) */
+    border: 2px solid #f5222d; /* Трохи темніша червона рамка */
+    color: #fff;
+    font-weight: 700;
+    height: 70px;
+    /* Легке червоне світіння */
+    box-shadow: 0 0 8px rgba(255, 77, 79, 0.6);
+    transition: all 0.3s ease;
+    cursor: pointer; /* Показуємо, що на нього можна клікнути */
+}
+
 
 
 
