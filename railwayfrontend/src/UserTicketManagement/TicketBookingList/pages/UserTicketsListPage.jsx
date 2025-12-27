@@ -75,7 +75,7 @@ export default function UserTicketsListPage() {
             console.error(error);
         }
     }, [potentialTicketCartState.potentialTicketsList]);
-    
+
     const fetchData = useCallback(async (isSilent = false) => {
         const token = localStorage.getItem("token");
         if (!isSilent) setLoading(true);
@@ -200,6 +200,7 @@ export default function UserTicketsListPage() {
             return <UserPotentialTicketCartPanel
                 cartState={potentialTicketCartState}
                 removePotentialTicketFromCart={cancelTicketReservation}
+                dispatch = {potentialTicketCartDispatch}
             ></UserPotentialTicketCartPanel>
         }
 

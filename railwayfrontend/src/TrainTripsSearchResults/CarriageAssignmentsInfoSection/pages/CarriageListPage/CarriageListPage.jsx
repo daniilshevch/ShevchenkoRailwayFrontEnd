@@ -417,6 +417,7 @@ function CarriageListPage()
                         <UserPotentialTicketCartDrawer
                             cartState={potentialTicketCartState}
                             removePotentialTicketFromCart={removePotentialTicketFromCart}
+                            dispatch = {potentialTicketCartDispatch}
                         />
                     </>
                 )

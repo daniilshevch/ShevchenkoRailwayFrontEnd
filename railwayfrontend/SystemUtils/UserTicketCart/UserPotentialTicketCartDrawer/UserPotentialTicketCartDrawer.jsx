@@ -20,11 +20,11 @@ import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx"
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
 const { Text } = Typography;
-function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart})
+function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart, dispatch})
 {
     const navigate = useNavigate();
     const location = useLocation();
-    const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
+    //const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const handleCheckoutAttempt = () => {
         const token = localStorage.getItem('token');
@@ -101,10 +101,12 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         }
         console.log("TICKET BOOKINGS");
         console.log(ticketBookings);
-        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        //potentialTicketCartDispatch({type: "CLEAR_CART"});
+        dispatch({type: "CLEAR_CART"});
         for(const ticket of ticketBookings)
         {
-            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+            //potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+            dispatch({type: "ADD_TICKET", ticket: ticket});
         }
         localStorage.setItem("potentialTicketsCart", JSON.stringify({
             potentialTicketsList: ticketBookings}));
@@ -166,7 +168,11 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                                     expirationTime={potential_ticket.booking_expiration_time}
                                                     onExpire={() => {
                                                         markTicketAsExpired(potential_ticket);
-                                                        console.log("Час резерву вийшов для квитка", potential_ticket.id);
+                                                        console.log("Час резерву вийшов для квитка", potential_ticket.id)
+                                                        dispatch({
+                                                            type: "CHANGE_TICKET_STATUS_FOR_CART",
+                                                            ticket: { ...potential_ticket, ticket_status: "EXPIRED" }
+                                                        });
                                                     }}
                                                 />
                                             )}

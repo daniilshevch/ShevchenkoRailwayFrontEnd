@@ -1,5 +1,8 @@
 ﻿import { Button, Divider, Space, Typography, Tooltip, Badge, Alert } from "antd";
-import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined, UndoOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined, UndoOutlined, CheckCircleFilled,
+    CloseCircleFilled,
+    ExclamationCircleFilled,
+    ClockCircleFilled } from "@ant-design/icons";
 import React, { useReducer, useState, useEffect } from "react";
 import { stationTitleIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, { getTrainRouteIdFromTrainRaceId } from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
@@ -18,12 +21,24 @@ import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx"
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
 const { Text, Title } = Typography;
+const getStatusMarker = (status) => {
+    switch (status) {
+        case "RESERVED":
+            return <CheckCircleFilled style={{ color: '#52c41a', fontSize: '22px' }} />;
+        case "BOOKING_FAILED":
+        case "EXPIRED":
+            return <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: '22px' }} />;
+        case "SELECTED_YET_NOT_RESERVED":
+            return <ClockCircleFilled style={{ color: '#1677ff', fontSize: '22px' }} />;
+        default:
+            return <ExclamationCircleFilled style={{ color: '#faad14', fontSize: '22px' }} />;
+    }
+};
 
-
-function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart }) {
+function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart, dispatch }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
+    //const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const handleCheckoutAttempt = () => {
@@ -105,10 +120,12 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
         }
         console.log("TICKET BOOKINGS");
         console.log(ticketBookings);
-        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        //potentialTicketCartDispatch({type: "CLEAR_CART"});
+        dispatch({type: "CLEAR_CART"});
         for(const ticket of ticketBookings)
         {
-            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+            //potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+            dispatch({type: "ADD_TICKET", ticket: ticket});
         }
         localStorage.setItem("potentialTicketsCart", JSON.stringify({
             potentialTicketsList: ticketBookings}));
@@ -152,6 +169,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                 className="cart-ticket"
                                 style={{ margin: 0, width: '100%' }} // Картка з Drawer
                             >
+
                                 <div className="cart-ticket-info">
                                     <div className="cart-ticket-header">
                                         <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
@@ -169,6 +187,10 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                                 onExpire={() => {
                                                     markTicketAsExpired(potential_ticket);
                                                     console.log("Час резерву вийшов для квитка", potential_ticket.id);
+                                                    dispatch({
+                                                        type: "CHANGE_TICKET_STATUS_FOR_CART",
+                                                        ticket: { ...potential_ticket, ticket_status: "EXPIRED" }
+                                                    });
                                                 }}
                                             />
                                         )}

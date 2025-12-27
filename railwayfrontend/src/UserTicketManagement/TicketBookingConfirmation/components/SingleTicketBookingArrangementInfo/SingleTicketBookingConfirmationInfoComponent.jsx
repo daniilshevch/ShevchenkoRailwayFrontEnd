@@ -1,4 +1,5 @@
 ﻿import React, {useEffect, useReducer} from "react";
+import {useNavigate} from "react-router-dom";
 import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space, Result } from "antd";
 import {
     stationTitleIntoUkrainian
@@ -17,7 +18,7 @@ import {
 } from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 const { Text } = Typography;
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined } from '@ant-design/icons';
 function UpperOrLower(number)
 {
     if(number % 2 === 0)
@@ -33,6 +34,7 @@ function UpperOrLower(number)
 
 function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, namePrefix, potentialTicketCartState, potentialTicketCartDispatch})
 {
+    const navigate = useNavigate();
     async function cancelTicketReservation(ticket)
     {
         const token = localStorage.getItem("token");
@@ -69,6 +71,67 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
     {
         return null;
     }
+    if (ticket.ticket_status === "EXPIRED") {
+        return         (
+            <Card
+                size="small"
+                title={`Квиток ${index + 1} із ${total}`}
+                extra={
+                    <Space size={8}>
+                        <Popconfirm
+                            title="Скасувати бронь на цей квиток?"
+                            okText="Так"
+                            cancelText="Ні"
+                            onConfirm={() => {cancelTicketReservation(ticket)}}
+                        >
+                            <Button size="small" danger>Скасувати бронювання</Button>
+                        </Popconfirm>
+                    </Space>
+                }
+            >
+                <div className="ticket-two-col">
+                    <div className="ticket-two-col__left">
+                        <Descriptions size="small" column={1} bordered style={{ marginBottom: 16 }}>
+                            <Descriptions.Item label="Поїзд" span={2}>
+                                <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(ticket.train_race_id))}</Text><Text className={`train-class-section-${ticket.train_route_quality_class}`}>({ticket.train_route_quality_class})</Text><Text className="station-title"> ({stationTitleIntoUkrainian(ticket.full_route_starting_station)}</Text><Text className="arrow"> →</Text><Text className="station-title">{stationTitleIntoUkrainian(ticket.full_route_ending_station)})</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Відправлення">
+                                <Text className="station-title">{stationTitleIntoUkrainian(ticket.trip_starting_station)}</Text><Text className="station-time"> ({formatDM_HM(ticket.trip_starting_station_departure_time)})</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Прибуття">
+                                <Text className="station-title">{stationTitleIntoUkrainian(ticket.trip_ending_station)}</Text><Text className="station-time"> ({formatDM_HM(ticket.trip_ending_station_arrival_time)})</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Вагон">
+                                <Text className="carriage-number">№{ticket.carriage_position_in_squad}</Text><Text className="carriage-section"> ({changeCarriageTypeIntoUkrainian(ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${ticket.carriage_quality_class}`}>{ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Місце у вагоні">
+                                <Text className="place-number">{ticket.place_in_carriage}, {UpperOrLower(ticket.place_in_carriage)}</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Ціна">
+                                <Text className="place-number">{ticket.price} грн</Text>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </div>
+                    <div className="ticket-two-col__right" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {/* Використовуємо компонент Result */}
+                        <div className="ticket-two-col__right">
+                            <Result
+                                icon={<ClockCircleOutlined style={{ color: '#faad14' }} />}
+                                title="Час резерву вийшов"
+                                subTitle="Це місце повернуто у вільний продаж"
+                                extra={
+                                    <Button type="primary" icon={<UndoOutlined />} onClick={() => navigate(-1)}>
+                                        Обрати заново
+                                    </Button>
+                                }
+                                style={{ padding: '0', marginTop: 20 }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        )
+    }
     if(ticket.ticket_status !== "RESERVED")
     {
         return         (
@@ -89,7 +152,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
             }
         >
             <div className="ticket-two-col">
-                <div className="ticket-two-col__left">
+                <div className="ticket-two-col__left" style = {{opacity: 1}}>
                     <Descriptions size="small" column={1} bordered style={{ marginBottom: 16 }}>
                         <Descriptions.Item label="Поїзд" span={2}>
                             <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(ticket.train_race_id))}</Text><Text className={`train-class-section-${ticket.train_route_quality_class}`}>({ticket.train_route_quality_class})</Text><Text className="station-title"> ({stationTitleIntoUkrainian(ticket.full_route_starting_station)}</Text><Text className="arrow"> →</Text><Text className="station-title">{stationTitleIntoUkrainian(ticket.full_route_ending_station)})</Text>

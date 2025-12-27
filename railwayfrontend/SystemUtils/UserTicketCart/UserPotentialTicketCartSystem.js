@@ -84,6 +84,22 @@ function potentialTicketCartReducer(state, action)
             removeTicket();
             return addTicket();
         }
+        case "CHANGE_TICKET_STATUS_FOR_CART": {
+            const updatedTicketsList = state.potentialTicketsList.map(ticket => {
+                const isMatch =
+                    ticket.train_race_id === action.ticket.train_race_id &&
+                    ticket.carriage_position_in_squad === action.ticket.carriage_position_in_squad &&
+                    ticket.place_in_carriage === action.ticket.place_in_carriage &&
+                    ticket.trip_starting_station === action.ticket.trip_starting_station &&
+                    ticket.trip_ending_station === action.ticket.trip_ending_station;
+                return isMatch ? action.ticket : ticket;
+            });
+
+            return {
+                ...state,
+                potentialTicketsList: updatedTicketsList
+            };
+        }
         case "CLEAR_CART":
             return {...state, potentialTicketsList: [], totalSum: 0};
         default:
