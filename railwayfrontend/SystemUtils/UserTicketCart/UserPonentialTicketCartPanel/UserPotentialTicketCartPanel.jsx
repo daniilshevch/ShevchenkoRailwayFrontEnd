@@ -9,7 +9,11 @@ import { formatDM_HM } from "../../InterpreterMethodsAndDictionaries//TimeFormat
 import { SERVER_URL } from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import { changeTicketBookingCartStatusIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
-import { initialPotentialTicketCartState, potentialTicketCartReducer } from "./../UserPotentialTicketCartSystem.js";
+import {
+    initialPotentialTicketCartState,
+    markTicketAsExpired,
+    potentialTicketCartReducer
+} from "./../UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
@@ -163,6 +167,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                             <TicketTimer
                                                 expirationTime={potential_ticket.booking_expiration_time}
                                                 onExpire={() => {
+                                                    markTicketAsExpired(potential_ticket);
                                                     console.log("Час резерву вийшов для квитка", potential_ticket.id);
                                                 }}
                                             />
@@ -209,7 +214,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                         alignItems: 'center'
                     }}>
                         <div>
-                            <Text type="secondary" style={{ fontSize: '14px' }}>Разом до сплати:</Text>
+                            <Text type="secondary" style={{ fontSize: '18px', fontWeight: 600 }}>Разом до сплати:</Text>
                             <div style={{ fontSize: '32px', fontWeight: '800', color: '#1677ff', lineHeight: 1 }}>
                                 {cartState.totalSum} ₴
                             </div>

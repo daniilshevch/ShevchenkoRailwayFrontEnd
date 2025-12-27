@@ -1,6 +1,6 @@
 ﻿import {Button, Divider, Drawer, Space, Typography, Tooltip, Badge} from "antd";
 import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
-import React, {useReducer, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {stationTitleIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import {changeCarriageTypeIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
@@ -11,7 +11,11 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {
     changeTicketBookingCartStatusIntoUkrainian
 } from "../../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
-import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../UserPotentialTicketCartSystem.js";
+import {
+    initialPotentialTicketCartState,
+    markTicketAsExpired,
+    potentialTicketCartReducer
+} from "../UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 
@@ -161,6 +165,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                                 <TicketTimer
                                                     expirationTime={potential_ticket.booking_expiration_time}
                                                     onExpire={() => {
+                                                        markTicketAsExpired(potential_ticket);
                                                         console.log("Час резерву вийшов для квитка", potential_ticket.id);
                                                     }}
                                                 />

@@ -5,6 +5,29 @@ const initialPotentialTicketCartState = {
     isOpen: false,
     totalSum: 0
 };
+const markTicketAsExpired = (expiredTicket) => {
+    const rawData = localStorage.getItem("potentialTicketsCart");
+    if (!rawData) return;
+    const cartData = JSON.parse(rawData);
+    const tickets = cartData.potentialTicketsList || [];
+    const updatedTickets = tickets.map(ticket => {
+        const isMatchTicketFromQuery = ticket.train_race_id === expiredTicket.train_race_id &&
+            ticket.carriage_position_in_squad === expiredTicket.carriage_position_in_squad &&
+            ticket.place_in_carriage === expiredTicket.place_in_carriage &&
+            ticket.trip_starting_station === expiredTicket.trip_starting_station &&
+            ticket.trip_ending_station === expiredTicket.trip_ending_station;
+        if(isMatchTicketFromQuery)
+        {
+            return {...ticket, ticket_status: "EXPIRED"};
+        }
+        return ticket;
+    })
+    localStorage.setItem("potentialTicketsCart", JSON.stringify({
+        ...cartData,
+        potentialTicketsList: updatedTickets
+    }));
+    window.dispatchEvent(new Event('cartUpdated'));
+}
 function potentialTicketCartReducer(state, action)
 {
     const addTicket = () => {
@@ -68,7 +91,7 @@ function potentialTicketCartReducer(state, action)
 
     }
 }
-export {initialPotentialTicketCartState, potentialTicketCartReducer};
+export {initialPotentialTicketCartState, potentialTicketCartReducer, markTicketAsExpired};
 function UserTicketCart()
 {
 

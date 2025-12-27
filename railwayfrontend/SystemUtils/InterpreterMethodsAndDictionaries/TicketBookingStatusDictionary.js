@@ -1,7 +1,8 @@
 ﻿const TicketBookingCartStatusOptions = [
     {english: "SELECTED_YET_NOT_RESERVED", ukrainian: "ОБРАНО"},
     {english: "RESERVED", ukrainian: "ЗАРЕЗЕРВОВАНО"},
-    {english: "BOOKING_FAILED", ukrainian: "РЕЗЕРВАЦІЯ НЕ ВДАЛАСЬ"}
+    {english: "BOOKING_FAILED", ukrainian: "РЕЗЕРВАЦІЯ НЕ ВДАЛАСЬ"},
+    {english: "EXPIRED", ukrainian: "РЕЗЕРВАЦІЯ ПРОСТРОЧЕНА"}
 ]
 const TicketBookingServerStatusOptions = [
     {english: "Booking_In_Progress", ukrainian: "ТИМЧАСОВО ЗАРЕЗЕРВОВАНИЙ"},
