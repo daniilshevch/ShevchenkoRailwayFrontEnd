@@ -61,9 +61,15 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
     const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
         const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
         const token = localStorage.getItem('token');
-        const ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
+        let ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
         //console.log("BOOKINGS IN CART");
         //console.log(ticketBookings);
+
+        //ДОДАНА ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА
+        ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
+            && ticket.ticket_status !== "EXPIRED");
+
+
         const ticketBookingsDtoForFetch = [];
         for(const ticket of ticketBookings)
         {
