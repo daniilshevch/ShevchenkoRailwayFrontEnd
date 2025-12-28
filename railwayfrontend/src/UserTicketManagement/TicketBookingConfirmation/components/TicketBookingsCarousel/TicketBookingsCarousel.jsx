@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Carousel, Card, Space, Typography, Form, Button, message } from "antd";
+import { Carousel, Card, Space, Typography, Form, Button, message, Steps } from "antd";
 import SingleTicketBookingConfirmationInfoComponent
     from "../SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {useNavigate} from "react-router-dom";
+import {
+    CloseCircleFilled,
+    ClockCircleFilled,
+    CheckCircleFilled,
+    InfoCircleFilled
+} from '@ant-design/icons';
+import {TicketTimer} from "../../../../../SystemUtils/UserTicketCart/TicketTimer/TicketTimer.jsx";
 
 
 const { Title, Text } = Typography;
@@ -13,6 +20,57 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
     const [current, setCurrent] = useState(0);
     const navigate = useNavigate();
     const total = tickets.length;
+    const renderStepItems = tickets.map((t, idx) => {
+        const isCurrent = idx === current;
+
+        if (t.ticket_status === "EXPIRED") {
+            return {
+                title: <span style={{fontWeight: 500, color: '#faad14' }}>Квиток {idx + 1}</span>,
+                status: 'error', // Використовуємо для системного підсвічування, але іконку замінимо
+                icon: <ClockCircleFilled style={{ color: '#faad14' }} />,
+                description: <span style={{ color: '#faad14', fontSize: '12px', fontWeight: 'bold', marginLeft: '-60px' }}>Резервація прострочена</span>
+            };
+        }
+
+        if (t.ticket_status !== "RESERVED") {
+            return {
+                title: <span style={{fontWeight: 500, color: '#ff4d4f' }}>Квиток {idx + 1}</span>,
+                status: 'error',
+                icon: <CloseCircleFilled style={{ color: '#ff4d4f' }} />,
+                description: <span style={{ color: '#ff4d4f', fontSize: '12px', fontWeight: 'bold', marginLeft: '-30px' }}>Місце зайняте</span>
+            };
+        }
+
+        return {
+            title: <span style={{fontWeight: 500, color: isCurrent ? '#1890ff' : '#52c41a' }}>Квиток {idx + 1}</span>,
+            status: 'finish',
+            icon: <CheckCircleFilled style={{ color: isCurrent ? '#1890ff' : '#52c41a' }} />,
+            description: (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    lineHeight: '1.2',
+                    marginTop: '4px'
+                }}>
+                    <Text style={{ fontSize: '12px',fontWeight: 'bold', color: isCurrent ? '#1890ff' : '#52c41a', marginLeft: '-50px' }}>
+                        {'Успішно зарезервовано'}
+                    </Text>
+                    <div style = {{marginLeft: '-40px'}}>
+                        <TicketTimer
+                            expirationTime={t.booking_expiration_time}
+                            onExpire={() => {
+                                potentialTicketCartDispatch({
+                                    type: "CHANGE_TICKET_STATUS_FOR_CART",
+                                    ticket: { ...t, ticket_status: "EXPIRED" }
+                                });
+                            }}
+                        />
+                    </div>
+                </div>
+            )
+        };
+    });
     const handleConfirm = () =>
     {
         const values = form.getFieldsValue();
@@ -43,6 +101,10 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
         });
         setCurrent(0);
     }, [total, form]);
+    const handleStepChange = (step) => {
+        carouselRef.current?.goTo(step);
+        setCurrent(step);
+    };
     const go = async (delta) => {
         const target = Math.min(Math.max(current + delta, 0), total - 1);
         carouselRef.current?.goTo(target);
@@ -54,7 +116,16 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
                 <Title level={4} style={{ margin: 0 }}>
                     Оформлення квитків
                 </Title>
-
+                <div style={{ marginBottom: 20 }}>
+                    <Steps
+                        size="small"
+                        current={current}
+                        onChange={handleStepChange}
+                        items={renderStepItems}
+                        type="navigation" // Робить кроки більш схожими на кнопки-вкладки
+                        style={{ padding: '0px 0' }}
+                    />
+                </div>
                 <Form form={form} layout="vertical">
                     <Carousel
                         ref={carouselRef}
