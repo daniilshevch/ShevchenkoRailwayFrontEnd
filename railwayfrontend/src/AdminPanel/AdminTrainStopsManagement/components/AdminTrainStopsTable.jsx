@@ -43,6 +43,7 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
 
     const saveUpdate = async (station_title, train_route_on_date_id) => {
         try {
+            const token = localStorage.getItem('token');
             const row = await updateForm.validateFields();
             const updatedTrainStop = {
                 ...trainStops.find(train_stop => train_stop.station_title === station_title),
@@ -53,7 +54,8 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
             const response = await fetch(`https://localhost:7230/Admin-API/update-train-stop/${train_route_on_date_id}/${station_title}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(updatedTrainStop)
             });

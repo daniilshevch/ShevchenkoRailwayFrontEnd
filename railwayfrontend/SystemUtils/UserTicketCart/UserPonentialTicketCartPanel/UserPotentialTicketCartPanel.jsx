@@ -69,7 +69,6 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
         ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
             && ticket.ticket_status !== "EXPIRED");
 
-
         const ticketBookingsDtoForFetch = [];
         for(const ticket of ticketBookings)
         {

@@ -22,7 +22,6 @@ function AdminTrainRoutesCreateForm({fetchRoutes, isCreateModalVisible, setIsCre
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             });
-
             if (!response.ok) throw new Error('Помилка при створенні маршруту');
 
             messageApi.success(`Маршрут ${values.id} успішно створено`);

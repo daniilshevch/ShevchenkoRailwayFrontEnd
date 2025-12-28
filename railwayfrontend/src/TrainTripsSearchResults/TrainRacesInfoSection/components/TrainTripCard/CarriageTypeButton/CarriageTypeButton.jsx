@@ -45,7 +45,7 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
     return (
         <Card
             title={cardTitle}
-            className="carriage-type-card"
+            className="carriage-type-card-for-race"
         >
             <div className="subclass-tags-wrapper">
                 {Object.entries(classStats.carriage_quality_class_dictionary).map(([qualityClass, data]) => (

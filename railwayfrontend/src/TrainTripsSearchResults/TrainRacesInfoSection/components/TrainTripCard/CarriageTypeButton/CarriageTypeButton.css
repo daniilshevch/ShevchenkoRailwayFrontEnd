@@ -1,4 +1,4 @@
-﻿.carriage-type-card {
+﻿.carriage-type-card-for-race {
     margin-right: 10px;
     margin-left: 0;
     margin-top: 10px;
@@ -34,10 +34,10 @@
     flex-wrap: wrap;
     gap: 0;
 }
-.carriage-type-card .ant-card-body {
+.carriage-type-card-for-race .ant-card-body {
     padding: 0;
 }
-.carriage-type-card .ant-card-head {
+.carriage-type-card-for-race .ant-card-head {
     min-height: auto;
     padding-top: 10px;
     padding-bottom: 10px;
