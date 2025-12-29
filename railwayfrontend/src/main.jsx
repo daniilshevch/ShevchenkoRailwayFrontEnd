@@ -34,6 +34,7 @@ import AdminLoginPage from "./AdminPanel/AdminLoginPage/AdminLoginPage.jsx";
 import MainAdminLayout from "./AdminPanel/AdminLayout/AdminLayout.jsx";
 import {AdminDashboard} from "./AdminDashboard/AdminDashboard.jsx";
 import AdminCarriagesListPage from "./AdminPanel/AdminCarriagesManagement/pages/AdminCarriagesListPage.jsx";
+import AdminStationsListPage from "./AdminPanel/AdminStationsManagement/pages/AdminStationsListPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -53,6 +54,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path = "/admin" element = {<MainAdminLayout/>}>
                         <Route path="dashboard" element = {<AdminDashboard/>}/>
                         <Route path="carriages-list" element = {<AdminCarriagesListPage/>}/>
+                        <Route path="stations-list" element = {<AdminStationsListPage/>}/>
                         <Route path="train-routes-list" element={<AdminTrainRoutesListPage />} />
                         <Route path=":train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
                         <Route path=":train_race_id/info" element = {<AdminTrainRaceInfoPage />} />

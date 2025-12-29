@@ -22,7 +22,7 @@ const MainAdminLayout = () => {
     const menuItems = [
         { key: '/admin/dashboard', icon: <DashboardOutlined />, label: 'Головна' },
         { key: '/admin/train-routes-list', icon: <GlobalOutlined />, label: 'Маршрути' },
-        { key: '/admin/stations', icon: <SettingOutlined />, label: 'Станції' },
+        { key: '/admin/stations-list', icon: <SettingOutlined />, label: 'Станції' },
         { key: '/admin/carriages-list', icon: <ContainerOutlined />, label: 'Вагони' },
     ];
 

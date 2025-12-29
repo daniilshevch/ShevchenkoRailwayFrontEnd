@@ -59,6 +59,7 @@
     { "ukrainian": "Бугаз", "english": "Buhaz" },
     { "ukrainian": "Кароліно-Бугаз", "english": "Karolino-Buhaz" },
     { "ukrainian": "Сарата", "english": "Sarata" },
+    { "ukrainian": "Луцьк", "english": "Lutsk" },
 ];
 export function stationTitleIntoUkrainian(station_title)
 {
