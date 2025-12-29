@@ -115,7 +115,7 @@ function AdminTrainStopsTable({ trainStops, fetchTrainStops }) {
         },
         {
             title: 'Стоянка',
-            width: 100,
+            width: 90,
             align: 'center',
             render: (_, record) => {
                 if (!record.arrival_time || !record.departure_time) return "✖️";
@@ -126,7 +126,7 @@ function AdminTrainStopsTable({ trainStops, fetchTrainStops }) {
         {
             title: 'Тип',
             dataIndex: 'stop_type',
-            width: 130,
+            width: 135,
             render: (_, record) => isEdited(record) ? (
                 <Form.Item name="stop_type" style={{ margin: 0 }}>
                     <Select>{enumOptions(TRAIN_STOP_TYPE_OPTIONS)}</Select>
@@ -138,7 +138,7 @@ function AdminTrainStopsTable({ trainStops, fetchTrainStops }) {
         {
             title: "Відстань (км)",
             dataIndex: "distance_from_starting_station",
-            width: 110,
+            width: 90,
             render: (_, record) => isEdited(record) ? (
                 <Form.Item name="distance_from_starting_station" style={{ margin: 0 }}><Input /></Form.Item>
             ) : <Text italic>{record.distance_from_starting_station} км</Text>

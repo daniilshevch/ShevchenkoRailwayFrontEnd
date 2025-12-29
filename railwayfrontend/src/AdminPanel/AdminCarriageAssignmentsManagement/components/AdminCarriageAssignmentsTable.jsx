@@ -60,7 +60,7 @@ function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fet
             dataIndex: 'passenger_carriage_id',
             key: 'passenger_carriage_id',
             fixed: 'left',
-            width: 120,
+            width: 80,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
                 <div style={{ padding: 8 }}>
                     <Input
@@ -83,7 +83,7 @@ function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fet
         {
             title: '№',
             dataIndex: 'position_in_squad',
-            width: 80,
+            width: 55,
             align: 'center',
             render: (val, record) => isEdited(record) ? (
                 <Form.Item name="position_in_squad" style={{ margin: 0 }}>
@@ -94,22 +94,22 @@ function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fet
         {
             title: 'Тип',
             dataIndex: ['passenger_carriage_info', 'type_of'],
-            width: 120,
+            width: 90,
             render: (val) => CARRIAGE_TYPE_OPTIONS[val]
         },
         {
             title: 'Клас',
             dataIndex: ['passenger_carriage_info', 'quality_class'],
-            width: 100,
+            width: 55,
             render: (val) => <Tag color="purple">{CARRIAGE_QUALITY_CLASS_OPTIONS[val]}</Tag>
         },
-        { title: 'Жін.', dataIndex: 'is_for_woman', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_woman" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Дит.', dataIndex: 'is_for_children', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_children" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Wi-Fi', dataIndex: 'factual_wi_fi', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_wi_fi" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Конд.', dataIndex: 'factual_air_conditioning', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_air_conditioning" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Душ', dataIndex: 'factual_shower_availability', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_shower_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Інкл.', dataIndex: 'factual_is_inclusive', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_is_inclusive" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
-        { title: 'Їжа', dataIndex: 'food_availability', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="food_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Жін.', dataIndex: 'is_for_woman', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_woman" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Дит.', dataIndex: 'is_for_children', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_children" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Wi-Fi', dataIndex: 'factual_wi_fi', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_wi_fi" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Конд.', dataIndex: 'factual_air_conditioning', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_air_conditioning" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Душ', dataIndex: 'factual_shower_availability', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_shower_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Інкл.', dataIndex: 'factual_is_inclusive', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_is_inclusive" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Їжа', dataIndex: 'food_availability', width: 55, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="food_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
 
         {
             title: "Квитки",

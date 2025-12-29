@@ -31,6 +31,9 @@ import UserProfilePage from "./UserProfile/pages/UserProfilePage.jsx";
 import StationBoard from "./TrainScheduleThroughStation/StationBoard/StationBoard.jsx";
 import {PrivateRoute} from "../SystemUtils/PrivateRoutes/PrivateRoute.jsx";
 import AdminLoginPage from "./AdminPanel/AdminLoginPage/AdminLoginPage.jsx";
+import MainAdminLayout from "./AdminPanel/AdminLayout/AdminLayout.jsx";
+import {AdminDashboard} from "./AdminDashboard/AdminDashboard.jsx";
+import AdminCarriagesListPage from "./AdminPanel/AdminCarriagesManagement/pages/AdminCarriagesListPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -44,11 +47,16 @@ createRoot(document.getElementById('root')).render(
                     <Route path = "ticket" element = {<SingleTicketBookingConfirmationInfoComponent ticket={ticket} /> }></Route>
                     <Route path = "google" element = {<GoogleTest></GoogleTest>}></Route>
                     <Route path = "station-board" element = {<StationBoard></StationBoard>}></Route>
+                    <Route path = "admin-layout" element = {<MainAdminLayout/>}></Route>
                 </Route>
                 <Route element = {<PrivateRoute allowedRoles={["Administrator"]} />}>
-                    <Route path="/admin/train-routes-list" element={<AdminTrainRoutesListPage />} />
-                    <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
-                    <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                    <Route path = "/admin" element = {<MainAdminLayout/>}>
+                        <Route path="dashboard" element = {<AdminDashboard/>}/>
+                        <Route path="carriages-list" element = {<AdminCarriagesListPage/>}/>
+                        <Route path="train-routes-list" element={<AdminTrainRoutesListPage />} />
+                        <Route path=":train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
+                        <Route path=":train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                    </Route>
                 </Route>
                 <Route path = "/login" element = {<LoginPage />} />
                 <Route path = "/admin-login" element = {<AdminLoginPage />} />
