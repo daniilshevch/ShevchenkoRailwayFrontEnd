@@ -1,56 +1,33 @@
-﻿import {Button, DatePicker, Form, Input, message, Popconfirm, Select, Switch, Table} from "antd";
-import React, {useState} from "react";
-import {stationTitleIntoUkrainian} from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
-import {enumOptions} from "../../GeneralComponents/EnumOptionConvertion.jsx";
-import {TRAIN_STOP_TYPE_OPTIONS} from "./AdminTrainStopsEnums.js";
+﻿import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table, Tag, Typography, Space } from "antd";
+import React, { useState } from "react";
+import { SearchOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { stationTitleIntoUkrainian } from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
+import { enumOptions } from "../../GeneralComponents/EnumOptionConvertion.jsx";
+import { TRAIN_STOP_TYPE_OPTIONS } from "./AdminTrainStopsEnums.js";
 import dayjs from 'dayjs';
-function formatDate(dateTime)
-{
-    return dateTime.toLocaleString('uk-UA', {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-function AdminTrainStopsTable({trainStops, fetchTrainStops})
-{
+
+const { Text } = Typography;
+
+function AdminTrainStopsTable({ trainStops, fetchTrainStops }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
-    const isEdited = (record) => record.station_title === editingKey;
-    const toLocalTimeFormat = (time) => {
-        if(time == null)
-        {
-            return null;
-        }
-        else
-        {
-            return time.format("YYYY-MM-DDTHH:mm:ss")
-        }
-    };
-    const update = (record) => {
-        updateForm.setFieldsValue({
-            ...record,
-            arrival_time: record.arrival_time ? dayjs(record.arrival_time) : null,
-            departure_time: record.departure_time ? dayjs(record.departure_time) : null,
-        });
-        setEditingKey(record.station_title);
-    };
 
-    const cancelUpdate = () => setEditingKey('');
+    const isEdited = (record) => record.station_title === editingKey;
+
+    const toLocalTimeFormat = (time) => time ? time.format("YYYY-MM-DDTHH:mm:ss") : null;
 
     const saveUpdate = async (station_title, train_route_on_date_id) => {
         try {
             const token = localStorage.getItem('token');
             const row = await updateForm.validateFields();
             const updatedTrainStop = {
-                ...trainStops.find(train_stop => train_stop.station_title === station_title),
+                ...trainStops.find(ts => ts.station_title === station_title),
                 ...row,
                 arrival_time: toLocalTimeFormat(row.arrival_time),
                 departure_time: toLocalTimeFormat(row.departure_time)
             };
+
             const response = await fetch(`https://localhost:7230/Admin-API/update-train-stop/${train_route_on_date_id}/${station_title}`, {
                 method: 'PUT',
                 headers: {
@@ -59,161 +36,180 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
                 },
                 body: JSON.stringify(updatedTrainStop)
             });
-            if (!response.ok) throw new Error('Помилка при оновленні');
-            messageApi.success(`Зупинку ${stationTitleIntoUkrainian(station_title)} успішно оновлено`);
+
+            if (!response.ok) throw new Error('Помилка при оновленні зупинки');
+
+            messageApi.success(`Зупинку ${stationTitleIntoUkrainian(station_title)} оновлено`);
             setEditingKey('');
             fetchTrainStops();
         } catch (err) {
             messageApi.error(err.message);
         }
     };
+
     const handleDelete = async (train_route_on_date_id, station_title) => {
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch(`https://localhost:7230/Admin-API/delete-train-stop/${train_route_on_date_id}/${station_title}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!response.ok) throw new Error("Помилка при видаленні");
-            messageApi.success(`Зупинку ${stationTitleIntoUkrainian(station_title)} успішно видалено`)
+            if (!response.ok) throw new Error("Не вдалося видалити зупинку");
+            messageApi.success(`Зупинку видалено`);
             fetchTrainStops();
-        }
-        catch (err) {
+        } catch (err) {
             messageApi.error(err.message);
         }
-    }
+    };
 
     const columns = [
         {
-            title: 'Назва станції',
+            title: 'Станція',
             dataIndex: 'station_title',
-            render: (_, record) => (
-                stationTitleIntoUkrainian(record.station_title)
+            key: 'station_title',
+            fixed: 'left',
+            width: 200,
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Назва станції"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm()}
+                        style={{ marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button type="primary" onClick={() => confirm()} size="small" style={{ width: 80 }}>ОК</Button>
+                        <Button onClick={() => clearFilters()} size="small" style={{ width: 80 }}>Скинути</Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+            onFilter: (value, record) =>
+                stationTitleIntoUkrainian(record.station_title).toLowerCase().includes(value.toLowerCase()),
+            render: (text) => <Text strong>{stationTitleIntoUkrainian(text)}</Text>
+        },
+        {
+            title: 'Прибуття',
+            dataIndex: 'arrival_time',
+            width: 180,
+            render: (_, record) => isEdited(record) ? (
+                <Form.Item name="arrival_time" style={{ margin: 0 }}>
+                    <DatePicker showTime={{ format: 'HH:mm' }} format="DD.MM.YYYY HH:mm" style={{ width: '100%' }} />
+                </Form.Item>
+            ) : (
+                record.arrival_time ? dayjs(record.arrival_time).format("DD.MM.YYYY HH:mm") : "✖️"
             )
         },
         {
-            title: 'ID рейсу',
-            dataIndex: 'train_route_on_date_id',
-        },
-        {
-            title: 'Час прибуття',
-            dataIndex: 'arrival_time',
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="arrival_time" style={{ margin: 0 }}>
-                        <DatePicker
-                            showTime={{ format: 'HH:mm' }}
-                            format="DD.MM.YYYY HH:mm"
-                            minuteStep={1}
-                            allowClear
-                            style={{ width: '100%' }}
-                        />
-                    </Form.Item>
-                ) : (
-                    record.arrival_time ? dayjs(record.arrival_time).format("DD.MM.YYYY HH:mm") : "✖️"
-                ),
-
-        },
-        {
-            title: 'Час відправлення',
+            title: 'Відправлення',
             dataIndex: 'departure_time',
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="departure_time" style={{ margin: 0 }}>
-                        <DatePicker
-                            showTime={{ format: 'HH:mm' }}
-                            format="DD.MM.YYYY HH:mm"
-                            minuteStep={1}
-                            allowClear
-                            style={{ width: '100%' }}
-                        />
-                    </Form.Item>
-                ) : record.departure_time ? dayjs(record.departure_time).format("DD.MM.YYYY HH:mm") : "✖️"
+            width: 180,
+            render: (_, record) => isEdited(record) ? (
+                <Form.Item name="departure_time" style={{ margin: 0 }}>
+                    <DatePicker showTime={{ format: 'HH:mm' }} format="DD.MM.YYYY HH:mm" style={{ width: '100%' }} />
+                </Form.Item>
+            ) : (
+                record.departure_time ? dayjs(record.departure_time).format("DD.MM.YYYY HH:mm") : "✖️"
+            )
         },
         {
-            title: 'Тривалість зупинки',
-            dataIndex: 'stop_duration',
-            render: (_, record) => (record.departure_time != undefined && record.arrival_time != undefined) ?
-                `${(new Date(record.departure_time) - new Date(record.arrival_time))/ 60000} хв` : "✖️"
+            title: 'Стоянка',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                if (!record.arrival_time || !record.departure_time) return "✖️";
+                const diff = dayjs(record.departure_time).diff(dayjs(record.arrival_time), 'minute');
+                return `${diff} хв`;
+            }
         },
         {
-            title: 'Тип зупинки',
+            title: 'Тип',
             dataIndex: 'stop_type',
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="stop_type" style={{ margin: 0 }}>
-                        <Select>{enumOptions(TRAIN_STOP_TYPE_OPTIONS)}</Select>
-                    </Form.Item>
-                ) : (
-                    TRAIN_STOP_TYPE_OPTIONS[record.stop_type]
-                ),
-            width: 50,
+            width: 130,
+            render: (_, record) => isEdited(record) ? (
+                <Form.Item name="stop_type" style={{ margin: 0 }}>
+                    <Select>{enumOptions(TRAIN_STOP_TYPE_OPTIONS)}</Select>
+                </Form.Item>
+            ) : (
+                <Tag color={record.stop_type === 0 ? "gold" : "blue"}>{TRAIN_STOP_TYPE_OPTIONS[record.stop_type]}</Tag>
+            )
         },
         {
-            title: "Відстань від початкової станції",
+            title: "Відстань (км)",
             dataIndex: "distance_from_starting_station",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="distance_from_starting_station" style={{ margin: 0 }}>
-                        <Input />
-                    </Form.Item>
-                ) : record.distance_from_starting_station,
-            width: 100
+            width: 110,
+            render: (_, record) => isEdited(record) ? (
+                <Form.Item name="distance_from_starting_station" style={{ margin: 0 }}><Input /></Form.Item>
+            ) : <Text italic>{record.distance_from_starting_station} км</Text>
         },
-        { //////////////////////CHANGE
-            title: "Швидкість на перегоні",
+        {
+            title: "Швидкість (км/год)",
             dataIndex: "speed_on_section",
-            editable: true,
-            render: (_, record) => record.speed_on_section
+            width: 140,
+            render: (value) => value != null ? `${value.toFixed(2)} км/год` : "✖️"
         },
         {
             title: 'Дії',
-            dataIndex: 'actions',
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <>
-                        <Popconfirm
-                            title="Підтвердити збереження?"
-                            onConfirm={() => saveUpdate(record.station_title, record.train_route_on_date_id)}
-                            okText="Так"
-                            cancelText="Ні"
+            fixed: 'right',
+            width: 200, // Збільшили ширину для комфортного розміщення
+            align: 'center',
+            render: (_, record) => isEdited(record) ? (
+                <Space size="middle">
+                    <Button
+                        type="primary"
+                        size="small"
+                        onClick={() => saveUpdate(record.station_title, record.train_route_on_date_id)}
+                    >
+                        Зберегти
+                    </Button>
+                    <Button
+                        size="small"
+                        onClick={() => setEditingKey('')}
+                    >
+                        Відміна
+                    </Button>
+                </Space>
+            ) : (
+                /* Використовуємо Space з розділювачем */
+                <Space split={<span style={{ color: '#ccc' }}>|</span>}>
+                    <Button
+                        type="link"
+                        icon={<EditOutlined />}
+                        style={{ padding: 0 }}
+                        onClick={() => {
+                            updateForm.setFieldsValue({
+                                ...record,
+                                arrival_time: record.arrival_time ? dayjs(record.arrival_time) : null,
+                                departure_time: record.departure_time ? dayjs(record.departure_time) : null,
+                            });
+                            setEditingKey(record.station_title);
+                        }}
+                    >
+                        Змінити
+                    </Button>
+                    <Popconfirm
+                        title="Видалити зупинку?"
+                        onConfirm={() => handleDelete(record.train_route_on_date_id, record.station_title)}
+                        okText="Так"
+                        cancelText="Ні"
+                    >
+                        <Button
+                            type="link"
+                            danger
+                            icon={<DeleteOutlined />}
+                            style={{ padding: 0 }}
                         >
-                            <Button type="link">Зберегти</Button>
-                        </Popconfirm>
-                        <Popconfirm
-                            title="Скасувати зміни?"
-                            onConfirm={cancelUpdate}
-                            okText="Так"
-                            cancelText="Ні"
-                        >
-                            <Button type="link">Скасувати</Button>
-                        </Popconfirm>
-                    </>
-                ) : (
-                    <>
-                        <Button disabled={editingKey !== ''} onClick={() => {
-                            update(record);
-                        }} type="link">
-                            Редагувати
+                            Видалити
                         </Button>
-                        <Popconfirm
-                            title="Ви впевнені, що хочете видалити цю станцію?"
-                            onConfirm={() => handleDelete(record.train_route_on_date_id, record.station_title)}
-                            okText="Так"
-                            cancelText="Ні"
-                        >
-                            <Button type="link" danger>
-                                Видалити
-                            </Button>
-                        </Popconfirm>
-                    </>
-                ),
-        },
+                    </Popconfirm>
+                </Space>
+            )
+        }
     ];
+
     return (
-        <>
+        <div className="table-container">
             {contextHolder}
             <Form form={updateForm} component={false}>
                 <Table
@@ -221,16 +217,13 @@ function AdminTrainStopsTable({trainStops, fetchTrainStops})
                     columns={columns}
                     rowKey="station_title"
                     bordered
+                    scroll={{ x: 1100 }}
                     pagination={false}
-                    components={{
-                        body: {
-                            cell: ({ children }) => <td>{children}</td>,
-                        },
-                    }}
-                    rowClassName={(_, index) => (index % 2 === 0 ? 'light-blue-row' : 'dark-blue-row')}
+                    rowClassName={(_, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}
                 />
             </Form>
-        </>
-    )
+        </div>
+    );
 }
+
 export default AdminTrainStopsTable;
