@@ -17,7 +17,7 @@ const TRIP_TYPE_OPTIONS = {
 const FREQUENCY_TYPE_OPTIONS = {
     0: 'Щоденний',
     1: 'Через день',
-    2: 'По особливим датам',
+    2: 'По особливих датах',
 };
 
 const ASSIGNMENT_TYPE_OPTIONS = {

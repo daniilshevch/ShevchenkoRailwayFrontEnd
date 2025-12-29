@@ -1,0 +1,44 @@
+.table-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.create-button-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0px;
+}
+.light-blue-row {
+    background-color: #e6f7ff;
+}
+
+.dark-blue-row {
+    background-color: #bae7ff;
+}
+.ant-input-number.custom-coeff-input {
+    background-color: #ffffff !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 6px !important;
+}
+
+/* Стан при наведенні (Hover) тільки для цього поля */
+.ant-input-number.custom-coeff-input:hover {
+    border-color: #4096ff !important;
+}
+
+/* Стан при фокусі (Focus) */
+.ant-input-number.custom-coeff-input.ant-input-number-focused {
+    border-color: #4096ff !important;
+    box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1) !important;
+}
+
+/* Внутрішнє поле вводу */
+.custom-coeff-input .ant-input-number-input {
+    background-color: transparent !important;
+    color: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* Вимикаємо кнопки перемикання тільки тут */
+.custom-coeff-input .ant-input-number-handler-wrap {
+    display: none;
+}

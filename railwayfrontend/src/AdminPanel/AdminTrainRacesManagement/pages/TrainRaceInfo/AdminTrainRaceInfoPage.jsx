@@ -1,5 +1,5 @@
-﻿import AdminTrainStopsList from "../../AdminTrainStopsManagement/components/AdminTrainStopsList.jsx";
-import AdminCarriageAssignmentsList from "../../AdminCarriageAssignmentsManagement/components/AdminCarriageAssignmentsList.jsx";
+﻿import AdminTrainStopsList from "../../../AdminTrainStopsManagement/components/AdminTrainStopsList.jsx";
+import AdminCarriageAssignmentsList from "../../../AdminCarriageAssignmentsManagement/components/AdminCarriageAssignmentsList.jsx";
 import React from 'react';
 import {useParams} from "react-router-dom";
 import { Typography, Divider } from 'antd';

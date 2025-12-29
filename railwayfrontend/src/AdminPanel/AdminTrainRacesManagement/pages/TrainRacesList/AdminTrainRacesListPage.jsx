@@ -8,18 +8,17 @@ import {
     Modal,
     DatePicker
 } from 'antd';
-import '../../AdminTrainRoutesManagement/components/AdminTrainRoutesList.css';
-import AdminTrainRacesTable from "./AdminTrainRacesTable.jsx";
-import AdminTrainRacesCreateForm from "./AdminTrainRacesCreateForm.jsx";
+import '../../../AdminTrainRoutesManagement/pages/AdminTrainRoutesListPage.css';
+import AdminTrainRacesTable from "../../components/AdminTrainRacesTable.jsx";
+import AdminTrainRacesCreateForm from "../../components/AdminTrainRacesCreateForm.jsx";
 
 const { Option } = Select;
 
 
-function AdminTrainRacesList() {
+function AdminTrainRacesListPage() {
     const [races, setRaces] = useState([]);
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const { train_route_id } = useParams();
-
     const fetchRaces = async () => {
         const res = await fetch(`https://localhost:7230/Admin-API/get-races-for-train-route/${train_route_id}`);
         const data = await res.json();
@@ -28,12 +27,6 @@ function AdminTrainRacesList() {
     useEffect(() => {
         fetchRaces();
     }, []);
-
-
-
-
-
-
 
     return (
         <>
@@ -53,4 +46,4 @@ function AdminTrainRacesList() {
     );
 }
 
-export default AdminTrainRacesList;
+export default AdminTrainRacesListPage;

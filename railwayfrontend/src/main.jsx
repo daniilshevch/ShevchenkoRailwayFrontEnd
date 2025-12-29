@@ -6,9 +6,9 @@ import HomePage from './HomePage/pages/HomePage.jsx';
 import GeneralLayout from './GeneralWebsiteElements/GeneralLayout/GeneralLayout.jsx';
 import TrainTripsSearchResultsPage from './TrainTripsSearchResults/TrainRacesInfoSection/pages/TrainTripsSearchResultsPage.jsx';
 import CarriageListPage from './TrainTripsSearchResults/CarriageAssignmentsInfoSection/pages/CarriageListPage/CarriageListPage.jsx';
-import AdminTrainRoutesList from './AdminPanel/AdminTrainRoutesManagement/components/AdminTrainRoutesList.jsx';
-import AdminTrainRacesList from './AdminPanel/AdminTrainRacesManagement/components/AdminTrainRacesList.jsx';
-import AdminTrainRaceInfoPage from "./AdminPanel/AdminTrainRacesManagement/pages/AdminTrainRaceInfoPage.jsx";
+import AdminTrainRoutesListPage from './AdminPanel/AdminTrainRoutesManagement/pages/AdminTrainRoutesListPage.jsx';
+import AdminTrainRacesListPage from './AdminPanel/AdminTrainRacesManagement/pages/TrainRacesList/AdminTrainRacesListPage.jsx';
+import AdminTrainRaceInfoPage from "./AdminPanel/AdminTrainRacesManagement/pages/TrainRaceInfo/AdminTrainRaceInfoPage.jsx";
 import LoginPage from "./RegistrationAndLogin/pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "./RegistrationAndLogin/pages/RegisterPage/RegisterPage.jsx";
 import DateSlider from "./TrainTripsSearchResults/TrainRacesInfoSection/components/DateSlider/DateSlider.jsx";
@@ -29,6 +29,8 @@ import UserSidePanel from "./UserProfile/UserSidePanel.jsx";
 import UserDataForm from "./UserProfile/UserDataForm.jsx";
 import UserProfilePage from "./UserProfile/pages/UserProfilePage.jsx";
 import StationBoard from "./TrainScheduleThroughStation/StationBoard/StationBoard.jsx";
+import {PrivateRoute} from "../SystemUtils/PrivateRoutes/PrivateRoute.jsx";
+import AdminLoginPage from "./AdminPanel/AdminLoginPage/AdminLoginPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -43,11 +45,15 @@ createRoot(document.getElementById('root')).render(
                     <Route path = "google" element = {<GoogleTest></GoogleTest>}></Route>
                     <Route path = "station-board" element = {<StationBoard></StationBoard>}></Route>
                 </Route>
+                <Route element = {<PrivateRoute allowedRoles={["Administrator"]} />}>
+                    <Route path="/admin/train-routes-list" element={<AdminTrainRoutesListPage />} />
+                    <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
+                    <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                </Route>
                 <Route path = "/login" element = {<LoginPage />} />
+                <Route path = "/admin-login" element = {<AdminLoginPage />} />
                 <Route path = "/register" element = {<RegisterPage />} />
-                <Route path="/admin/train-routes-list" element={<AdminTrainRoutesList />} />
-                <Route path="/admin/:train_route_id/train-races-list" element={<AdminTrainRacesList />} />
-                <Route path="/admin/:train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                <Route path="/forbidden" element={<div>У вас немає доступу до цієї сторінки</div>} />
                     <Route element = {<GeneralLayout />}>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/:train_race_id/:start/:end/carriages" element={<CarriageListPage />} />

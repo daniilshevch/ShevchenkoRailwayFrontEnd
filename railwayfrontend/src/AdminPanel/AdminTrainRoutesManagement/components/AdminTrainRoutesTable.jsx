@@ -10,7 +10,12 @@ import {
     TRAIN_QUALITY_CLASS_OPTIONS,
     TRIP_TYPE_OPTIONS
 } from "./AdminTrainRoutesEnums.js";
+import {SearchOutlined} from "@ant-design/icons";
 import 'antd/dist/reset.css';
+import changeTrainRouteIdIntoUkrainian
+    from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
+import changeTrainRouteBrandedNameIntoUkrainian
+    from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainBrandedNamesDictionary.js";
 const { Text } = Typography;
 
 function AdminTrainRoutesTable({ routes, fetchRoutes }) {
@@ -66,18 +71,42 @@ function AdminTrainRoutesTable({ routes, fetchRoutes }) {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Пошук ID"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm()}
+                        style={{ marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button type="primary" onClick={() => confirm()} size="small" style={{ width: 90 }}>
+                            Пошук
+                        </Button>
+                        <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+                            Скинути
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => (
+                <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+            ),
+            onFilter: (value, record) =>
+                record.id.toString().toLowerCase().includes(value.toLowerCase()),
             width: 80,
-            fixed: 'left', // Залишається зліва при скролі
-            render: (id) => <Text strong>{id}</Text>
+            fixed: 'left',
+            render: (id) => <Text strong>{changeTrainRouteIdIntoUkrainian(id)}</Text>
         },
         {
             title: 'Фірмова назва',
             dataIndex: 'branded_name',
             width: 150,
-            ellipsis: true, // Додає "..." якщо текст задовгий
+            ellipsis: true,
             render: (_, record) => isEdited(record) ?
                 <Form.Item name="branded_name" style={{ margin: 0 }}><Input /></Form.Item> :
-                <Text italic>{record.branded_name || "—"}</Text>
+                <Text italic>{changeTrainRouteBrandedNameIntoUkrainian(record.branded_name) || "—"}</Text>
         },
         {
             title: 'Філія',
@@ -185,7 +214,7 @@ function AdminTrainRoutesTable({ routes, fetchRoutes }) {
                     bordered
                     size="large" // Зменшує відступи в комірках для економії місця
                     scroll={{ x: 1800 }} // Вмикає горизонтальний скрол (сума ширини всіх колонок)
-                    pagination={{ pageSize: 10, showSizeChanger: false }}
+                    pagination={{ pageSize: 8, showSizeChanger: false }}
                     rowClassName={(_, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}
                 />
             </Form>

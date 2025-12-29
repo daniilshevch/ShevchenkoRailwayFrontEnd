@@ -1,12 +1,12 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Button, message, Card, Typography, Space } from 'antd';
-import AdminTrainRoutesTable from "./AdminTrainRoutesTable.jsx";
-import AdminTrainRoutesCreateForm from "./AdminTrainRoutesCreateForm.jsx";
-import './AdminTrainRoutesList.css';
+import AdminTrainRoutesTable from "../components/AdminTrainRoutesTable.jsx";
+import AdminTrainRoutesCreateForm from "../components/AdminTrainRoutesCreateForm.jsx";
+import './AdminTrainRoutesListPage.css';
 
 const { Title } = Typography;
 
-function AdminTrainRoutesList() {
+function AdminTrainRoutesListPage() {
     const [messageApi, contextHolder] = message.useMessage();
     const [routes, setRoutes] = useState([]);
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -41,9 +41,7 @@ function AdminTrainRoutesList() {
                     + Створити маршрут
                 </Button>
             </Space>
-
             <AdminTrainRoutesTable routes={routes} fetchRoutes={fetchRoutes} />
-
             <AdminTrainRoutesCreateForm
                 fetchRoutes={fetchRoutes}
                 isCreateModalVisible={isCreateModalVisible}
@@ -53,4 +51,4 @@ function AdminTrainRoutesList() {
     );
 }
 
-export default AdminTrainRoutesList;
+export default AdminTrainRoutesListPage;
