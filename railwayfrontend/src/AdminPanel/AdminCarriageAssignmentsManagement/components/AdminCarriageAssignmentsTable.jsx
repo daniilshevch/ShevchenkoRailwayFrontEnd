@@ -1,253 +1,148 @@
-﻿import React, {useState} from "react";
-import {Button, Form, Input, message, Popconfirm, Switch, Table} from "antd";
-import {CARRIAGE_TYPE_OPTIONS, CARRIAGE_QUALITY_CLASS_OPTIONS, CARRIAGE_MANUFACTURER_OPTIONS} from "./AdminCarriageAssignmentsEnums.js";
+﻿import React, { useState } from "react";
+import { Button, Form, Input, message, Popconfirm, Switch, Table, Typography, Space, Tag, InputNumber } from "antd";
+import { SearchOutlined, EditOutlined, DeleteOutlined, IdcardOutlined } from "@ant-design/icons";
+import { CARRIAGE_TYPE_OPTIONS, CARRIAGE_QUALITY_CLASS_OPTIONS } from "./AdminCarriageAssignmentsEnums.js";
+import "./AdminCarriageAssignmentsList.css";
+const { Text } = Typography;
 
-function AdminCarriageAssignmentsTable({train_race_id, carriageAssignments, fetchCarriageAssignments})
-{
+function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fetchCarriageAssignments }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
+
     const isEdited = (record) => record.passenger_carriage_id === editingKey;
-
-    const update = (record) => {
-        updateForm.setFieldsValue({ ...record });
-        setEditingKey(record.passenger_carriage_id);
-    };
-
-    const cancelUpdate = () => setEditingKey('');
 
     const saveUpdate = async (passenger_carriage_id, train_route_on_date_id) => {
         try {
+            const token = localStorage.getItem('token');
             const row = await updateForm.validateFields();
-            const updatedCarriageAssignment = { ...carriageAssignments.find(carriage_assignment => carriage_assignment.passenger_carriage_id === passenger_carriage_id), ...row };
+            const original = carriageAssignments.find(c => c.passenger_carriage_id === passenger_carriage_id);
+            const updated = { ...original, ...row };
+
             const response = await fetch(`https://localhost:7230/Admin-API/update-carriage-assignment/${train_route_on_date_id}/${passenger_carriage_id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(updatedCarriageAssignment)
+                body: JSON.stringify(updated)
             });
+
             if (!response.ok) throw new Error('Помилка при оновленні');
-            messageApi.success(` Вагон ${passenger_carriage_id} успішно оновлено`);
+            messageApi.success(`Вагон ${passenger_carriage_id} оновлено`);
             setEditingKey('');
             fetchCarriageAssignments();
         } catch (err) {
             messageApi.error(err.message);
         }
     };
+
     const handleDelete = async (passenger_carriage_id) => {
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch(`https://localhost:7230/Admin-API/delete-carriage-assignment/${train_race_id}/${passenger_carriage_id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) throw new Error("Помилка при видаленні");
-            messageApi.success(`Вагон  ${passenger_carriage_id} успішно видалено`);
+            messageApi.success(`Вагон ${passenger_carriage_id} видалено`);
             fetchCarriageAssignments();
-        }
-        catch (err) {
+        } catch (err) {
             messageApi.error(err.message);
         }
-    }
+    };
+
+    const renderBoolean = (val) => val ? <Tag color="success">ТАК</Tag> : <Tag color="default">НІ</Tag>;
 
     const columns = [
         {
             title: 'ID вагону',
             dataIndex: 'passenger_carriage_id',
+            key: 'passenger_carriage_id',
+            fixed: 'left',
+            width: 120,
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="ID вагону"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm()}
+                        style={{ marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button type="primary" onClick={() => confirm()} size="small" style={{ width: 80 }}>ОК</Button>
+                        <Button onClick={() => clearFilters()} size="small" style={{ width: 80 }}>Скинути</Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+            onFilter: (value, record) => record.passenger_carriage_id.toString().includes(value),
+            render: (id) => <Text strong>{id}</Text>
         },
         {
-            title: 'ID рейсу',
-            dataIndex: 'train_route_on_date_id',
-        },
-        {
-            title: 'Номер в складі',
+            title: '№',
             dataIndex: 'position_in_squad',
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="position_in_squad" style={{ margin: 0 }}>
-                        <Input />
-                    </Form.Item>
-                ) : (
-                    record.position_in_squad
-                ),
+            width: 80,
+            align: 'center',
+            render: (val, record) => isEdited(record) ? (
+                <Form.Item name="position_in_squad" style={{ margin: 0 }}>
+                    <InputNumber style = {{width: "100%" }} min={1} className="custom-number-input" size="small" />
+                </Form.Item>
+            ) : <Text code>{val}</Text>
+        },
+        {
+            title: 'Тип',
+            dataIndex: ['passenger_carriage_info', 'type_of'],
+            width: 120,
+            render: (val) => CARRIAGE_TYPE_OPTIONS[val]
+        },
+        {
+            title: 'Клас',
+            dataIndex: ['passenger_carriage_info', 'quality_class'],
             width: 100,
+            render: (val) => <Tag color="purple">{CARRIAGE_QUALITY_CLASS_OPTIONS[val]}</Tag>
         },
+        { title: 'Жін.', dataIndex: 'is_for_woman', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_woman" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Дит.', dataIndex: 'is_for_children', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="is_for_children" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Wi-Fi', dataIndex: 'factual_wi_fi', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_wi_fi" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Конд.', dataIndex: 'factual_air_conditioning', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_air_conditioning" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Душ', dataIndex: 'factual_shower_availability', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_shower_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Інкл.', dataIndex: 'factual_is_inclusive', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="factual_is_inclusive" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+        { title: 'Їжа', dataIndex: 'food_availability', width: 80, align: 'center', render: (val, record) => isEdited(record) ? <Form.Item name="food_availability" valuePropName="checked" style={{ margin: 0 }}><Switch size="small"/></Form.Item> : renderBoolean(val) },
+
         {
-            title: 'Тип вагону',
-            dataIndex: 'passenger_carriage_type',
-            render: (_, record) => (
-                CARRIAGE_TYPE_OPTIONS[record.passenger_carriage_info.type_of]
-            ),
+            title: "Квитки",
             width: 100,
-        },
-        {
-            title: 'Клас вагону',
-            dataIndex: 'passenger_carriage_quality_class',
-            render: (_, record) => (
-                CARRIAGE_QUALITY_CLASS_OPTIONS[record.passenger_carriage_info.quality_class]
-            ),
-            width: 100,
-        },
-        {
-            title: 'Для жінок',
-            dataIndex: 'is_for_woman',
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="is_for_woman" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.is_for_woman ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Для дітей",
-            dataIndex: "is_for_children",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="is_for_children" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.is_for_children ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Wi-Fi",
-            dataIndex: "factual_wi_fi",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="factual_wi_fi" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.factual_wi_fi ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Кондиціонування",
-            dataIndex: "factual_air_conditioning",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="factual_air_conditioning" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.factual_air_conditioning ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Душ",
-            dataIndex: "factual_shower_availability",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="factual_shower_availability" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.factual_shower_availability ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Інклюзивність",
-            dataIndex: "factual_is_inclusive",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="factual_is_inclusive" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.factual_is_inclusive ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Харчування",
-            dataIndex: "food_availability",
-            editable: true,
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <Form.Item name="food_availability" valuePropName="checked" style={{ margin: 0 }}>
-                        <Switch />
-                    </Form.Item>
-                ) : record.food_availability ? (
-                    '✅'
-                ) : (
-                    '❌'
-                ),
-        },
-        {
-            title: "Інформація про пасажирів",
-            dataIndex: "ticket_bookings_for_passenger_carriage",
-            render: (_, record) => (
-                <Button onClick={() => {}} type="link">
-                    Квитки
-                </Button>
-            )
+            align: 'center',
+            render: (_, record) => <Button icon={<IdcardOutlined />} type="link">Квитки</Button>
         },
         {
             title: 'Дії',
-            dataIndex: 'actions',
-            render: (_, record) =>
-                isEdited(record) ? (
-                    <>
-                        <Popconfirm
-                            title="Підтвердити збереження?"
-                            onConfirm={() => saveUpdate(record.passenger_carriage_id, record.train_route_on_date_id)}
-                            okText="Так"
-                            cancelText="Ні"
-                        >
-                            <Button type="link">Зберегти</Button>
-                        </Popconfirm>
-                        <Popconfirm
-                            title="Скасувати зміни?"
-                            onConfirm={cancelUpdate}
-                            okText="Так"
-                            cancelText="Ні"
-                        >
-                            <Button type="link">Скасувати</Button>
-                        </Popconfirm>
-                    </>
-                ) : (
-                    <>
-                        <Button disabled={editingKey !== ''} onClick={() => {
-                            update(record);
-                        }} type="link">
-                            Редагувати
-                        </Button>
-                        <Popconfirm
-                            title="Ви впевнені, що хочете видалити цей маршрут?"
-                            onConfirm={() => handleDelete(record.passenger_carriage_id)}
-                            okText="Так"
-                            cancelText="Ні"
-                        >
-                            <Button type="link" danger>
-                                Видалити
-                            </Button>
-                        </Popconfirm>
-                    </>
-                ),
-        },
+            fixed: 'right',
+            width: 160,
+            align: 'center',
+            render: (_, record) => isEdited(record) ? (
+                <Space>
+                    <Button type="primary" size="small" onClick={() => saveUpdate(record.passenger_carriage_id, record.train_route_on_date_id)}>ОК</Button>
+                    <Button size="small" onClick={() => setEditingKey('')}>Ні</Button>
+                </Space>
+            ) : (
+                <Space split={<span style={{ color: '#ccc' }}>|</span>}>
+                    <Button type="link" icon={<EditOutlined />} style={{ padding: 0 }} onClick={() => {
+                        updateForm.setFieldsValue({ ...record });
+                        setEditingKey(record.passenger_carriage_id);
+                    }}>Змінити</Button>
+                    <Popconfirm title="Видалити вагон зі складу?" onConfirm={() => handleDelete(record.passenger_carriage_id)}>
+                        <Button type="link" danger icon={<DeleteOutlined />} style={{ padding: 0 }}>Видалити</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
     ];
+
     return (
-        <>
+        <div className="table-container">
             {contextHolder}
             <Form form={updateForm} component={false}>
                 <Table
@@ -255,16 +150,13 @@ function AdminCarriageAssignmentsTable({train_race_id, carriageAssignments, fetc
                     columns={columns}
                     rowKey="passenger_carriage_id"
                     bordered
+                    scroll={{ x: 1500 }}
                     pagination={false}
-                    components={{
-                        body: {
-                            cell: ({ children }) => <td>{children}</td>,
-                        },
-                    }}
-                    rowClassName={(_, index) => (index % 2 === 0 ? 'light-blue-row' : 'dark-blue-row')}
+                    rowClassName={(_, index) => (index % 2 === 0 ? 'table-row-light' : 'table-row-dark')}
                 />
             </Form>
-        </>
-    )
+        </div>
+    );
 }
+
 export default AdminCarriageAssignmentsTable;

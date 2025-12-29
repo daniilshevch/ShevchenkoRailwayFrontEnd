@@ -6,3 +6,47 @@
     margin-top: 0;
     background-color: green;
 }
+.ant-input-number.custom-number-input {
+    background-color: #ffffff !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 6px !important;
+}
+.ant-input-number.custom-number-input:hover {
+    border-color: #4096ff !important;
+}
+
+.ant-input-number.custom-number-input.ant-input-number-focused {
+    border-color: #4096ff !important;
+    box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1) !important;
+}
+
+.custom-number-input .ant-input-number-input {
+    background-color: transparent !important;
+    color: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* Вимикаємо кнопки перемикання тільки тут */
+.custom-number-input .ant-input-number-handler-wrap {
+    display: none;
+}
+
+
+.ant-input-number.custom-number-input {
+    background-color: #ffffff !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 6px !important;
+    /* ВИПРАВЛЕННЯ ШИРИНИ */
+    width: 100% !important;
+    min-width: 0 !important; /* Дозволяє компоненту стискатися менше стандартних 90px */
+    display: flex;
+}
+
+.custom-number-input .ant-input-number-input {
+    background-color: transparent !important;
+    color: rgba(0, 0, 0, 0.88) !important;
+    padding: 0 8px !important; /* Зменшуємо внутрішні відступи для вузьких колонок */
+}
+
+.custom-number-input .ant-input-number-handler-wrap {
+    display: none;
+}
