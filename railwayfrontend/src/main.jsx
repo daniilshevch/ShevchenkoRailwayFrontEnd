@@ -35,6 +35,9 @@ import MainAdminLayout from "./AdminPanel/AdminLayout/AdminLayout.jsx";
 import {AdminDashboard} from "./AdminDashboard/AdminDashboard.jsx";
 import AdminCarriagesListPage from "./AdminPanel/AdminCarriagesManagement/pages/AdminCarriagesListPage.jsx";
 import AdminStationsListPage from "./AdminPanel/AdminStationsManagement/pages/AdminStationsListPage.jsx";
+import CarriageAssistantGroupedTicketsPanel
+    from "./AdminPanel/AdminTicketBookingsManagement/components/CarriageAssistantGroupedTicketsPanel.jsx";
+import CarriageAssistantPage from "./AdminPanel/AdminTicketBookingsManagement/pages/CarriageAssistantPage.jsx";
       
 
 createRoot(document.getElementById('root')).render(
@@ -58,6 +61,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="train-routes-list" element={<AdminTrainRoutesListPage />} />
                         <Route path=":train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
                         <Route path=":train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
+                        <Route path = "carriage-assistant/:trainRouteId" element={<CarriageAssistantPage/>}></Route>
                     </Route>
                 </Route>
                 <Route path = "/login" element = {<LoginPage />} />

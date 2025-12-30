@@ -1,4 +1,5 @@
 ﻿import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 import { Button, Form, Input, message, Popconfirm, Switch, Table, Typography, Space, Tag, InputNumber } from "antd";
 import { SearchOutlined, EditOutlined, DeleteOutlined, IdcardOutlined } from "@ant-design/icons";
 import { CARRIAGE_TYPE_OPTIONS, CARRIAGE_QUALITY_CLASS_OPTIONS } from "./AdminCarriageAssignmentsEnums.js";
@@ -9,6 +10,7 @@ function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fet
     const [messageApi, contextHolder] = message.useMessage();
     const [updateForm] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
+    const navigate = useNavigate();
 
     const isEdited = (record) => record.passenger_carriage_id === editingKey;
 
@@ -115,7 +117,7 @@ function AdminCarriageAssignmentsTable({ train_race_id, carriageAssignments, fet
             title: "Квитки",
             width: 100,
             align: 'center',
-            render: (_, record) => <Button icon={<IdcardOutlined />} type="link">Квитки</Button>
+            render: (_, record) => <Button icon={<IdcardOutlined />} type="link" onClick={() => navigate(`/admin/carriage-assistant/${train_race_id}?carriage_number=${record.position_in_squad}`)}>Квитки</Button>
         },
         {
             title: 'Дії',
