@@ -18,7 +18,7 @@ import {
 const { Text } = Typography;
 const { Panel } = Collapse;
 
-const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChange }) => {
+const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChange, trainRaceId }) => {
     if (!data) return (
         <Card style={{ borderRadius: '12px', textAlign: 'center', padding: '40px' }}>
             <Empty description="Дані про бронювання відсутні" />
@@ -100,6 +100,7 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
 
                 // Визначаємо основний колір для поточної секції
                 const themeColor = isArrivalMode ? '#fa8c16' : '#52c41a';
+                const themeColorInversed = isArrivalMode ?  '#52c41a' : '#fa8c16';
 
                 return (
                     <Panel
@@ -156,8 +157,8 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
                                         borderRadius: '6px',
                                         fontWeight: 600,
                                         border: 'none',
-                                        backgroundColor: isArrivalMode ? '#fff7e6' : '#f6ffed',
-                                        color: themeColor,
+                                        backgroundColor: isArrivalMode ? '#f6ffed': '#fff7e6' ,
+                                        color: themeColorInversed,
                                         fontSize: '13px'
                                     }}>
                                         {stationTitleIntoUkrainian(isArrivalMode ? sub.trip_starting_station_title : sub.trip_ending_station_title)}
@@ -204,6 +205,9 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
                 extra={<Tag color="blue" style={{ fontFamily: 'monospace' }}>ID: {passenger_carriage_bookings_info.passenger_carriage_id}</Tag>}
             >
                 <Descriptions bordered column={{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }} size="small">
+                    <Descriptions.Item label="Рейс поїзда" span = {0.1}>
+                        <Text strong style={{ fontSize: '15px' }}>{trainRaceId}</Text>
+                    </Descriptions.Item>
                     <Descriptions.Item label="Тип вагона">
                         <Text strong>{changeCarriageTypeIntoUkrainian(passenger_carriage_bookings_info.carriage_type)}</Text>
                     </Descriptions.Item>

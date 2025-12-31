@@ -5,7 +5,7 @@ import {
     potentialTicketCartReducer
 } from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import { SERVER_URL } from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
-import { Button, message, Typography, Progress, Spin } from 'antd';
+import { Button, message, Typography, Progress, Spin, Empty } from 'antd';
 import {
     CheckCircleFilled,
     ClockCircleFilled,
@@ -15,9 +15,10 @@ import {
     CreditCardOutlined,
     SolutionOutlined,
     SignatureOutlined,
-    SearchOutlined, // Додано
-    MailOutlined,   // Додано
-    LoadingOutlined // Додано
+    SearchOutlined,
+    MailOutlined,
+    LoadingOutlined,
+    ShoppingOutlined
 } from '@ant-design/icons';
 import "./TicketBookingCompletionResultPage.css";
 import {
@@ -31,7 +32,7 @@ import {
     changeCarriageTypeIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import dayjs from 'dayjs';
-const { Text, Title } = Typography;
+const { Text, Title, Paragraph } = Typography;
 
 const getClassTagStyle = (qualityClass) => {
     const classLetter = qualityClass?.toUpperCase();
@@ -295,7 +296,8 @@ function TicketBookingCompletionResultPage() {
                 <div className="booking-tickets-list">
                     <Title level={4} style={{ marginBottom: 20, paddingLeft: 10 }}>Ваші квитки ({steps.length})</Title>
                     <div className="tickets-scroll-area">
-                        {steps.map((ticket, idx) => {
+                        {steps.length > 0 ? (
+                        steps.map((ticket, idx) => {
                             const status = bookingStatus[idx];
                             const isProcessing = status === "processing";
                             const isFinish = status === "finish";
@@ -386,7 +388,43 @@ function TicketBookingCompletionResultPage() {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })): (
+                            // ЯКЩО ПУСТО — показуємо Empty прямо всередині правої панелі
+                            <div style={{
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: '20px',
+                                textAlign: 'center'
+                            }}>
+                                <Empty
+                                    image={<ShoppingOutlined style={{ fontSize: 64, color: '#d9d9d9' }} />}
+                                    imageStyle={{ height: 70 }}
+                                    description={
+                                        <div style={{ marginTop: 16 }}>
+                                            <Text strong style={{ fontSize: '18px', display: 'block', color: '#595959' }}>
+                                                Ваш кошик квитків порожній
+                                            </Text>
+                                            <Text type="secondary" style = {{fontWeight: '500'}}>
+                                                Ймовірно, час тимчасової резервації квитків минув <br />
+                                                або ви ще не додали квитки.
+                                            </Text>
+                                        </div>
+                                    }
+                                >
+                                    <Button
+                                        type="default"
+                                        shape="round"
+                                        icon={<SearchOutlined />}
+                                        onClick={() => navigate('/')}
+                                    >
+                                        Повернутися до пошуку
+                                    </Button>
+                                </Empty>
+                            </div>
+                            )}
                     </div>
                 </div>
             </div>

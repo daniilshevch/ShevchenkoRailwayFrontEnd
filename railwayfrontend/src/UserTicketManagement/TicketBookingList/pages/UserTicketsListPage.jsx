@@ -1,6 +1,12 @@
 import React, {useEffect, useMemo, useState, useCallback, useReducer} from "react";
 import {useParams, useNavigate} from "react-router-dom";
-import { Alert, Divider, Spin, Tabs } from "antd"; // Додали Tabs
+import { Alert, Divider, Spin, Tabs, Empty, Button, Typography } from "antd"; // Додали Tabs
+import {
+    ShoppingCartOutlined,
+    HistoryOutlined,
+    EnvironmentOutlined,
+    LockOutlined
+} from "@ant-design/icons";
 import TrainTripTicketsCard from "../components/TrainTripTicketsCard/TrainTripTicketsCard.jsx";
 import { SERVER_URL } from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 import ticketsBg from '../../../../public/background_images/tickets.jpg';
@@ -14,6 +20,8 @@ import {
 import UserPotentialTicketCartPanel
     from "../../../../SystemUtils/UserTicketCart/UserPonentialTicketCartPanel/UserPotentialTicketCartPanel.jsx";
 
+
+const { Text, Paragraph } = Typography;
 function toDateKey(iso) {
     const d = new Date(iso);
     const y = d.getFullYear();
@@ -22,6 +30,66 @@ function toDateKey(iso) {
     return `${y}-${m}-${day}`;
 }
 
+const emptyConfig = {
+    "in-progress": {
+        description: (
+            <div style={{ marginTop: 12 }}>
+                <Paragraph strong style={{ fontSize: '18px', marginBottom: 4 }}>
+                    Ваш кошик порожній
+                </Paragraph>
+                <Text type="secondary" style={{ fontSize: '15px', fontWeight: '500' }}>
+                    Ви ще не обрали жодного квитка для бронювання.
+                    Виберіть рейс, щоб розпочати подорож.
+                </Text>
+            </div>
+        ),
+        icon: <ShoppingCartOutlined style={{ fontSize: 60, color: '#1890ff' }} />,
+        actionText: "Знайти поїзд"
+    },
+    "active": {
+        description: (
+            <div style={{ marginTop: 12 }}>
+                <Paragraph strong style={{ fontSize: '18px', marginBottom: 4 }}>
+                    У Вас нема запланованих поїздок
+                </Paragraph>
+                <Text type="secondary" style={{ fontSize: '15px', fontWeight: '500' }}>
+                    Наразі Ви не купляли квитки для майбутніх поїздок. Всі Ваші завершені подорожі знаходяться в архіві.
+                </Text>
+            </div>
+        ),
+        icon: <EnvironmentOutlined style={{ fontSize: 60, color: '#52c41a' }} />,
+        actionText: "Планувати подорож"
+    },
+    "archived": {
+        description: (
+            <div style={{ marginTop: 12 }}>
+                <Paragraph strong style={{ fontSize: '18px', marginBottom: 4 }}>
+                    Ваш архів квитків порожній
+                </Paragraph>
+                <Text type="secondary" style={{ fontSize: '15px', fontWeight: '500' }}>
+                    Наразі у Вас немає завершених подорожей. Після завершення поїздок архівні квитки з'являться тут
+                </Text>
+            </div>
+        ),
+        icon: <HistoryOutlined style={{ fontSize: 60, color: '#8c8c8c' }} />,
+        actionText: "На головну"
+    },
+    "unauthorized": {
+        description: (
+            <div style={{ marginTop: 12 }}>
+                <Paragraph strong style={{ fontSize: '18px', marginBottom: 4 }}>
+                    Ви не авторизовані
+                </Paragraph>
+                <Text type="secondary" style={{ fontSize: '15px', fontWeight: '500' }}>
+                    Будь ласка, увійдіть у свій акаунт, щоб переглянути квитки.
+                </Text>
+            </div>
+        ),
+        icon: <LockOutlined style={{ fontSize: 60, color: '#ff4d4f' }} />,
+        actionText: "Увійти",
+        path: "/login"
+    }
+};
 function formatDateUkr(isoOrKey) {
     const d = new Date(isoOrKey);
     if (Number.isNaN(d.valueOf()) && /^\d{4}-\d{2}-\d{2}$/.test(isoOrKey)) {
@@ -76,6 +144,27 @@ export default function UserTicketsListPage() {
         }
     }, [potentialTicketCartState.potentialTicketsList]);
 
+    const renderEmptyState = (tab) => {
+        const config = emptyConfig[tab];
+        return (
+            <div style={{ padding: '60px 0' }}>
+                <Empty
+                    image={config.icon}
+                    imageStyle={{ height: 80 }}
+                    description={config.description}
+                >
+                    <Button
+                        type="primary"
+                        shape="round"
+                        size="large"
+                        onClick={() => navigate(config.path || '/')}
+                    >
+                        {config.actionText}
+                    </Button>
+                </Empty>
+            </div>
+        );
+    };
     const fetchData = useCallback(async (isSilent = false) => {
         const token = localStorage.getItem("token");
         if (!isSilent) setLoading(true);
@@ -197,6 +286,9 @@ export default function UserTicketsListPage() {
         }
         if(activeTab === "in-progress")
         {
+            if (potentialTicketCartState.potentialTicketsList.length === 0) {
+                return renderEmptyState("in-progress");
+            }
             return <UserPotentialTicketCartPanel
                 cartState={potentialTicketCartState}
                 removePotentialTicketFromCart={cancelTicketReservation}
@@ -205,19 +297,14 @@ export default function UserTicketsListPage() {
         }
 
         if (err) {
+            if (err.message.includes("401")) {
+                return renderEmptyState("unauthorized");
+            }
             return <Alert type="error" showIcon message="Помилка завантаження" description={err.message} />;
         }
 
         if (groupedByDate.length === 0) {
-            return (
-                <div style={{ textAlign: 'center', padding: '60px 0' }}>
-                    <Alert
-                        type="info"
-                        showIcon
-                        message={activeTab === "active" ? "У вас немає активних квитків" : "Архів порожній"}
-                    />
-                </div>
-            );
+            return renderEmptyState(activeTab);
         }
 
         return groupedByDate.map(([dateKey, trips], idx) => (

@@ -21,6 +21,8 @@ function formatTimeDate(dateStr) {
 }
 
 function useNormalizedTrain(train) {
+    if (!train) {return null;}
+
     return useMemo(() => {
         const depISO = train.trip_starting_station_departure_time || train.departure_time;
         const arrISO = train.trip_ending_station_arrival_time || train.arrival_time;
@@ -41,7 +43,7 @@ function useNormalizedTrain(train) {
             arrISO,
             startStation,
             endStation,
-            duration,
+            duration: duration || "00:00:00",
             train_route_id: train.train_route_id,
             train_route_class: train.train_route_class,
             train_route_branded_name: train.train_route_branded_name,
@@ -167,7 +169,11 @@ function TrainTripTicketsCard({ train, onRefresh }) {
     const [fetchedSchedule, setFetchedSchedule] = useState(null);
     const [isScheduleLoading, setIsScheduleLoading] = useState(false);
 
+
     const t = useNormalizedTrain(train);
+    if (!t) {
+        return null;
+    }
     const departure = formatTimeDate(t.depISO);
     const arrival   = formatTimeDate(t.arrISO);
 

@@ -61,7 +61,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="train-routes-list" element={<AdminTrainRoutesListPage />} />
                         <Route path=":train_route_id/train-races-list" element={<AdminTrainRacesListPage />} />
                         <Route path=":train_race_id/info" element = {<AdminTrainRaceInfoPage />} />
-                        <Route path = "carriage-assistant/:trainRouteId" element={<CarriageAssistantPage/>}></Route>
+                        <Route path = "carriage-assistant/:trainRaceId" element={<CarriageAssistantPage/>}></Route>
                     </Route>
                 </Route>
                 <Route path = "/login" element = {<LoginPage />} />
