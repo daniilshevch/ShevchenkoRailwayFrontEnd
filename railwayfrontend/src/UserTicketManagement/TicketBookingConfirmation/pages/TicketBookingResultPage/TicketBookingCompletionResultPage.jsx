@@ -55,6 +55,7 @@ const getClassTagStyle = (qualityClass) => {
         borderStyle: 'solid'
     };
 };
+
 function TicketBookingCompletionResultPage() {
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [bookingProgress, setBookingProgress] = useState(0);
@@ -69,6 +70,15 @@ function TicketBookingCompletionResultPage() {
     </>);
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
+    useEffect(() => {
+        // При монтуванні компонента ховаємо скрол
+        document.body.style.overflow = 'hidden';
+
+        // Функція очищення (виконується, коли користувач іде зі сторінки)
+        return () => {
+            document.body.style.overflow = 'auto'; // або 'unset'
+        };
+    }, []);
 
     useEffect(() => {
         try {
@@ -123,6 +133,7 @@ function TicketBookingCompletionResultPage() {
         setBookingProgress(40);
         const token = localStorage.getItem("token");
 
+        //НЕОБІХІДНО ВИРІШИТИ ПРОБЛЕМУ з passenger_trip_info, якщо перехід відбувається не централізованим методом
         const ticket_completion_info_list = steps.map(ticket => ({
             mediator_ticket_booking: {
                 id: ticket.id,
@@ -314,7 +325,7 @@ function TicketBookingCompletionResultPage() {
                                             <div className="passenger-info">
                                                 <UserOutlined className="icon" />
                                                 <Text strong className="passenger-name">
-                                                    {ticket.passenger_trip_info.passenger_name} {ticket.passenger_trip_info.passenger_surname}
+                                                    {ticket.passenger_trip_info?.passenger_name} {ticket.passenger_trip_info?.passenger_surname}
                                                 </Text>
                                             </div>
                                             <div className="status-icon">

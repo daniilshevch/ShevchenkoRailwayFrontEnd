@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Carousel, Card, Space, Typography, Form, Button, message, Steps } from "antd";
+import { Carousel, Card, Space, Typography, Form, Button, message, Steps, Empty, Spin } from "antd";
 import SingleTicketBookingConfirmationInfoComponent
     from "../SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {useNavigate} from "react-router-dom";
@@ -7,18 +7,21 @@ import {
     CloseCircleFilled,
     ClockCircleFilled,
     CheckCircleFilled,
-    InfoCircleFilled
+    InfoCircleFilled,
+    SearchOutlined,
+    ShoppingCartOutlined
 } from '@ant-design/icons';
 import {TicketTimer} from "../../../../../SystemUtils/UserTicketCart/TicketTimer/TicketTimer.jsx";
 
 
-const { Title, Text } = Typography;
-function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, potentialTicketCartDispatch})
+const { Title, Text, Paragraph } = Typography;
+function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCartState, potentialTicketCartDispatch})
 {
     const [form] = Form.useForm();
     const carouselRef = useRef(null);
     const [current, setCurrent] = useState(0);
     const navigate = useNavigate();
+
     const total = tickets.length;
     const renderStepItems = tickets.map((t, idx) => {
         const isCurrent = idx === current;
@@ -26,7 +29,7 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
         if (t.ticket_status === "EXPIRED") {
             return {
                 title: <span style={{fontWeight: 500, color: '#faad14' }}>Квиток {idx + 1}</span>,
-                status: 'error', // Використовуємо для системного підсвічування, але іконку замінимо
+                status: 'error',
                 icon: <ClockCircleFilled style={{ color: '#faad14' }} />,
                 description: <span style={{ color: '#faad14', fontSize: '12px', fontWeight: 'bold', marginLeft: '-60px' }}>Резервація прострочена</span>
             };
@@ -95,12 +98,14 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
         console.log(completedTicketsWithPassengerTripInfo);
         navigate("/ticket-booking-completion");
     }
+
     useEffect(() => {
         form.setFieldsValue({
             passengers: tickets.map(() => ({ firstName: "", lastName: "" })),
         });
         setCurrent(0);
     }, [total, form]);
+
     const handleStepChange = (step) => {
         carouselRef.current?.goTo(step);
         setCurrent(step);
@@ -116,6 +121,13 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
                 <Title level={4} style={{ margin: 0 }}>
                     Оформлення квитків
                 </Title>
+                {loading ? (
+                        // 1. Поки йде завантаження - показуємо спінер
+                        <div style={{ padding: '80px 0', textAlign: 'center' }}>
+                            <Spin size="large" tip="Завантаження квитків..." />
+                        </div>
+                ) : total > 0 ? (
+                    <>
                 <div style={{ marginBottom: 20 }}>
                     <Steps
                         size="small"
@@ -174,6 +186,23 @@ function TicketBookingsCarousel({tickets, onSubmit, potentialTicketCartState, po
                         </Space>
                     </Space>
                 </Form>
+                    </>) :(
+                    <div style={{ padding: '40px 0' }}>
+                        <Empty
+                            image={<ShoppingCartOutlined style={{ fontSize: 64, color: '#d9d9d9' }} />}
+                            description={
+                                <span>
+                                    <Text strong style={{ fontSize: '16px', display: 'block', fontWeight: "bold" }}>Ваш кошик квитків порожній</Text>
+                                    <Text type="secondary" style = {{fontWeight: 500}}>Поверніться до пошуку доступних поїздів і оберіть квитки для подорожі</Text>
+                                </span>
+                            }
+                        >
+                            <Button type="primary" shape="round" icon={<SearchOutlined />} onClick={() => navigate('/')}>
+                                До пошуку
+                            </Button>
+                        </Empty>
+                    </div>
+                )}
             </Space>
         </Card>
     );

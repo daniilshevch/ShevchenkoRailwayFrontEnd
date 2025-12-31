@@ -8,6 +8,7 @@ import TicketBookingsCarousel from "../../components/TicketBookingsCarousel/Tick
 import "./TicketBookingArrangementPage.css";
 function TicketBookingArrangementPage()
 {
+    const [isLoading, setIsLoading] = useState(true);
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     useEffect(() => {
         try
@@ -21,6 +22,10 @@ function TicketBookingArrangementPage()
         catch(error)
         {
             console.error(error);
+        }
+        finally
+        {
+            setIsLoading(false);
         }
     }, []);
     useEffect(() => {
@@ -38,6 +43,7 @@ function TicketBookingArrangementPage()
         <div className="booking-background-image">
             <TicketBookingsCarousel
                 tickets={potentialTicketCartState.potentialTicketsList}
+                loading = {isLoading}
                 potentialTicketCartState={potentialTicketCartState}
                 potentialTicketCartDispatch={potentialTicketCartDispatch}
             />
