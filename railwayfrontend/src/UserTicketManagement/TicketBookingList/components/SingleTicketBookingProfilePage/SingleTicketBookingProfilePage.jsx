@@ -1,4 +1,4 @@
-﻿import React, {useState, useEffect} from "react";
+﻿import React, {useState, useEffect, useMemo} from "react";
 import { Typography, Divider, Row, Col, Tag, Dropdown, Button, Space, Modal } from "antd";
 import { changeCarriageTypeIntoUkrainian } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import { stationTitleIntoUkrainian } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
@@ -164,24 +164,64 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
             },
         });
     };
-    const menuItems = [
-        {
-            key: '1',
-            label: 'Завантажити PDF',
-            icon: <DownloadOutlined />,
-            onClick: handleDownloadPDF,
-        },
-        {
-            type: 'divider',
-        },
-        {
-            key: '2',
-            label: 'Повернути квиток',
-            icon: <RollbackOutlined />,
-            danger: true,
-            onClick: showReturnConfirm,
-        },
-    ];
+    const menuItems = useMemo(() => {
+        const items = [];
+
+        if (ticketStatus !== "Returned") {
+            items.push({
+                key: 'download',
+                label: 'Завантажити PDF',
+                icon: <DownloadOutlined />,
+                onClick: handleDownloadPDF,
+            });
+        }
+
+        switch (ticketStatus) {
+            case "Booked_And_Active":
+                items.push({ type: 'divider' });
+                items.push({
+                    key: 'return',
+                    label: 'Повернути квиток',
+                    icon: <RollbackOutlined />,
+                    danger: true,
+                    onClick: showReturnConfirm,
+                });
+                break;
+
+            case "Booked_And_Used":
+                items.push({ type: 'divider' });
+                items.push({
+                    key: 'info',
+                    label: 'Переглянути деталі поїздки',
+                    icon: <ExclamationCircleOutlined />,
+                    onClick: () => console.log("Поїздка вже завершена"),
+                });
+                break;
+
+            case "Archieved":
+                items.push({ type: 'divider' });
+                items.push({
+                    key: 'info',
+                    label: 'Оцінити поїздку',
+                    icon: <ExclamationCircleOutlined />,
+                    onClick: () => console.log("Оцінка поїздки"),
+                });
+                break;
+
+            case "Returned":
+                items.push({
+                    key: 'status',
+                    label: 'Квиток повернуто',
+                    disabled: true,
+                });
+                break;
+
+            default:
+                break;
+        }
+
+        return items;
+    }, [ticketStatus]); // Перераховувати, якщо змінився статус
     const passengerName = [t.passenger_name, t.passenger_surname].filter(Boolean).join(" ");
 
     // Колір бордера

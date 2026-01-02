@@ -1,12 +1,12 @@
 ﻿import React from 'react';
-import { Card, Table, Collapse, Badge, Tag, Typography, Space, Empty, Divider, Tabs, Descriptions, Avatar } from 'antd';
+import { Card, Table, Collapse, Badge, Tag, Typography, Space, Empty, Button, Divider, Tabs, Descriptions, Avatar } from 'antd';
 import {
     UserOutlined,
     EnvironmentOutlined,
     InfoCircleOutlined,
     CheckCircleOutlined,
     LoginOutlined,
-    LogoutOutlined
+    LogoutOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons';
 import {
     stationTitleIntoUkrainian
@@ -14,11 +14,14 @@ import {
 import {
     changeCarriageTypeIntoUkrainian
 } from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
+import {
+    changeTicketBookingServerStatusIntoUkrainian
+} from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 
 const { Text } = Typography;
 const { Panel } = Collapse;
 
-const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChange, trainRaceId }) => {
+const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChange, trainRaceId, onVerifyTicket }) => {
     if (!data) return (
         <Card style={{ borderRadius: '12px', textAlign: 'center', padding: '40px' }}>
             <Empty description="Дані про бронювання відсутні" />
@@ -49,7 +52,7 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
         {
             title: 'ПАСАЖИР',
             key: 'passenger',
-            width: 320, // Фіксуємо ширину, щоб прибрати дірку між колонками
+            width: 320,
             render: (record) => (
                 <Space size="middle">
                     <Avatar size="small" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} icon={<UserOutlined />} />
@@ -60,9 +63,22 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
             ),
         },
         {
+            title: !isArrivalMode ? 'СТАНЦІЯ ПОСАДКИ' : 'СТАНЦІЯ ВИСАДКИ',
+            key: 'sub_station',
+            render: (record) => (
+                <Space>
+                    <EnvironmentOutlined style={{ color: '#bfbfbf' }} />
+                    <Text type="secondary" style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                        {!isArrivalMode
+                            ? stationTitleIntoUkrainian(record.passenger_trip_info.trip_starting_station)
+                            : stationTitleIntoUkrainian(record.passenger_trip_info.trip_ending_station)}
+                    </Text>
+                </Space>
+            ),
+        },
+        {
             title: isArrivalMode ? 'СТАНЦІЯ ПОСАДКИ' : 'СТАНЦІЯ ВИСАДКИ',
             key: 'sub_station',
-            // Тут не ставимо фіксовану ширину, щоб вона займала весь вільний простір
             render: (record) => (
                 <Space>
                     <EnvironmentOutlined style={{ color: '#bfbfbf' }} />
@@ -79,15 +95,42 @@ const CarriageAssistantGroupedTicketsPanel = ({ data, isArrivalMode, onModeChang
             key: 'action',
             width: 160,
             align: 'right',
-            render: () => (
-                <Tag
-                    icon={<CheckCircleOutlined />}
-                    color="success"
-                    style={{ borderRadius: '4px', padding: '2px 8px', margin: 0, border: 'none', fontWeight: 600 }}
-                >
-                    ПЕРЕВІРЕНО
-                </Tag>
-            ),
+            render: (record) => {
+                const BookingStatus = record.passenger_trip_info.ticket_status;
+                console.log(BookingStatus);
+                const isActive = BookingStatus === "Booked_And_Active";
+                if (isActive) {
+                    return (
+                        <>
+                            <Button
+                                type="primary"
+                                size = "small"
+                                icon={<ExclamationCircleOutlined/>}
+                                color="success"
+                                onClick={() => onVerifyTicket(record.passenger_trip_info.full_ticket_id)}
+                                style={{
+                                    borderRadius: '4px',
+                                    fontSize: '12px',
+                                    fontWeight: 600
+                                }}
+                            >
+                                Валідувати (Активний)
+                            </Button>
+                        </>
+                    );
+                }
+                return (
+                    <Tag
+                        type="primary"
+                        size="small"
+                        ghost
+                        icon={<CheckCircleOutlined/>}
+                        style={{borderRadius: '4px', fontSize: '12px', fontWeight: 600}}
+                    >
+                        {changeTicketBookingServerStatusIntoUkrainian(BookingStatus)}
+                    </Tag>
+                );
+            }
         }
     ];
 

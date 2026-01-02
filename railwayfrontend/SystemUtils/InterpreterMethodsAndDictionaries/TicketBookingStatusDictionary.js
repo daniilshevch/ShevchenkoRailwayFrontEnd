@@ -9,6 +9,7 @@ const TicketBookingServerStatusOptions = [
     {english: "Booked_And_Active", ukrainian: "ГОТОВИЙ ДО ВИКОРИСТАННЯ"},
     {english: "Booked_And_Used", ukrainian: "В ПРОЦЕСІ ПОЇЗДКИ"},
     {english: "Archieved", ukrainian: "АРХІВНИЙ"},
+    {english: "Archived", ukrainian: "АРХІВНИЙ"},
     {english: "Returned", ukrainian: "ПОВЕРНЕНИЙ"},
 ]
 

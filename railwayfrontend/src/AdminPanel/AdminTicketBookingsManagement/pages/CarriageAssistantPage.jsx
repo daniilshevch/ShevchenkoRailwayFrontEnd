@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { Layout, Spin, Alert, Typography, Space, Button, Card, Radio, Tag } from 'antd';
+import {Layout, Spin, Alert, Typography, Space, Button, Card, Radio, Tag, message} from 'antd';
 import { ArrowLeftOutlined, BorderOutlined, ContainerOutlined } from '@ant-design/icons'; // Виправлено імпорт
 import CarriageAssistantGroupedTicketsPanel from "../components/CarriageAssistantGroupedTicketsPanel.jsx";
 
@@ -8,10 +8,10 @@ const { Content } = Layout;
 const { Title, Text } = Typography;
 
 const CarriageAssistantPage = () => {
-    const { trainRaceId } = useParams(); // Переконайся, що в App.js вказано :trainRaceId
+    const { trainRaceId } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
+    const [messageApi, contextHolder] = message.useMessage();
     const carriagePos = parseInt(searchParams.get('carriage_number') || "1");
 
     const [data, setData] = useState(null);
@@ -62,47 +62,70 @@ const CarriageAssistantPage = () => {
             setLoading(false);
         }
     }, [trainRaceId]);
+    const handleVerifyTicket = useCallback(async (fullTicketId) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`https://localhost:7230/Admin-API/set-ticket-status-as-used/${fullTicketId}`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!response.ok) throw new Error('Не вдалося активувати квиток');
+            messageApi.success('Квиток успішно перевірено');
+            await fetchGroupedData(isArrivalMode, carriagePos);
+        } catch (err) {
+            messageApi.error(err.message);
+        }
+    }, [isArrivalMode, carriagePos, fetchGroupedData]);
 
     useEffect(() => { fetchCarriageList(); }, [fetchCarriageList]);
     useEffect(() => { fetchGroupedData(isArrivalMode, carriagePos); }, [isArrivalMode, carriagePos, fetchGroupedData]);
 
     return (
-        <Layout style={{ padding: '24px', background: '#f0f2f5', minHeight: '100vh' }}>
-            <Content>
-                <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Space size="large">
-                            <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} shape="circle" />
-                            <div>
-                                <Title level={2} style={{ margin: 0 }}>Помічник провідника</Title>
-                                <Text type="secondary">Керування пасажирами вагона</Text>
-                            </div>
-                        </Space>
-                        <Tag color="blue" style={{ fontSize: '14px', padding: '4px 12px' }}>РЕЙС: {trainRaceId}</Tag>
-                    </div>
+        <>
+            {contextHolder}
+            <Layout style={{ padding: '24px', background: '#f0f2f5', minHeight: '100vh' }}>
+                <Content>
+                    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Space size="large">
+                                <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} shape="circle" />
+                                <div>
+                                    <Title level={2} style={{ margin: 0 }}>Помічник провідника</Title>
+                                    <Text type="secondary">Керування пасажирами вагона</Text>
+                                </div>
+                            </Space>
+                            <Tag color="blue" style={{ fontSize: '14px', padding: '4px 12px' }}>РЕЙС: {trainRaceId}</Tag>
+                        </div>
 
-                    <Card size="small" style={{ borderRadius: '12px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-                        <Space direction="vertical" style={{ width: '100%' }}>
-                            <Space><BorderOutlined style={{ color: '#1890ff' }} /><Text strong>Оберіть номер вагона:</Text></Space>
-                            <Radio.Group value={carriagePos} onChange={(e) => setSearchParams({ carriage_number: e.target.value })} buttonStyle="solid" size="large">
-                                {allCarriages.map(c => (
-                                    <Radio.Button key={c.passenger_carriage_id} value={c.position_in_squad} style={{ minWidth: '60px', textAlign: 'center' }}>
-                                        {c.position_in_squad}
-                                    </Radio.Button>
-                                ))}
-                            </Radio.Group>
-                        </Space>
-                    </Card>
+                        <Card size="small" style={{ borderRadius: '12px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                            <Space direction="vertical" style={{ width: '100%' }}>
+                                <Space><BorderOutlined style={{ color: '#1890ff' }} /><Text strong>Оберіть номер вагона:</Text></Space>
+                                <Radio.Group value={carriagePos} onChange={(e) => setSearchParams({ carriage_number: e.target.value })} buttonStyle="solid" size="large">
+                                    {allCarriages.map(c => (
+                                        <Radio.Button key={c.passenger_carriage_id} value={c.position_in_squad} style={{ minWidth: '60px', textAlign: 'center' }}>
+                                            {c.position_in_squad}
+                                        </Radio.Button>
+                                    ))}
+                                </Radio.Group>
+                            </Space>
+                        </Card>
 
-                    {error && <Alert message="Помилка" description={error} type="error" showIcon />}
-                    {loading && !data ? (
-                        <div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" tip="Завантаження..." /></div>
-                    ) : (
-                        <CarriageAssistantGroupedTicketsPanel trainRaceId={trainRaceId} data={data} isArrivalMode={isArrivalMode} onModeChange={setIsArrivalMode} />
-                    )}
-                </Space>
-            </Content>
-        </Layout>
+                        {error && <Alert message="Помилка" description={error} type="error" showIcon />}
+                        {loading && !data ? (
+                            <div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" tip="Завантаження..." /></div>
+                        ) : (
+                            <CarriageAssistantGroupedTicketsPanel
+                                trainRaceId={trainRaceId}
+                                data={data}
+                                isArrivalMode={isArrivalMode}
+                                onModeChange={setIsArrivalMode}
+                                onVerifyTicket = {handleVerifyTicket}
+                            />
+                        )}
+                    </Space>
+                </Content>
+            </Layout>
+        </>
     );
 };
 

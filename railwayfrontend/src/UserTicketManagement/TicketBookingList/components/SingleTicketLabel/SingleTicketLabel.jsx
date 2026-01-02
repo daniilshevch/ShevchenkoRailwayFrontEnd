@@ -88,7 +88,7 @@ export default function SingleTicketLabel({ t, onClick }) {
                             fontSize: "12px",
                             color: styles.color,
                             opacity: 0.9,
-                            maxWidth: "130px"
+                            maxWidth: "150px"
                         }}>
                             <UserOutlined style={{ marginRight: "2px", fontSize: "15px" }} />
                             <span style={{
