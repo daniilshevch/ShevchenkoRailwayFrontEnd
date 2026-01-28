@@ -18,9 +18,7 @@ import {
     CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE,
     REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
-import {
-    EAGER_BOOKINGS_SEARCH_MODE
-} from "../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
+import {trainSearchService} from "../../../TrainRacesInfoSection/services/TrainTripsSearchService.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
@@ -51,20 +49,25 @@ function CarriageListPage()
     const [isLoading, setIsLoading] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    //Універсальна функція оновлення станів з отриманого об'єкта
+    const applyTrainData = useCallback((data) => {
+        setCarriageStats(data.grouped_carriage_statistics_list);
+        setStartingStationDepartureTime(data.trip_starting_station_departure_time);
+        setEndingStationArrivalTime(data.trip_ending_station_arrival_time);
+        setTrainRouteClass(data.train_route_class);
+        setTrainRouteId(data.train_route_id);
+        setTrainStops(data.train_schedule);
+        setFullRouteStartingStationTitle(data.full_route_starting_station_title);
+        setFullRouteEndingStationTitle(data.full_route_ending_station_title);
+        setFullTrainData(data);
+        return data;
+    }, []);
     //Завантаження даних з сервера
     const loadTrainDataFromServer = async (lazy_load_mode = false,  refresh_mode = false) => {
         setIsLoading(true);
         try {
-            const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(train_race_id, start, end));
-            if (!response.ok) {
-                throw new Error("Помилка при оновленні даних");
-            }
-            const newData = await response.json();
-            if(EAGER_BOOKINGS_SEARCH_MODE) {
-                localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
-            }
-            //setCarriageStats(newData.grouped_carriage_statistics_list);
-            applyTrainData(newData);
+            const data = await trainSearchService.LOAD_TRAIN_DATA_FROM_SERVER(train_race_id, start, end);
+            applyTrainData(data);
             setRefreshTrigger(prev => prev + 1);
             if(refresh_mode) {
                 messageApi.success("Дані успішно оновлено");
@@ -80,57 +83,20 @@ function CarriageListPage()
             setIsLoading(false);
         }
     };
-
-    //Універсальна функція оновлення станів з отриманого об'єкта
-    const applyTrainData = useCallback((data) => {
-        setCarriageStats(data.grouped_carriage_statistics_list);
-        setStartingStationDepartureTime(data.trip_starting_station_departure_time);
-        setEndingStationArrivalTime(data.trip_ending_station_arrival_time);
-        setTrainRouteClass(data.train_route_class);
-        setTrainRouteId(data.train_route_id);
-        setTrainStops(data.train_schedule);
-        setFullRouteStartingStationTitle(data.full_route_starting_station_title);
-        setFullRouteEndingStationTitle(data.full_route_ending_station_title);
-        setFullTrainData(data);
-        return data;
-    }, []);
-
-    //Ініціалізація інформації про доступні для покупки місця в поїзді
     useEffect(() => {
-        const trainData = localStorage.getItem("generalTrainRaceData");
-        let useCache = false;
-        if(EAGER_BOOKINGS_SEARCH_MODE && trainData)
+        const {finalTrainData, useCache} = trainSearchService.LOAD_TRAIN_DATA_FROM_CACHE(train_race_id, start, end);
+        if(finalTrainData && useCache)
         {
-            try
-            {
-                const parsedTrainData = JSON.parse(trainData);
-                let isSameTrainRace = String(parsedTrainData.train_race_id) === String(train_race_id);
-                let isSameStartStation = String(parsedTrainData.trip_starting_station_title) === String(start);
-                let isSameEndStation = String(parsedTrainData.trip_ending_station_title) === String(end);
-
-
-                if(isSameTrainRace && isSameStartStation && isSameEndStation)
-                {
-                    applyTrainData(parsedTrainData);
-                    setRefreshTrigger(prev => prev + 1);
-                    useCache = true;
-                }
-                else
-                {
-                    console.warn("Дані в localStorage не відповідають запиту");
-                }
-            }
-            catch(error)
-            {
-                console.error(error.message);
-            }
+            applyTrainData(finalTrainData);
+            setRefreshTrigger(prev => prev + 1);
         }
-        if(!useCache)
+        else
         {
             loadTrainDataFromServer(true, false);
         }
     }, [train_race_id, start, end, applyTrainData]);
-    
+
+
     const initialSelectedSubtypes = useMemo(() => {
         const dict = {};
         const tokens = searchParams.getAll("type");

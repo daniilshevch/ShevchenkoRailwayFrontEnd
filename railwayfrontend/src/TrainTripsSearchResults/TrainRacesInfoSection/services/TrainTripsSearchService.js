@@ -39,18 +39,44 @@ class TrainSearchService {
     {
         return `/${trainRaceId}/${start}/${end}/carriages?type=${type}~${qualityClass}`;
     }
-    async LOAD_TRAIN_DATA_FROM_SERVER(train_race_id, start, end)
+    async LOAD_TRAIN_DATA_FROM_SERVER(trainRaceId, start, end)
     {
-            const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(train_race_id, start, end));
-            if (!response.ok) {
-                throw new Error("Помилка при оновленні даних");
-            }
-            const newData = await response.json();
-            if(EAGER_BOOKINGS_SEARCH_MODE) {
-                localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
-            }
-            return newData;
+        const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(trainRaceId, start, end));
+        if (!response.ok) {
+            throw new Error("Помилка при оновленні даних");
+        }
+        const newData = await response.json();
+        if(EAGER_BOOKINGS_SEARCH_MODE) {
+            localStorage.setItem("generalTrainRaceData", JSON.stringify(newData));
+        }
+        return newData;
     };
+    LOAD_TRAIN_DATA_FROM_CACHE(trainRaceId, start, end)
+    {
+        let finalTrainData = null;
+        const cachedTrainData = localStorage.getItem("generalTrainRaceData");
+        let useCache = false;
+        if(EAGER_BOOKINGS_SEARCH_MODE && cachedTrainData)
+        {
+            try
+            {
+                const parsedTrainData = JSON.parse(cachedTrainData);
+                let isSameTrainRace = String(parsedTrainData.train_race_id) === String(trainRaceId);
+                let isSameStartStation = String(parsedTrainData.trip_starting_station_title) === String(start);
+                let isSameEndStation = String(parsedTrainData.trip_ending_station_title) === String(end);
+                let isMatch = isSameTrainRace && isSameStartStation && isSameEndStation;
+                if(isMatch) {
+                    useCache = true;
+                    finalTrainData = parsedTrainData;
+                }
+            }
+            catch(error)
+            {
+                console.error(error.message);
+            }
+        }
+        return {finalTrainData, useCache};
+    }
 
 }
 export const trainSearchService = new TrainSearchService();
