@@ -1,37 +1,28 @@
 ﻿import React from "react";
-import "./CarriageTypeButton.css"; // Ми оновимо цей CSS
+import "./CarriageTypeButton.css";
 import CarriageQualityClassButton from "../CarriageQualityClassButton/CarriageQualityClassButton.jsx";
 import { useNavigate } from 'react-router-dom';
 import { Card, Typography } from 'antd';
+import {trainSearchService} from "../../../services/TrainTripsSearchService.js";
 import {
-    EAGER_BOOKINGS_SEARCH_MODE
-} from "../../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js"; // 👈 Імпортуємо Card
+    changeCarriageTypeIntoUkrainian
+} from "../../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 
 const { Title, Text } = Typography;
 
-const CARRIAGE_TYPES = {
-    "Platskart": "Плацкарт",
-    "Coupe": "Купе",
-    "SV": "СВ",
-    "Sitting": "Сидячий"
-};
-
-//Refactored
 function CarriageTypeButton({ trainRaceId, startStation, endStation, type, classStats, generalTrainRaceInfo, showWithoutFreePlaces }) {
 
     const navigate = useNavigate();
     const handleCarriageTypeClick = (carriageType, trainRaceId) => {
-        if(EAGER_BOOKINGS_SEARCH_MODE) {
-            localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
-        }
-        navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}`);
+        trainSearchService.SAVE_TRAIN_TRIP_DATA_TO_LOCAL_STORAGE(generalTrainRaceInfo);
+        const url = trainSearchService.GET_CARRIAGE_TYPE_SELECTION_URL(trainRaceId, startStation, endStation, type);
+        navigate(url);
     }
-
 
     const cardTitle = (
         <div className="card-title-header">
             <Title level={5} onClick={() => handleCarriageTypeClick(type, trainRaceId)} className="card-title-clickable">
-                {CARRIAGE_TYPES[type]}
+                {changeCarriageTypeIntoUkrainian(type)}
             </Title>
             <Text type="secondary" className="card-title-places">
                 Місця: {classStats.free_places}/{classStats.total_places}

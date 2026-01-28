@@ -2,26 +2,23 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { message, Spin } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
+import { SyncOutlined, SearchOutlined, InfoCircleOutlined, EyeOutlined } from "@ant-design/icons";
 import TrainTripCard from '../components/TrainTripCard/TrainTripCard.jsx';
 import CompactTripSearchForm from "../components/CompactTripsSearchForm/CompactTripsSearchForm.jsx";
 import DateSlider from "../components/DateSlider/DateSlider.jsx";
+import {trainSearchService} from "../services/TrainTripsSearchService.js";
 import './TrainTripsSearchResultsPage.css';
 import {
-    FETCH_TRAIN_TRIPS_WITH_DETAILED_BOOKINGS_INFO_URL, FETCH_TRAIN_TRIPS_WITHOUT_DETAILED_BOOKINGS_INFO_URL
-} from "../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
-import {
-    EAGER_BOOKINGS_SEARCH_MODE
-} from "../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
-
+    stationTitleIntoUkrainian
+} from "../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 const antIcon = <SyncOutlined spin style={{ fontSize: 40 }} />;
 
-//Refactored
+//January
 function TrainTripsSearchResultsPage() {
     const [messageApi, contextHolder] = message.useMessage();
+
     const { start, end } = useParams();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     const departureDate = searchParams.get("departure-date");
     const [initialDate] = useState(departureDate);
@@ -30,23 +27,15 @@ function TrainTripsSearchResultsPage() {
     const [loading, setLoading] = useState(true);
     const [showTrainsWithoutFreePlaces, setShowTrainsWithoutFreePlaces] = useState(false);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchTrainTripsData = async () => {
             setLoading(true);
             try {
-                let response = null;
-                if(EAGER_BOOKINGS_SEARCH_MODE) {
-                    response = await fetch(FETCH_TRAIN_TRIPS_WITH_DETAILED_BOOKINGS_INFO_URL(start, end, departureDate));
-                }
-                else
-                {
-                    response = await fetch(FETCH_TRAIN_TRIPS_WITHOUT_DETAILED_BOOKINGS_INFO_URL(start, end, departureDate));
-                }
-                if (!response.ok) throw new Error('Fetch failed');
-                const data = await response.json();
+                const data = await trainSearchService.FETCH_TRIPS(start, end, departureDate);
                 setTrainTripsList(data);
-            } catch (error) {
-                console.error(error);
+            } catch {
                 messageApi.error("Не вдалося завантажити дані про курсування поїздів");
             } finally {
                 setLoading(false);
@@ -54,26 +43,51 @@ function TrainTripsSearchResultsPage() {
         };
         fetchTrainTripsData();
     }, [start, end, departureDate, messageApi]);
-
     const handleDateSliderChange = (new_date) => {
         navigate(`/search-trips/${start}/${end}?departure-date=${new_date}`);
     };
-
     const displayedTrains = useMemo(() => {
-        if (!trainTripsList) return [];
-
-        return trainTripsList.filter(train => {
-            if (showTrainsWithoutFreePlaces) return true;
-            const stats = train.grouped_carriage_statistics_list || {};
-            const totalFreePlaces = Object.values(stats).reduce((acc, cat) => acc + (cat.free_places || 0), 0);
-            return totalFreePlaces > 0;
-        });
+        return trainSearchService.FILTER_TRIPS(trainTripsList, showTrainsWithoutFreePlaces);
     }, [trainTripsList, showTrainsWithoutFreePlaces]);
+
+    const renderNoResultsMessage = () => {
+        if (trainTripsList.length === 0) {
+            return (
+                <div className="no-results-minimal">
+                    <SearchOutlined className="minimal-icon" />
+                    <h3 className="minimal-title">Поїздів не знайдено</h3>
+                    <p className="minimal-text">
+                        За напрямком <strong>{stationTitleIntoUkrainian(start)} — {stationTitleIntoUkrainian(end)}</strong> на даний момент
+                        не призначено поїздів на дату {dayjs(departureDate).format('YYYY-MM-DD')}. Слідкуйте за оголошеннями про відкриття квитків
+                        або скористайтесь альтернативними маршрутами
+                    </p>
+                </div>
+            );
+        }
+
+        if (displayedTrains.length === 0 && !showTrainsWithoutFreePlaces) {
+            return (
+                <div className="no-results-minimal">
+                    <InfoCircleOutlined className="minimal-icon warning" />
+                    <h3 className="minimal-title">Всі квитки розпродані</h3>
+                    <p className="minimal-text">За напрямком <strong>{stationTitleIntoUkrainian(start)} — {stationTitleIntoUkrainian(end)}</strong> в призначених поїздах
+                        на даний момент немає вільних місць на дату {dayjs(departureDate).format('YYYY-MM-DD')} , оскільки всі наявні квитки були розкуплені.
+                        Для перегляду призначених рейсів скористайтесь фільтром "Без вільних місць"
+                    </p>
+                    <div className="minimal-actions">
+                        <button className="text-action-btn primary" onClick={() => setShowTrainsWithoutFreePlaces(true)}>
+                            <EyeOutlined /> Рейси без вільних місць
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    }
 
     return (
         <div className="train-trips-page">
             {contextHolder}
-
             <section className="search-form-wrapper">
                 <CompactTripSearchForm
                     compact
@@ -81,9 +95,9 @@ function TrainTripsSearchResultsPage() {
                     initialEndStation={end}
                     initialTripDate={departureDate}
                     onShowTrainsWithoutFreePlacesChange={setShowTrainsWithoutFreePlaces}
+                    showTrainsWithoutFreePlaces={showTrainsWithoutFreePlaces}
                 />
             </section>
-
             <section className="date-slider">
                 <DateSlider
                     start={dayjs(initialDate)}
@@ -91,10 +105,8 @@ function TrainTripsSearchResultsPage() {
                     onChange={handleDateSliderChange}
                 />
             </section>
-
             <main className="train-cards-container">
                 <h2 className="train-cards-container-header">Знайдені поїзди</h2>
-
                 {loading ? (
                     <div className="loader-center">
                         <Spin indicator={antIcon} />
@@ -107,14 +119,7 @@ function TrainTripsSearchResultsPage() {
                             showWithoutFreePlaces={showTrainsWithoutFreePlaces}
                         />
                     ))
-                ) : (
-                    <div className="no-results-message">
-                        <h3 className="no-available-trains-info">Не вдалося знайти доступні місця</h3>
-                        <p className="no-available-trains-details">
-                            <strong>Можливі причини</strong>: поїзди не курсують, продаж ще не відкрито або всі місця розкуплені.
-                        </p>
-                    </div>
-                )}
+                ) : renderNoResultsMessage()}
             </main>
         </div>
     );

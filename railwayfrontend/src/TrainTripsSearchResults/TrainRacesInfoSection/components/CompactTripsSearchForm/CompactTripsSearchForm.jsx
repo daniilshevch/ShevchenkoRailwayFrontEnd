@@ -14,6 +14,7 @@ const CompactTripSearchForm = ({
                                    initialStartStation = "",
                                    initialEndStation = "",
                                    initialTripDate = "",
+                                   showTrainsWithoutFreePlaces = false,
                                    onShowTrainsWithoutFreePlacesChange
 }) => {
     const navigate = useNavigate();
@@ -24,7 +25,6 @@ const CompactTripSearchForm = ({
     const endRef = useRef(null);
     const dateRef = useRef(null);
     const [dateOpen, setDateOpen] = useState(false);
-    const [showTrainsWithoutFreePlaces, setShowTrainsWithoutFreePlaces] = useState(false);
 
     useEffect(() => {
         form.setFieldsValue({
@@ -41,7 +41,6 @@ const CompactTripSearchForm = ({
     };
     const handleShowTrainsWithoutFreePlacesChange = (e) => {
         const checked = e.target.checked;
-        setShowTrainsWithoutFreePlaces(checked);
         if (onShowTrainsWithoutFreePlacesChange) {
             onShowTrainsWithoutFreePlacesChange(checked);
         }
@@ -85,8 +84,6 @@ const CompactTripSearchForm = ({
                             date: initialTripDate ? dayjs(initialTripDate) : null
                         }}
                     >
-                        {/* ... (Інші Form.Item залишаються без змін) ... */}
-
                         <Form.Item
                             name="startStationUkrainian"
                             rules={[{ required: true, message: 'Вкажіть звідки' }]}

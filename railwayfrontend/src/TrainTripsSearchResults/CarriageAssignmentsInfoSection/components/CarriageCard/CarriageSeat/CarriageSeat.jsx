@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './CarriageSeat.css';
+import {Modal, Button} from 'antd';
 
 function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, carriageNumber, onClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart})
 {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     //ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА!
     let ticketInCart = null;
     let ticketStatus = null;

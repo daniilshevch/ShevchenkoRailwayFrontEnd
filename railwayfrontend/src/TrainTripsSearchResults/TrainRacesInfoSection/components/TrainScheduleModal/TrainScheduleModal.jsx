@@ -3,6 +3,7 @@ import { Row, Col, Modal, Timeline, Typography } from 'antd';
 import { stationTitleIntoUkrainian } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import './TrainScheduleModal.css';
 
+//January
 const { Text } = Typography;
 const defineTripStopType = (train_stop) => {
     if(train_stop.is_final_trip_stop)

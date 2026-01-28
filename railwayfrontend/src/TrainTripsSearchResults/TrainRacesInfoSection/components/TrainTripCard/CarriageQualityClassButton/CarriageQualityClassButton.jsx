@@ -1,12 +1,10 @@
 ﻿import React from 'react';
-import "./CarriageQualityClassButton.css"; // Ми оновимо цей CSS
+import "./CarriageQualityClassButton.css";
 import { useNavigate } from 'react-router-dom';
 import { Tag } from 'antd';
-import {
-    EAGER_BOOKINGS_SEARCH_MODE
-} from "../../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js"; // 👈 Імпортуємо Tag
+import {trainSearchService} from "../../../services/TrainTripsSearchService.js";
 
-//Refactored
+//January
 function CarriageQualityClassButton({ trainRaceId, startStation, endStation, carriageType, qualityClass, generalTrainRaceInfo, data, showWithoutFreePlaces }) {
     const navigate = useNavigate();
     if(showWithoutFreePlaces === false && data.free_places === 0)
@@ -14,12 +12,16 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
         return null;
     }
     const handleCarriageTypeAndQualityClassClick = (carriageType, qualityClass, trainRaceId) => {
-        if(EAGER_BOOKINGS_SEARCH_MODE) {
-            localStorage.setItem("generalTrainRaceData", JSON.stringify(generalTrainRaceInfo));
-        }
-        navigate(`/${trainRaceId}/${startStation}/${endStation}/carriages?type=${carriageType}~${qualityClass}`);
+        trainSearchService.SAVE_TRAIN_TRIP_DATA_TO_LOCAL_STORAGE(generalTrainRaceInfo);
+        const url = trainSearchService.GET_CARRIAGE_TYPE_WITH_QUALITY_CLASS_SELECTION_URL(
+            trainRaceId,
+            startStation,
+            endStation,
+            carriageType,
+            qualityClass
+        );
+        navigate(url);
     }
-
     const getColorClass = (qualityClass) => {
         if(data.free_places === 0)
         {
@@ -32,7 +34,6 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
             default: return "quality-tag-default";
         }
     };
-
     return (
         <Tag
             className={`quality-class-tag ${getColorClass(qualityClass)}`}

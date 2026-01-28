@@ -5,8 +5,6 @@ import {message, Spin} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer/UserPotentialTicketCartDrawer.jsx";
-import CarriageTypeAndQualityFilter
-    from "../../components/CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
 import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
 import CarriageFilteringHeader from "../../components/CarriageFilteringHeader/CarriageFilteringHeader.jsx";
 import TrainRaceInfoHeader from "../../components/TrainRaceInfoHeader/TrainRaceInfoHeader.jsx";
@@ -23,7 +21,6 @@ import {
 import {
     EAGER_BOOKINGS_SEARCH_MODE
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
-import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {

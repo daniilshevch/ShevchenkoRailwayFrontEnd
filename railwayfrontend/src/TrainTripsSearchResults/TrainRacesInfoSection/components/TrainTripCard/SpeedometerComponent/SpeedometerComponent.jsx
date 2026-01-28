@@ -1,12 +1,19 @@
 ﻿import ReactSpeedometer from "react-d3-speedometer";
 import React from "react";
-
+import {Tooltip} from 'antd';
+//January
 const SpeedometerComponent = ({speed}) => {
     if(speed > 140)
     {
         speed = 140;
     }
     return (
+        <Tooltip
+            title={`Поїзд розвиває середню швидкістю ${Math.round(speed)} км/год`}
+            placement="top"
+            mouseEnterDelay={0.1}
+            overlayStyle={{ maxWidth: '350px' }}
+        >
         <div style = {{width: 120, height: 70, overflow: "hidden"}}>
             <div style={{ transform: "scale(0.4)", transformOrigin: "top left" }}>
             <ReactSpeedometer
@@ -14,9 +21,7 @@ const SpeedometerComponent = ({speed}) => {
                 value={speed}
                 needleColor="red"
                 segments={14}
-                //width={150}
-                // height={80}
-                currentValueText=""
+                currentValueText=" "
                 segmentColors={[
                     "#000000",
                     "#7e1b0a",
@@ -36,6 +41,7 @@ const SpeedometerComponent = ({speed}) => {
             />
             </div>
         </div>
+        </Tooltip>
 );
 }
 export default SpeedometerComponent;
