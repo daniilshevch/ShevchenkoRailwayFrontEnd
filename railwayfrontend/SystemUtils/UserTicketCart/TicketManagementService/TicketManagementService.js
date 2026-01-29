@@ -1,5 +1,8 @@
-﻿class TicketManagementService {
+﻿import {
+    CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE
+} from "../../ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 
+class TicketManagementService {
     GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch) {
         try {
             const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
@@ -53,7 +56,7 @@
             ticket.trip_ending_station === trip_ending_station
         );
     }
-    CREATE_SELECTED_YET_NOT_RESERVED_TICKET_IN_CART(data)
+    ALLOCATE_SELECTED_YET_NOT_RESERVED_TICKET_FOR_CART(data)
     {
         const potentialTicket = {
             train_race_id: data.train_race_id,
@@ -87,6 +90,54 @@
     REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
     {
         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+    }
+    async CANCEL_TEMPORARY_TICKET_RESERVATION_ON_SERVER(ticket)
+    {
+        const token = localStorage.getItem("token");
+        //potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+        const ticket_info = {
+            id: ticket.id,
+            full_ticket_id: ticket.full_ticket_id,
+            user_id: ticket.user_id,
+            train_route_on_date_id: ticket.train_race_id,
+            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+            passenger_carriage_id: ticket.passenger_carriage_id,
+            starting_station_title: ticket.trip_starting_station,
+            ending_station_title: ticket.trip_ending_station,
+            place_in_carriage: ticket.place_in_carriage,
+            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+            booking_initialization_time: ticket.booking_initialization_time,
+            booking_expiration_time: ticket.booking_expiration_time
+        };
+        const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(ticket_info)
+        });
+        if (!response.ok)
+        {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || "Не вдалося скасувати бронювання на сервері");
+        }
+    }
+    async REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(potentialTicket, potentialTicketCartDispatch, messageApi)
+    {
+        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+        if(potentialTicket.ticket_status === "RESERVED")
+        {
+            try
+            {
+                await this.CANCEL_TEMPORARY_TICKET_RESERVATION_ON_SERVER(potentialTicket);
+                messageApi.info(`Ви скасували тимчасову резервацію для місця ${potentialTicket.place_in_carriage}`);
+            }
+            catch(error)
+            {
+                console.error("Помилка скасування:", error);
+            }
+        }
     }
 }
 export const ticketManagementService = new TicketManagementService();

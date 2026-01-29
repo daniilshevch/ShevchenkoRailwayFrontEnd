@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useReducer, useState, useMemo, useCallback    } from 'react';
+﻿import React, {useEffect, useReducer, useState, useMemo, useCallback} from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CarriageListLayout from '../../components/CarriageListLayout/CarriageListLayout.jsx';
 import {message, Spin} from 'antd';
@@ -14,9 +14,6 @@ import TrainScheduleModal from "../../../TrainRacesInfoSection/components/TrainS
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
-import {
-    CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE,
-} from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 import {trainSearchService} from "../../../TrainRacesInfoSection/services/TrainTripsSearchService.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 import {
@@ -175,7 +172,7 @@ function CarriageListPage()
     //Обробка натиснення на місце в вагоні
     const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) =>
     {
-        const potentialTicket = ticketManagementService.CREATE_SELECTED_YET_NOT_RESERVED_TICKET_IN_CART({
+        const potentialTicket = ticketManagementService.ALLOCATE_SELECTED_YET_NOT_RESERVED_TICKET_FOR_CART({
             train_race_id,
             trainRouteClass,
             carriageNumber,
@@ -199,57 +196,10 @@ function CarriageListPage()
             ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
         }
     }
-
-    async function cancelTicketReservation(ticket)
-    {
-        const token = localStorage.getItem("token");
-        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
-        const ticket_info = {
-            id: ticket.id,
-            full_ticket_id: ticket.full_ticket_id,
-            user_id: ticket.user_id,
-            train_route_on_date_id: ticket.train_race_id,
-            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-            passenger_carriage_id: ticket.passenger_carriage_id,
-            starting_station_title: ticket.trip_starting_station,
-            ending_station_title: ticket.trip_ending_station,
-            place_in_carriage: ticket.place_in_carriage,
-            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
-            booking_initialization_time: ticket.booking_initialization_time,
-            booking_expiration_time: ticket.booking_expiration_time
-        };
-        const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(ticket_info)
-        });
-        if (!response.ok)
-        {
-            try {
-                const errorData = await response.json();
-                console.error("Докладна помилка (JSON):", errorData);
-                // Наприклад, якщо сервер шле { message: "Текст помилки" }
-                alert(errorData.message || "Сталася помилка");
-            } catch (e) {
-                // Якщо це не JSON, спробуємо просто як текст
-                const errorText = await response.text();
-                console.error("Докладна помилка (Text):", errorText);
-            }
-            console.log(response);
-        }
-    }
+    //Прибирання квитка з кошика з скасуванням тимчасової резервації на сервері, якщо вона була розпочата
     const removePotentialTicketFromCart = (potentialTicket) =>
     {
-        console.log("REMOVE OF TEMPORARY TICKET BOOKING CANCELLATION");
-        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
-        if(potentialTicket.ticket_status === "RESERVED")
-        {
-            console.log("RESERVED section");
-            cancelTicketReservation(potentialTicket);
-        }
+        ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(potentialTicket, potentialTicketCartDispatch, messageApi)
     }
 
 
@@ -455,5 +405,57 @@ export default CarriageListPage;
 //     else
 //     {
 //         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+//     }
+// }
+
+// async function cancelTicketReservation(ticket)
+// {
+//     const token = localStorage.getItem("token");
+//     potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+//     const ticket_info = {
+//         id: ticket.id,
+//         full_ticket_id: ticket.full_ticket_id,
+//         user_id: ticket.user_id,
+//         train_route_on_date_id: ticket.train_race_id,
+//         passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+//         passenger_carriage_id: ticket.passenger_carriage_id,
+//         starting_station_title: ticket.trip_starting_station,
+//         ending_station_title: ticket.trip_ending_station,
+//         place_in_carriage: ticket.place_in_carriage,
+//         ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+//         booking_initialization_time: ticket.booking_initialization_time,
+//         booking_expiration_time: ticket.booking_expiration_time
+//     };
+//     const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
+//         method: 'DELETE',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify(ticket_info)
+//     });
+//     if (!response.ok)
+//     {
+//         try {
+//             const errorData = await response.json();
+//             console.error("Докладна помилка (JSON):", errorData);
+//             // Наприклад, якщо сервер шле { message: "Текст помилки" }
+//             alert(errorData.message || "Сталася помилка");
+//         } catch (e) {
+//             // Якщо це не JSON, спробуємо просто як текст
+//             const errorText = await response.text();
+//             console.error("Докладна помилка (Text):", errorText);
+//         }
+//         console.log(response);
+//     }
+// }
+// const removePotentialTicketFromCart = (potentialTicket) =>
+// {
+//     console.log("REMOVE OF TEMPORARY TICKET BOOKING CANCELLATION");
+//     potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+//     if(potentialTicket.ticket_status === "RESERVED")
+//     {
+//         console.log("RESERVED section");
+//         cancelTicketReservation(potentialTicket);
 //     }
 // }
