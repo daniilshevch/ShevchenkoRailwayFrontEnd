@@ -16,17 +16,12 @@ import {
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import {
     CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE,
-    REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 import {trainSearchService} from "../../../TrainRacesInfoSection/services/TrainTripsSearchService.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 import {
     ticketManagementService
 } from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
-const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
-{
-   return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
-};
 
 function CarriageListPage()
 {
@@ -141,68 +136,70 @@ function CarriageListPage()
 
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
+    //Завантаження актуального кошика з LocalStorage
     useEffect(() => {
         ticketManagementService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch)
     }, []);
+    //Синхронізація LocalStorage з актуальним кошиком
     useEffect(() => {
         ticketManagementService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState)
     }, [potentialTicketCartState.potentialTicketsList])
-
+    //Вертає список зайнятих місць в спеціальному форматі
     const selectedPotentialTicketSeats = useMemo(() => {
-        return new Set(
-        potentialTicketCartState.potentialTicketsList.map(ticket => seatKeyCodeForCart(
-            ticket.train_race_id,
-            ticket.carriage_position_in_squad,
-            ticket.place_in_carriage,
-            ticket.trip_starting_station,
-            ticket.trip_ending_station)));
-},[potentialTicketCartState.potentialTicketsList]);
+        return ticketManagementService.GET_SELECTED_POTENTIAL_TICKET_SEATS(potentialTicketCartState)
+    }, [potentialTicketCartState.potentialTicketsList])
+    //Перевіряє, чи певне місце заброньоване(перевірка на місце, рейс, поїздку між конкретними станціями)
     const isSeatSelectedInPotentialTicketCart = useCallback(
         (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
         {
-            return selectedPotentialTicketSeats.has(seatKeyCodeForCart(train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station));
+            return ticketManagementService.IS_SEAT_SELECTED_IN_POTENTIAL_TICKET_CART(
+                selectedPotentialTicketSeats,
+                train_race_id,
+                carriage_position_in_squad,
+                place_in_carriage,
+                trip_starting_station,
+                trip_ending_station)
         }, [train_race_id, selectedPotentialTicketSeats]);
-    const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) => {
-        return potentialTicketCartState.potentialTicketsList.find(t =>
-            t.train_race_id === train_race_id &&
-            t.carriage_position_in_squad === carriage_position_in_squad &&
-            t.place_in_carriage === place_in_carriage &&
-            t.trip_starting_station === trip_starting_station &&
-            t.trip_ending_station === trip_ending_station
+    //Отримання конкретного квитка з кошику
+    const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
+    {
+        return ticketManagementService.GET_TICKET_FROM_CART(
+            potentialTicketCartState,
+            train_race_id,
+            carriage_position_in_squad,
+            place_in_carriage,
+            trip_starting_station,
+            trip_ending_station
         );
-    };
-    const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) => {
-        const potentialTicket = {
-            train_race_id: train_race_id,
-            train_route_quality_class: trainRouteClass,
-            carriage_position_in_squad: carriageNumber,
-            carriage_type: carriageType,
-            carriage_quality_class: carriageQualityClass,
-            place_in_carriage: seatNumber,
-            trip_starting_station: startStation,
-            trip_ending_station: endStation,
-            trip_starting_station_departure_time: startingStationDepartureTime,
-            trip_ending_station_arrival_time: endingStationArrivalTime,
-            full_route_starting_station: fullRouteStartingStationTitle,
-            full_route_ending_station: fullRouteEndingStationTitle,
-            price: price ?? 0,
-            ticket_status: "SELECTED_YET_NOT_RESERVED"
-        };
-        if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
-            if(potentialTicketCartState.potentialTicketsList.length < 4)
-            {
-                potentialTicketCartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
-            }
-            else
-            {
-                messageApi.info("Максимальна кількість потенційних квитків в кошику - 4")
-            }
+    }
+    //Обробка натиснення на місце в вагоні
+    const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) =>
+    {
+        const potentialTicket = ticketManagementService.CREATE_SELECTED_YET_NOT_RESERVED_TICKET_IN_CART({
+            train_race_id,
+            trainRouteClass,
+            carriageNumber,
+            carriageType,
+            carriageQualityClass,
+            seatNumber,
+            startStation,
+            endStation,
+            startingStationDepartureTime,
+            endingStationArrivalTime,
+            fullRouteStartingStationTitle,
+            fullRouteEndingStationTitle,
+            price
+        });
+        if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation))
+        {
+            ticketManagementService.ADD_POTENTIAL_NOT_RESERVED_TICKET_TO_CART(potentialTicketCartState, potentialTicketCartDispatch, potentialTicket, messageApi);
         }
         else
         {
-            potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+            ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
         }
     }
+
     async function cancelTicketReservation(ticket)
     {
         const token = localStorage.getItem("token");
@@ -385,3 +382,78 @@ function CarriageListPage()
 
 }
 export default CarriageListPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const selectedPotentialTicketSeats = useMemo(() => {
+//     return new Set(
+//     potentialTicketCartState.potentialTicketsList.map(ticket => seatKeyCodeForCart(
+//         ticket.train_race_id,
+//         ticket.carriage_position_in_squad,
+//         ticket.place_in_carriage,
+//         ticket.trip_starting_station,
+//         ticket.trip_ending_station)));
+// },[potentialTicketCartState.potentialTicketsList]);
+
+// const isSeatSelectedInPotentialTicketCart = useCallback(
+//     (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
+//     {
+//         return selectedPotentialTicketSeats.has(seatKeyCodeForCart(train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station));
+//     }, [train_race_id, selectedPotentialTicketSeats]);
+
+// const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) => {
+//     return potentialTicketCartState.potentialTicketsList.find(t =>
+//         t.train_race_id === train_race_id &&
+//         t.carriage_position_in_squad === carriage_position_in_squad &&
+//         t.place_in_carriage === place_in_carriage &&
+//         t.trip_starting_station === trip_starting_station &&
+//         t.trip_ending_station === trip_ending_station
+//     );
+// };
+
+// const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) => {
+//     const potentialTicket = {
+//         train_race_id: train_race_id,
+//         train_route_quality_class: trainRouteClass,
+//         carriage_position_in_squad: carriageNumber,
+//         carriage_type: carriageType,
+//         carriage_quality_class: carriageQualityClass,
+//         place_in_carriage: seatNumber,
+//         trip_starting_station: startStation,
+//         trip_ending_station: endStation,
+//         trip_starting_station_departure_time: startingStationDepartureTime,
+//         trip_ending_station_arrival_time: endingStationArrivalTime,
+//         full_route_starting_station: fullRouteStartingStationTitle,
+//         full_route_ending_station: fullRouteEndingStationTitle,
+//         price: price ?? 0,
+//         ticket_status: "SELECTED_YET_NOT_RESERVED"
+//     };
+//     if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
+//         if(potentialTicketCartState.potentialTicketsList.length < 4)
+//         {
+//             potentialTicketCartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
+//         }
+//         else
+//         {
+//             messageApi.info("Максимальна кількість потенційних квитків в кошику - 4")
+//         }
+//     }
+//     else
+//     {
+//         potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: potentialTicket});
+//     }
+// }
