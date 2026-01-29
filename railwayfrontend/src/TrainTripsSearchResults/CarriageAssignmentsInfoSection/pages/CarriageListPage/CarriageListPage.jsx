@@ -20,6 +20,9 @@ import {
 } from "../../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 import {trainSearchService} from "../../../TrainRacesInfoSection/services/TrainTripsSearchService.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
+import {
+    ticketManagementService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
 const seatKeyCodeForCart = (train_race_id, carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
 {
    return `${train_race_id}|${carriage_position_in_squad}|${place_in_carriage}|${trip_starting_station}|${trip_ending_station}`;
@@ -83,6 +86,8 @@ function CarriageListPage()
             setIsLoading(false);
         }
     };
+    //Завантаження даних про поїзд з кешу або серверу(в залежності від налаштувань використання кешу та актуальності інформації
+    //в кеші, якщо він використовується)
     useEffect(() => {
         const {finalTrainData, useCache} = trainSearchService.LOAD_TRAIN_DATA_FROM_CACHE(train_race_id, start, end);
         if(finalTrainData && useCache)
@@ -137,31 +142,11 @@ function CarriageListPage()
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
     useEffect(() => {
-        try
-        {
-            const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
-            if (potentialTicketsCart)
-            {
-                potentialTicketCartDispatch({type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: JSON.parse(potentialTicketsCart)});
-            }
-        }
-        catch(error)
-        {
-            console.error(error);
-        }
+        ticketManagementService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch)
     }, []);
     useEffect(() => {
-        try
-        {
-            localStorage.setItem("potentialTicketsCart", JSON.stringify({
-                potentialTicketsList: potentialTicketCartState.potentialTicketsList}));
-            window.dispatchEvent(new Event('cartUpdated'));
-        }
-        catch(error)
-        {
-            console.error(error);
-        }
-    }, [potentialTicketCartState.potentialTicketsList]);
+        ticketManagementService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState)
+    }, [potentialTicketCartState.potentialTicketsList])
 
     const selectedPotentialTicketSeats = useMemo(() => {
         return new Set(

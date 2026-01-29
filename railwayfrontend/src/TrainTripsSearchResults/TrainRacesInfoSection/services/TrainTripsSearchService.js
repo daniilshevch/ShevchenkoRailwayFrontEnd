@@ -6,6 +6,7 @@ import {
     EAGER_BOOKINGS_SEARCH_MODE
 } from "../../../../SystemUtils/ServerConnectionConfiguration/ProgramFunctioningConfiguration/ProgramFunctioningConfiguration.js";
 class TrainSearchService {
+    //Пошук доступних поїздів(+доступних місць) між станціями в дату
     async FETCH_TRIPS(startStation, endStation, departureDate) {
         const url = EAGER_BOOKINGS_SEARCH_MODE
             ? FETCH_TRAIN_TRIPS_WITH_DETAILED_BOOKINGS_INFO_URL(startStation, endStation, departureDate)
@@ -15,6 +16,7 @@ class TrainSearchService {
         if (!response.ok) throw new Error('Network response was not ok');
         return await response.json();
     }
+    //Фільтрація поїздів в залежності від вільних місць
     FILTER_TRIPS(trainTripsList, showTrainsWithoutFreePlaces)
     {
         if (!trainTripsList) return [];
@@ -25,20 +27,24 @@ class TrainSearchService {
             return totalFreePlaces > 0;
         });
     }
+    //Збереження даних поїзда в LocalStorage
     SAVE_TRAIN_TRIP_DATA_TO_LOCAL_STORAGE(trainRaceInfo)
     {
         if (EAGER_BOOKINGS_SEARCH_MODE) {
             localStorage.setItem("generalTrainRaceData", JSON.stringify(trainRaceInfo));
         }
     }
+    //Отримання URL для перенаправлення на сторінку з вагонами певного типу
     GET_CARRIAGE_TYPE_SELECTION_URL(trainRaceId, start, end, type)
     {
         return `/${trainRaceId}/${start}/${end}/carriages?type=${type}`;
     }
+    //Отримання URL для перенаправлення на сторінку з вагонами певного типу та класу
     GET_CARRIAGE_TYPE_WITH_QUALITY_CLASS_SELECTION_URL(trainRaceId, start, end, type, qualityClass)
     {
         return `/${trainRaceId}/${start}/${end}/carriages?type=${type}~${qualityClass}`;
     }
+    //Завантаження даних по конкретному поїзду з сервера
     async LOAD_TRAIN_DATA_FROM_SERVER(trainRaceId, start, end)
     {
         const response = await fetch(REFRESH_TRAIN_TRIP_WITH_BOOKINGS_INFO_DATA_URL(trainRaceId, start, end));
@@ -51,6 +57,8 @@ class TrainSearchService {
         }
         return newData;
     };
+    //Завантаження даних по конкретному поїзду з LocalStorage. Якщо таких даних там немає(LocalStorage порожній
+    //або там дані про інший поїзд), то вертається null
     LOAD_TRAIN_DATA_FROM_CACHE(trainRaceId, start, end)
     {
         let finalTrainData = null;
@@ -77,6 +85,5 @@ class TrainSearchService {
         }
         return {finalTrainData, useCache};
     }
-
 }
 export const trainSearchService = new TrainSearchService();
