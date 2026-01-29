@@ -5,7 +5,6 @@ import {message, Spin} from 'antd';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer/UserPotentialTicketCartDrawer.jsx";
-import { divideTypeAndQuality } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TypeAndQualityDivider.js";
 import CarriageFilteringHeader from "../../components/CarriageFilteringHeader/CarriageFilteringHeader.jsx";
 import TrainRaceInfoHeader from "../../components/TrainRaceInfoHeader/TrainRaceInfoHeader.jsx";
 import changeTrainRouteIdIntoUkrainian
@@ -19,6 +18,7 @@ import CarriageListLegend from "../../components/CarriageListLegend/CarriageList
 import {
     ticketManagementService
 } from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
+import {carriageDisplayService} from "../../services/CarriageDisplayService.js";
 
 function CarriageListPage()
 {
@@ -94,43 +94,7 @@ function CarriageListPage()
     }, [train_race_id, start, end, applyTrainData]);
 
 
-    const initialSelectedSubtypes = useMemo(() => {
-        const dict = {};
-        const tokens = searchParams.getAll("type");
-        for(const token of tokens)
-        {
-            const {type, qualities} = divideTypeAndQuality(token);
-            if(qualities.length > 0)
-            {
-                dict[type] = Array.from(new Set(qualities));
-            }
-            else
-            {
-                dict[type] = ["All"]
-            }
-        }
-        return dict;
-    }, [searchParams]);
-    const initialSelectedTypes = useMemo(() => Object.keys(initialSelectedSubtypes), [initialSelectedSubtypes]);
-    const handleFilterChange = ({ queryParams, showCarriagesWithoutFreePlaces: showFull }) => {
-        if(showFull !== undefined)
-        {
-            setShowCarriagesWithoutFreePlaces(showFull)
-        }
-        const current = searchParams.getAll("type");
-        const same =
-            current.length === queryParams.length &&
-            current.every((v, i) => v === queryParams[i]);
-        if (same) return;
-
-        const next = new URLSearchParams(searchParams);
-        next.delete("type");
-        for (const t of queryParams) next.append("type", t);
-        setSearchParams(next, { replace: true });
-    };
-
-
-
+    //Частина, пов'язана з кошиком квитків
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
     //Завантаження актуального кошика з LocalStorage
@@ -202,76 +166,36 @@ function CarriageListPage()
         ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(potentialTicket, potentialTicketCartDispatch, messageApi)
     }
 
-
-
+    const initialSelectedSubtypes = useMemo(() =>
+        carriageDisplayService.PARSE_INITIAL_SELECTED_SUBTYPES(searchParams), [searchParams]);
+    const initialSelectedTypes = useMemo(() => Object.keys(initialSelectedSubtypes), [initialSelectedSubtypes]);
+    const handleFilterChange = ({ queryParams, showCarriagesWithoutFreePlaces: showFull }) => {
+        if(showFull !== undefined)
+        {
+            setShowCarriagesWithoutFreePlaces(showFull)
+        }
+        const current = searchParams.getAll("type");
+        const same =
+            current.length === queryParams.length &&
+            current.every((v, i) => v === queryParams[i]);
+        if (same) return;
+        const next = new URLSearchParams(searchParams);
+        next.delete("type");
+        for (const t of queryParams) next.append("type", t);
+        setSearchParams(next, { replace: true });
+    };
 
     useEffect(() => {
-        const typeParams = searchParams.getAll("type");
-        const trainDataObject = fullTrainData;
-        if (trainDataObject)
-        {
-            try
-            {
-                const carriage_statistics_list = trainDataObject.carriage_statistics_list;
-                const groupedCarriageStatisticsList = trainDataObject.grouped_carriage_statistics_list;
-                let carriagesList = [];
-                if (typeParams.length > 0) {
-                    for (const type of typeParams) {
-                        const typeAndQuality = divideTypeAndQuality(type);
-                        const _type = typeAndQuality.type;
-                        const qualities = typeAndQuality.qualities;
-                        const typeGroup = groupedCarriageStatisticsList?.[_type];
-                        console.log(typeGroup);
-                        console.log("----");
-                        console.log(qualities);
-                        console.log("XXXXXXXXXXXX");
-                        if (!typeGroup) {
-                            continue;
-                        }
-                        const qualityClassDictionary = typeGroup.carriage_quality_class_dictionary;
-                        let selectedQualities = undefined;
-                        if (qualities.length > 0) {
-                            selectedQualities = qualities.filter(quality => qualityClassDictionary[quality] != undefined);
-                        }
-                        else {
-                            selectedQualities = Object.keys(qualityClassDictionary);
-                        }
-                        console.log("--------");
-                        console.log(selectedQualities);
-                        for (const quality of selectedQualities) {
-                            const qualityClassData = qualityClassDictionary[quality];
-                            if (!qualityClassData) {
-                                continue;
-                            }
-                            carriagesList.push(...(qualityClassData.carriage_statistics_list || []));
+        const typeParams =  searchParams.getAll("type");
+        const filteredCarriagesList = carriageDisplayService.FILTER_CARRIAGES_BY_TYPE_AND_QUALITY(fullTrainData, typeParams);
+        setCarriages(filteredCarriagesList);
+    }, [searchParams, fullTrainData, refreshTrigger]);
 
-                        }
-                        carriagesList.sort((a, b) => a.carriage_position_in_squad - b.carriage_position_in_squad);
-                    }
-                }
-                else
-                {
-                    carriagesList = carriage_statistics_list;
-                }
-                console.log(carriagesList);
-                setCarriages(carriagesList);
-            }
-            catch (error)
-            {
-                console.error(error);
-            }
-        }
-    }, [searchParams, refreshTrigger]);
-    const displayedCarriages = useMemo(() => {
-        if (!carriages) return null;
 
-        return carriages.filter(carriage => {
-            if (showCarriagesWithoutFreePlaces) {
-                return true;
-            }
-            return carriage.free_places > 0;
-        });
-    }, [carriages, showCarriagesWithoutFreePlaces]);
+    const displayedCarriages = useMemo(() =>
+        carriageDisplayService.GET_FINAL_DISPLAYED_CARRIAGES(carriages, showCarriagesWithoutFreePlaces),
+        [carriages, showCarriagesWithoutFreePlaces]);
+
     return (
         <div className = "main-layout-container">
             {contextHolder}
@@ -308,7 +232,7 @@ function CarriageListPage()
                             isSeatSelectedInPotentialTicketCart = {isSeatSelectedInPotentialTicketCart}
                             getTicketFromCart = {getTicketFromCart}
                         />
-                        <CarriageListLegend></CarriageListLegend>
+                        <CarriageListLegend/>
                         <UserPotentialTicketCartDrawer
                             cartState={potentialTicketCartState}
                             removePotentialTicketFromCart={removePotentialTicketFromCart}
@@ -459,3 +383,89 @@ export default CarriageListPage;
 //         cancelTicketReservation(potentialTicket);
 //     }
 // }
+
+// useEffect(() => {
+//     const typeParams = searchParams.getAll("type");
+//     const trainDataObject = fullTrainData;
+//     if (trainDataObject)
+//     {
+//         try
+//         {
+//             const carriage_statistics_list = trainDataObject.carriage_statistics_list;
+//             const groupedCarriageStatisticsList = trainDataObject.grouped_carriage_statistics_list;
+//             let carriagesList = [];
+//             if (typeParams.length > 0) {
+//                 for (const type of typeParams) {
+//                     const typeAndQuality = divideTypeAndQuality(type);
+//                     const _type = typeAndQuality.type;
+//                     const qualities = typeAndQuality.qualities;
+//                     const typeGroup = groupedCarriageStatisticsList?.[_type];
+//                     console.log(typeGroup);
+//                     console.log("----");
+//                     console.log(qualities);
+//                     console.log("XXXXXXXXXXXX");
+//                     if (!typeGroup) {
+//                         continue;
+//                     }
+//                     const qualityClassDictionary = typeGroup.carriage_quality_class_dictionary;
+//                     let selectedQualities = undefined;
+//                     if (qualities.length > 0) {
+//                         selectedQualities = qualities.filter(quality => qualityClassDictionary[quality] != undefined);
+//                     }
+//                     else {
+//                         selectedQualities = Object.keys(qualityClassDictionary);
+//                     }
+//                     console.log("--------");
+//                     console.log(selectedQualities);
+//                     for (const quality of selectedQualities) {
+//                         const qualityClassData = qualityClassDictionary[quality];
+//                         if (!qualityClassData) {
+//                             continue;
+//                         }
+//                         carriagesList.push(...(qualityClassData.carriage_statistics_list || []));
+//
+//                     }
+//                     carriagesList.sort((a, b) => a.carriage_position_in_squad - b.carriage_position_in_squad);
+//                 }
+//             }
+//             else
+//             {
+//                 carriagesList = carriage_statistics_list;
+//             }
+//             console.log(carriagesList);
+//             setCarriages(carriagesList);
+//         }
+//         catch (error)
+//         {
+//             console.error(error);
+//         }
+//     }
+// }, [searchParams, refreshTrigger]);
+// const displayedCarriages = useMemo(() => {
+//     if (!carriages) return null;
+//
+//     return carriages.filter(carriage => {
+//         if (showCarriagesWithoutFreePlaces) {
+//             return true;
+//         }
+//         return carriage.free_places > 0;
+//     });
+// }, [carriages, showCarriagesWithoutFreePlaces]);
+
+// const initialSelectedSubtypes = useMemo(() => {
+//     const dict = {};
+//     const tokens = searchParams.getAll("type");
+//     for(const token of tokens)
+//     {
+//         const {type, qualities} = divideTypeAndQuality(token);
+//         if(qualities.length > 0)
+//         {
+//             dict[type] = Array.from(new Set(qualities));
+//         }
+//         else
+//         {
+//             dict[type] = ["All"]
+//         }
+//     }
+//     return dict;
+// }, [searchParams]);
