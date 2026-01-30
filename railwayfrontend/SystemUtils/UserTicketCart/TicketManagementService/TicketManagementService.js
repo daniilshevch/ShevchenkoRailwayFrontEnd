@@ -1,6 +1,8 @@
 ﻿import {
     CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE
 } from "../../ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
+import {userService} from "../../UserDefinerService/UserDefiner.js";
+import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 
 class TicketManagementService {
     GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch) {
@@ -93,7 +95,7 @@ class TicketManagementService {
     }
     async CANCEL_TEMPORARY_TICKET_RESERVATION_ON_SERVER(ticket)
     {
-        const token = localStorage.getItem("token");
+        const currentUser = userService.getCurrentUser();
         //potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
         const ticket_info = {
             id: ticket.id,
@@ -113,7 +115,7 @@ class TicketManagementService {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${currentUser?.token}`
             },
             body: JSON.stringify(ticket_info)
         });
@@ -138,6 +140,80 @@ class TicketManagementService {
                 console.error("Помилка скасування:", error);
             }
         }
+    }
+    async INITIALIZE_TICKET_BOOKING_PROCESS(dispatch)
+    {
+        const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+        const currentUser = userService.getCurrentUser();
+
+        let ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
+        ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
+            && ticket.ticket_status !== "EXPIRED");
+
+        const ticketBookingsDtoForFetch = [];
+        for(const ticket of ticketBookings)
+        {
+            const ticketDto = {
+                train_route_on_date_id: ticket.train_race_id,
+                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                starting_station_title: ticket.trip_starting_station,
+                ending_station_title: ticket.trip_ending_station,
+                place_in_carriage: ticket.place_in_carriage
+            };
+            //Якщо запит на тимчасову резервацію на сервер ще не надсилався, то надсилаємо його
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED")
+            {
+                ticketBookingsDtoForFetch.push(ticketDto);
+            }
+        }
+        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser?.token}`
+            },
+            body: JSON.stringify(ticketBookingsDtoForFetch),
+        });
+        if(!response.ok)
+        {
+            throw new Error("Невірні облікові дані");
+        }
+
+        //Отримуємо відповідь від сервера і в залежності від неї оновлюємо статуси квитків
+        const ticketListReservationResult =  await response.json();
+        for(const ticket of ticketBookings) //Проходимся по всіх квитках, що знаходяться в кошику
+        {
+            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+                //Отримуємо відповідь сервера по конкретному квитку(якщо він ще був не зарезервований і ми провели звернення на сервер по ньому
+                const singleTicketBookingReservationResult = ticketListReservationResult.find(ticket_booking =>
+                    ticket_booking.train_route_on_date_id === ticket.train_race_id &&
+                    ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
+                    ticket_booking.starting_station_title === ticket.trip_starting_station &&
+                    ticket_booking.ending_station_title === ticket.trip_ending_station &&
+                    ticket_booking.place_in_carriage === ticket.place_in_carriage);
+                const ticketBookingReservationStatus = singleTicketBookingReservationResult?.ticket_status;
+                //Якщо сервер видав статус Booking_In_Progress, то резервація успішна
+                if (ticketBookingReservationStatus === "Booking_In_Progress") {
+                    ticket.ticket_status = "RESERVED";
+                    ticket.id = singleTicketBookingReservationResult.id;
+                    ticket.full_ticket_id = singleTicketBookingReservationResult.full_ticket_id;
+                    ticket.user_id = singleTicketBookingReservationResult.user_id;
+                    ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
+                    ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;
+                    ticket.booking_expiration_time = singleTicketBookingReservationResult.booking_expiration_time;
+                } else {//Інакше - резервація провалена
+                    ticket.ticket_status = "BOOKING_FAILED";
+                }
+            }
+        }
+        dispatch({type: "CLEAR_CART"});
+        for(const ticket of ticketBookings)
+        {
+            dispatch({type: "ADD_TICKET", ticket: ticket});
+        }
+        localStorage.setItem("potentialTicketsCart", JSON.stringify({
+            potentialTicketsList: ticketBookings}));
+        window.dispatchEvent(new Event('cartUpdated'));
     }
 }
 export const ticketManagementService = new TicketManagementService();

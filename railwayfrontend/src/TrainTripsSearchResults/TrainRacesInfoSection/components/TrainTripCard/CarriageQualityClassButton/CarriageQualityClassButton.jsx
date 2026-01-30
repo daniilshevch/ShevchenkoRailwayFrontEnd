@@ -28,6 +28,7 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
             return "quality-tag-without-free-places"
         }
         switch (qualityClass) {
+            case "S": return "quality-tag-s";
             case "A": return "quality-tag-a";
             case "B": return "quality-tag-b";
             case "C": return "quality-tag-c";

@@ -231,6 +231,7 @@ export default function SingleTicketBookingProfilePage({ t, onRefresh, onReturnC
             return "grey";
         }
         switch (quality) {
+            case "S": return "purple";
             case "A": return "#cf1322";
             case "B": return "#389e0d";
             case "C": return "#096dd9";

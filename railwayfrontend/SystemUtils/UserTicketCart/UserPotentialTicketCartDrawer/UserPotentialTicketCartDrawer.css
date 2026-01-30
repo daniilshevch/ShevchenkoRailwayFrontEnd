@@ -78,6 +78,7 @@
     font-weight: 600;
 }
 
+.carriage-class-section-S { font-weight: 700; color: purple; }
 .carriage-class-section-A { font-weight: 700; color: red; }
 .carriage-class-section-B { font-weight: 700; color: green; }
 .carriage-class-section-C { font-weight: 700; color: blue; }

@@ -17,6 +17,13 @@ const { Text, Title } = Typography;
 function CarriageInfoPanel({ carriageNumber, type, qualityClass, features, freePlaces, totalPlaces, price }) {
 
     const classAvatars = {
+        S: (
+            <Tooltip title="Клас S">
+                <Avatar style={{ backgroundColor: 'mediumorchid', color: 'white', fontWeight: 'bold' }}>
+                    S
+                </Avatar>
+            </Tooltip>
+        ),
         A: (
             <Tooltip title="Клас A">
                 <Avatar style={{ backgroundColor: '#ff4d4f', color: 'white', fontWeight: 'bold' }}>

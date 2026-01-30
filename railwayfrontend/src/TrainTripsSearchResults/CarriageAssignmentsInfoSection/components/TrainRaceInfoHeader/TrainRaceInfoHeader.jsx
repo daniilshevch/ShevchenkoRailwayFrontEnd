@@ -1,15 +1,12 @@
-﻿import CarriageTypeAndQualityFilter from "../CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
-import {Button, Typography} from "antd";
+﻿import {Button, Typography} from "antd";
 import "./TrainRaceInfoHeader.css";
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import {formatDM_HM} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TimeFormaters.js";
-import changeTrainRouteIdIntoUkrainian, {
-    getTrainRouteIdFromTrainRaceId
-} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import React from "react";
 
+//January
 function TrainRaceInfoHeader(
     {
         trainRouteId,

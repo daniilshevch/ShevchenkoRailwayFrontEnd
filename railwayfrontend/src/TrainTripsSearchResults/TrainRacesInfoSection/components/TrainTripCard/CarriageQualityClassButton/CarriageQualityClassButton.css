@@ -54,7 +54,11 @@
     background: #f8f8f8;
     color: #555;
 }
-
+.quality-tag-s {
+    border-color: rebeccapurple;
+    background-color: rgba(102, 51, 153, 0.1);
+    color: rebeccapurple;
+}
 .quality-tag-a {
     border-color: #d9534f;
     background-color: rgba(217, 83, 79, 0.1);

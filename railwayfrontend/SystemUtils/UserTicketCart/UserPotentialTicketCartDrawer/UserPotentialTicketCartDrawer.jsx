@@ -1,131 +1,42 @@
 ﻿import {Button, Divider, Drawer, Space, Typography, Tooltip, Badge} from "antd";
 import {ShoppingCartOutlined, InfoCircleOutlined} from "@ant-design/icons";
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useState} from "react";
 import {stationTitleIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, {getTrainRouteIdFromTrainRaceId} from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import {changeCarriageTypeIntoUkrainian} from "../../InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import "./UserPotentialTicketCartDrawer.css";
 import {formatDM_HM} from "../../InterpreterMethodsAndDictionaries/TimeFormaters.js";
-import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 import {useNavigate, useLocation} from "react-router-dom";
 import {
     changeTicketBookingCartStatusIntoUkrainian
 } from "../../InterpreterMethodsAndDictionaries/TicketBookingStatusDictionary.js";
 import {
-    initialPotentialTicketCartState,
     markTicketAsExpired,
-    potentialTicketCartReducer
 } from "../UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
+import {ticketManagementService} from "../TicketManagementService/TicketManagementService.js";
+import {userService} from "../../UserDefinerService/UserDefiner.js";
 
 const { Text } = Typography;
 function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart, dispatch})
 {
     const navigate = useNavigate();
     const location = useLocation();
-    //const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const handleCheckoutAttempt = () => {
-        const token = localStorage.getItem('token');
-
-        if (!token) {
+    const handleCheckoutAttempt = async () => {
+        const currentUser = userService.getCurrentUser();
+        if (!currentUser) {
             setIsLoginModalOpen(true);
         } else {
-            INITIALIZE_TICKET_BOOKING_PROCESS();
+            await ticketManagementService.INITIALIZE_TICKET_BOOKING_PROCESS(dispatch);
+            navigate("/ticket-booking");
         }
     };
     const handleLoginRedirect = () => {
         setIsLoginModalOpen(false);
         navigate('/login',{ state: { from: location } });
     };
-    const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
-        const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
-        const token = localStorage.getItem('token');
-        let ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
-        //console.log("BOOKINGS IN CART");
-        //console.log(ticketBookings);
-
-        //ДОДАНА ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА
-        ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
-            && ticket.ticket_status !== "EXPIRED");
-
-
-        const ticketBookingsDtoForFetch = [];
-        for(const ticket of ticketBookings)
-        {
-            //ДОДАНО для перевірки статусу
-
-            const ticketDto = {
-                train_route_on_date_id: ticket.train_race_id,
-                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-                starting_station_title: ticket.trip_starting_station,
-                ending_station_title: ticket.trip_ending_station,
-                place_in_carriage: ticket.place_in_carriage
-            };
-            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED")
-            {
-                ticketBookingsDtoForFetch.push(ticketDto);
-            }
-        }
-        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(ticketBookingsDtoForFetch),
-        });
-        if(!response.ok)
-        {
-            throw new Error("Невірні облікові дані");
-        }
-        const ticketListReservationResult =  await response.json();
-
-
-        for(const ticket of ticketBookings)
-        {
-            if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
-                console.log("FROM BACK");
-                console.log("IN LOCAL STORAGE");
-                console.log(ticketBookings);
-                const singleTicketBookingReservationResult = ticketListReservationResult.find(ticket_booking =>
-                    ticket_booking.train_route_on_date_id === ticket.train_race_id &&
-                    ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
-                    ticket_booking.starting_station_title === ticket.trip_starting_station &&
-                    ticket_booking.ending_station_title === ticket.trip_ending_station &&
-                    ticket_booking.place_in_carriage === ticket.place_in_carriage);
-                const ticketBookingReservationStatus = singleTicketBookingReservationResult?.ticket_status;
-                console.log(`STATUS: ${ticketBookingReservationStatus}`);
-                if (ticketBookingReservationStatus === "Booking_In_Progress") {
-                    ticket.ticket_status = "RESERVED";
-                    ticket.id = singleTicketBookingReservationResult.id;
-                    ticket.full_ticket_id = singleTicketBookingReservationResult.full_ticket_id;
-                    ticket.user_id = singleTicketBookingReservationResult.user_id;
-                    ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
-                    ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;
-                    ticket.booking_expiration_time = singleTicketBookingReservationResult.booking_expiration_time;
-                } else {
-                    ticket.ticket_status = "BOOKING_FAILED";
-                }
-            }
-        }
-        console.log("TICKET BOOKINGS");
-        console.log(ticketBookings);
-        //potentialTicketCartDispatch({type: "CLEAR_CART"});
-        dispatch({type: "CLEAR_CART"});
-        for(const ticket of ticketBookings)
-        {
-            //potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
-            dispatch({type: "ADD_TICKET", ticket: ticket});
-        }
-        localStorage.setItem("potentialTicketsCart", JSON.stringify({
-            potentialTicketsList: ticketBookings}));
-        window.dispatchEvent(new Event('cartUpdated'));
-        console.log("DATA");
-        navigate('/ticket-booking');
-    }
-
     const tickets = cartState.potentialTicketsList;
     return (
         <>
@@ -179,7 +90,6 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                                     expirationTime={potential_ticket.booking_expiration_time}
                                                     onExpire={() => {
                                                         markTicketAsExpired(potential_ticket);
-                                                        console.log("Час резерву вийшов для квитка", potential_ticket.id)
                                                         dispatch({
                                                             type: "CHANGE_TICKET_STATUS_FOR_CART",
                                                             ticket: { ...potential_ticket, ticket_status: "EXPIRED" }
@@ -191,7 +101,6 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                         <div className="cart-ticket-route">
                                             <Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_starting_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_starting_station_departure_time)})</Text><Text className="arrow">→</Text><Text className="station-title">{stationTitleIntoUkrainian(potential_ticket.trip_ending_station)}</Text><Text className="station-time">({formatDM_HM(potential_ticket.trip_ending_station_arrival_time)})</Text>
                                         </div>
-                                        {/*<Text type="primary">Ціна: {potential_ticket.price ?? 0} ₴</Text>*/}
                                     </div>
                                     <div className="cart-ticket-actions">
                                         <Text className="ticket-price-in-drawer" type="primary">
@@ -231,3 +140,92 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
     );
 }
 export default UserPotentialTicketCartDrawer;
+
+
+
+// const INITIALIZE_TICKET_BOOKING_PROCESS = async () =>  {
+//     const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+//     const token = localStorage.getItem('token');
+//     let ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
+//     //console.log("BOOKINGS IN CART");
+//     //console.log(ticketBookings);
+//
+//     //ДОДАНА ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА
+//     ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
+//         && ticket.ticket_status !== "EXPIRED");
+//
+//
+//     const ticketBookingsDtoForFetch = [];
+//     for(const ticket of ticketBookings)
+//     {
+//         //ДОДАНО для перевірки статусу
+//
+//         const ticketDto = {
+//             train_route_on_date_id: ticket.train_race_id,
+//             passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+//             starting_station_title: ticket.trip_starting_station,
+//             ending_station_title: ticket.trip_ending_station,
+//             place_in_carriage: ticket.place_in_carriage
+//         };
+//         if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED")
+//         {
+//             ticketBookingsDtoForFetch.push(ticketDto);
+//         }
+//     }
+//     const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Initialize-Multiple-Ticket-Bookings`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify(ticketBookingsDtoForFetch),
+//     });
+//     if(!response.ok)
+//     {
+//         throw new Error("Невірні облікові дані");
+//     }
+//     const ticketListReservationResult =  await response.json();
+//
+//
+//     for(const ticket of ticketBookings)
+//     {
+//         if(ticket.ticket_status === "SELECTED_YET_NOT_RESERVED") {
+//             console.log("FROM BACK");
+//             console.log("IN LOCAL STORAGE");
+//             console.log(ticketBookings);
+//             const singleTicketBookingReservationResult = ticketListReservationResult.find(ticket_booking =>
+//                 ticket_booking.train_route_on_date_id === ticket.train_race_id &&
+//                 ticket_booking.passenger_carriage_position_in_squad === ticket.carriage_position_in_squad &&
+//                 ticket_booking.starting_station_title === ticket.trip_starting_station &&
+//                 ticket_booking.ending_station_title === ticket.trip_ending_station &&
+//                 ticket_booking.place_in_carriage === ticket.place_in_carriage);
+//             const ticketBookingReservationStatus = singleTicketBookingReservationResult?.ticket_status;
+//             console.log(`STATUS: ${ticketBookingReservationStatus}`);
+//             if (ticketBookingReservationStatus === "Booking_In_Progress") {
+//                 ticket.ticket_status = "RESERVED";
+//                 ticket.id = singleTicketBookingReservationResult.id;
+//                 ticket.full_ticket_id = singleTicketBookingReservationResult.full_ticket_id;
+//                 ticket.user_id = singleTicketBookingReservationResult.user_id;
+//                 ticket.passenger_carriage_id = singleTicketBookingReservationResult.passenger_carriage_id;
+//                 ticket.booking_initialization_time = singleTicketBookingReservationResult.booking_initialization_time;
+//                 ticket.booking_expiration_time = singleTicketBookingReservationResult.booking_expiration_time;
+//             } else {
+//                 ticket.ticket_status = "BOOKING_FAILED";
+//             }
+//         }
+//     }
+//     console.log("TICKET BOOKINGS");
+//     console.log(ticketBookings);
+//     //potentialTicketCartDispatch({type: "CLEAR_CART"});
+//     dispatch({type: "CLEAR_CART"});
+//     for(const ticket of ticketBookings)
+//     {
+//         //potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+//         dispatch({type: "ADD_TICKET", ticket: ticket});
+//     }
+//     localStorage.setItem("potentialTicketsCart", JSON.stringify({
+//         potentialTicketsList: ticketBookings}));
+//     window.dispatchEvent(new Event('cartUpdated'));
+//     console.log("DATA");
+//     navigate('/ticket-booking');
+// }

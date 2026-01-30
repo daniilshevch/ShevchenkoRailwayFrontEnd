@@ -27,19 +27,15 @@ const getLightSubtypeColor = (subtype) => {
 const getPluralCarriage = (count) => {
     const lastDigit = count % 10;
     const lastTwoDigits = count % 100;
-    // Виключення для 11-14 (11 вагонів, 12 вагонів...)
     if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
         return `${count} вагонів`;
     }
-    // Якщо закінчується на 1 (1, 21, 31...)
     if (lastDigit === 1) {
         return `${count} вагон`;
     }
-    // Якщо закінчується на 2, 3, 4 (2, 23, 44...)
     if (lastDigit >= 2 && lastDigit <= 4) {
         return `${count} вагони`;
-    }
-    // Всі інші випадки (0, 5-9, 10, 15-20...)
+    } 
     return `${count} вагонів`;
 };
 const TypeLabel = React.memo(({

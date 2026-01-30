@@ -11,6 +11,7 @@ const getQualityStyles = (qualityClass, status = null) => {
         return { color: "#8c8c8c", bg: "#f5f5f5", border: "#d9d9d9" };
     }
     switch (qualityClass) {
+        case "S": return { color: "#722ed1", bg: "#f9f0ff", border: "#d3adf7" };
         case "A": return { color: "#cf1322", bg: "#fff1f0", border: "#ffa39e" };
         case "B": return { color: "#389e0d", bg: "#f6ffed", border: "#b7eb8f" };
         case "C": return { color: "#096dd9", bg: "#e6f7ff", border: "#91d5ff" };

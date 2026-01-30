@@ -82,6 +82,9 @@
     cursor: not-allowed;
 }
 
+.seat-S.seat-free {
+    background-color: mediumorchid;
+}
 .seat-A.seat-free {
     background-color: #ff4d4f;
 }
@@ -93,7 +96,9 @@
 .seat-C.seat-free {
     background-color: #1890ff;
 }
-
+.seat-S.seat-free:hover {
+    background-color: mediumpurple;
+}
 
 .seat-A.seat-free:hover {
     background-color: deeppink;

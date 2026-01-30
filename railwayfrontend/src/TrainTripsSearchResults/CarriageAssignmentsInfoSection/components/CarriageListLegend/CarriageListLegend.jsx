@@ -4,13 +4,12 @@ import './CarriageListLegend.css';
 
 const { Text, Title } = Typography;
 
+//January
 function CarriageListLegend() {
     return (
         <div className="carriage-legend">
             <Title level={5} className="legend-main-title">Умовні позначки</Title>
-
             <div className="legend-layout">
-                {/* ЛІВА ЧАСТИНА: КЛАСИ ВАГОНІВ */}
                 <div className="legend-left-side">
                     <div className="legend-class-row">
                         <div className="legend-visuals">
@@ -22,7 +21,6 @@ function CarriageListLegend() {
                             <Text type="secondary" className="class-desc">Телевізор в купе, душ, сейфи для особистих речей, електронна карта-ключ для купе</Text>
                         </div>
                     </div>
-
                     <div className="legend-class-row">
                         <div className="legend-visuals">
                             <Avatar size="default" style={{ backgroundColor: '#52c41a', fontWeight: 'bold' }}>B</Avatar>
@@ -33,7 +31,6 @@ function CarriageListLegend() {
                             <Text type="secondary" className="class-desc">Безкоштовний WI-FI, доставка їжі з вагону-ресторану</Text>
                         </div>
                     </div>
-
                     <div className="legend-class-row">
                         <div className="legend-visuals">
                             <Avatar size="default" style={{ backgroundColor: '#1890ff', fontWeight: 'bold' }}>C</Avatar>
@@ -45,10 +42,7 @@ function CarriageListLegend() {
                         </div>
                     </div>
                 </div>
-
                 <Divider type="vertical" className="legend-divider-vertical" />
-
-                {/* ПРАВА ЧАСТИНА: СТАТУСИ ТА ЗАГОТОВКА ПІД СЕРВІСИ */}
                 <div className="legend-right-side">
                     <div className="status-grid">
                         <div className="legend-item">
@@ -60,7 +54,6 @@ function CarriageListLegend() {
                             <Text className="status-label">У кошику</Text>
                         </div>
                     </div>
-                    {/* Тут залишиться місце для пояснення іконок сервісів */}
                 </div>
             </div>
         </div>
