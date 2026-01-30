@@ -15,8 +15,8 @@ import "./SingleTicketBookingConfirmationInfoComponent.css";
 const { Text, Title } = Typography;
 import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import {
-    ticketManagementService
-} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
+    ticketBookingProcessingService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 function UpperOrLower(number)
 {
     if(number % 2 === 0)
@@ -38,7 +38,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
     {
         try
         {
-            await ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(ticket, potentialTicketCartDispatch, messageApi);
+            await ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(ticket, potentialTicketCartDispatch, messageApi);
         }
         catch(error)
         {
@@ -201,7 +201,7 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                         }
                         subTitle={
                             <Text type="secondary" style={{ fontSize: '13px', fontWeight: 500, display: 'block', marginTop: '0px', marginBottom: '0px' }}>
-                                Інший пасажир встиг забронювати місце раніше за вас. Поверніться до списку вагонів, видаліть місце з кошику
+                                Інший пасажир встиг забронювати місце раніше за Вас. Поверніться до списку вагонів, видаліть місце з кошику
                                 та спробуйте повторно його забронювати. Або оберіть інші місця.
                             </Text>
                         }

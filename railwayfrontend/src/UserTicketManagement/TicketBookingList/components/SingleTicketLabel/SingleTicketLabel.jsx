@@ -5,6 +5,7 @@ import {
     changeCarriageTypeIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 
+//January
 const getQualityStyles = (qualityClass, status = null) => {
     if(status === "Returned")
     {
@@ -27,15 +28,6 @@ export default function SingleTicketLabel({ t, onClick }) {
         .join(" ");
 
     return (
-        <Tooltip
-            title={(
-                <>
-                    <div><strong>Тип:</strong> {t.carriage_type}</div>
-                    {passengerFullName && <div><strong>Пасажир:</strong> {passengerFullName}</div>}
-                    <div><strong>Статус:</strong> {t.ticket_status}</div>
-                </>
-            )}
-        >
             <Tag
                 onClick={onClick}
                 style={{
@@ -47,8 +39,8 @@ export default function SingleTicketLabel({ t, onClick }) {
                     backgroundColor: styles.bg,
                     border: `1px solid ${styles.border}`,
                     borderRadius: "6px",
-                    cursor: "default",
-                    minWidth: "200px"
+                    minWidth: "200px",
+                    cursor: "pointer"
                 }}
             >
                 <div style={{
@@ -104,6 +96,5 @@ export default function SingleTicketLabel({ t, onClick }) {
                     )}
                 </div>
             </Tag>
-        </Tooltip>
     );
 }

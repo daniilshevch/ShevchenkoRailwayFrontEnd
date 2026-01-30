@@ -4,7 +4,7 @@
 import {userService} from "../../UserDefinerService/UserDefiner.js";
 import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 
-class TicketManagementService {
+class TicketBookingProcessingService {
     GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch) {
         try {
             const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
@@ -277,4 +277,4 @@ class TicketManagementService {
         potentialTicketCartDispatch({ type: "CLEAR_CART" });
     }
 }
-export const ticketManagementService = new TicketManagementService();
+export const ticketBookingProcessingService = new TicketBookingProcessingService();

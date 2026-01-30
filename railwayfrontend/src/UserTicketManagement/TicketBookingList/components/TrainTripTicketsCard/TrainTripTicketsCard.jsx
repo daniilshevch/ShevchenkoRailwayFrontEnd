@@ -12,6 +12,9 @@ import changeTrainRouteBrandedNameIntoUkrainian from "../../../../../SystemUtils
 
 import SingleTicketLabel from '../SingleTicketLabel/SingleTicketLabel.jsx';
 import TicketBookingModal from "../TicketBookingModal/TicketBookingModal.jsx";
+import {
+    trainSearchService
+} from "../../../../TrainTripsSearchResults/TrainRacesInfoSection/services/TrainTripsSearchService.js";
 
 function formatTimeDate(dateStr) {
     const date = new Date(dateStr);
@@ -28,10 +31,8 @@ function useNormalizedTrain(train) {
     return useMemo(() => {
         const depISO = train.trip_starting_station_departure_time || train.departure_time;
         const arrISO = train.trip_ending_station_arrival_time || train.arrival_time;
-
         const startStation = train.trip_starting_station_title;
         const endStation   = train.trip_ending_station_title;
-
         let duration = train.total_trip_duration || train.trip_duration;
         if (!duration && depISO && arrISO) {
             const ms = new Date(arrISO) - new Date(depISO);
@@ -39,7 +40,6 @@ function useNormalizedTrain(train) {
             const m = Math.round((ms % 36e5) / 6e4);
             duration = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
         }
-
         return {
             depISO,
             arrISO,
@@ -171,32 +171,27 @@ function TrainTripTicketsCard({ train, onRefresh }) {
     const [fetchedSchedule, setFetchedSchedule] = useState(null);
     const [isScheduleLoading, setIsScheduleLoading] = useState(false);
 
-
-    const t = useNormalizedTrain(train);
-    if (!t) {
+    const tripInfo = useNormalizedTrain(train);
+    if (!tripInfo) {
         return null;
     }
-    const departure = formatTimeDate(t.depISO);
-    const arrival   = formatTimeDate(t.arrISO);
-
+    const departure = formatTimeDate(tripInfo.depISO);
+    const arrival   = formatTimeDate(tripInfo.arrISO);
     const handleOpenSchedule = async () => {
         setIsScheduleLoading(true);
-        try {
-            const url = `https://localhost:7230/Client-API/TrainSearch/get-train-schedule-for-train-race/${t.train_race_id}?starting_station_title=${t.startStation}&ending_station_title=${t.endStation}`;
-            const response = await fetch(url);
-
-            if (!response.ok) throw new Error("Не вдалося завантажити розклад");
-
-            const data = await response.json();
-            setFetchedSchedule(data); // Зберігаємо отриманий масив
-            setIsScheduleVisible(true); // Відкриваємо модалку
-        } catch (error) {
+        try
+        {
+            const scheduleData = await trainSearchService.GET_TRAIN_SCHEDULE_FROM_SERVER(tripInfo);
+            setFetchedSchedule(scheduleData);
+            setIsScheduleVisible(true);
+        }
+        catch(error) {
             console.error(error);
-            message.error("Помилка при отриманні розкладу руху");
-        } finally {
+        }
+        finally {
             setIsScheduleLoading(false);
         }
-    };
+    }
     const handleTicketClick = (index) => {
         setInitialTicketBookingIndex(index);
         setIsTicketBookingModalVisible(true);
@@ -206,13 +201,13 @@ function TrainTripTicketsCard({ train, onRefresh }) {
         <div className="train-card">
             <div className="train-header">
                 <div className="left-train-header-block">
-                    <span className="train-number">{trainNumberTag(t.train_route_id)}</span>
-                    <span className="train-quality-class">{trainQualityClassTag(t.train_route_class)}</span>
-                    <span className="train-branded-name">{trainBrandedNameTag(t.train_route_branded_name)}</span>
+                    <span className="train-number">{trainNumberTag(tripInfo.train_route_id)}</span>
+                    <span className="train-quality-class">{trainQualityClassTag(tripInfo.train_route_class)}</span>
+                    <span className="train-branded-name">{trainBrandedNameTag(tripInfo.train_route_branded_name)}</span>
                 </div>
                 <div className="right-train-header-block">
-                    <span className="is-fastest">{isFastestTag(t.is_fastest)}</span>
-                    <span className="is-cheapest">{isCheapestTag(t.is_fastest, t.is_cheapest)}</span>
+                    <span className="is-fastest">{isFastestTag(tripInfo.is_fastest)}</span>
+                    <span className="is-cheapest">{isCheapestTag(tripInfo.is_fastest, tripInfo.is_cheapest)}</span>
                 </div>
             </div>
 
@@ -220,23 +215,23 @@ function TrainTripTicketsCard({ train, onRefresh }) {
                 <div className="time-block left">
                     <div className="time">{departure.time}</div>
                     <div className="date">{departure.day}</div>
-                    <div className="station">{stationTitleIntoUkrainian(t.startStation)}</div>
+                    <div className="station">{stationTitleIntoUkrainian(tripInfo.startStation)}</div>
                 </div>
                 <div className="center-blocks">
                     <div className="duration-block">
             <span className="duration">
-              {Math.floor(parseInt(t.duration.split(":")[0], 10))} год{" "}
-                {parseInt(t.duration.split(":")[1], 10)} хв
+              {Math.floor(parseInt(tripInfo.duration.split(":")[0], 10))} год{" "}
+                {parseInt(tripInfo.duration.split(":")[1], 10)} хв
             </span>
                     </div>
-                    {typeof t.speed_on_trip !== "undefined" && (
-                        <SpeedometerComponent speed={t.speed_on_trip} />
+                    {typeof tripInfo.speed_on_trip !== "undefined" && (
+                        <SpeedometerComponent speed={tripInfo.speed_on_trip} />
                     )}
                 </div>
                 <div className="time-block right">
                     <div className="time">{arrival.time}</div>
                     <div className="date">{arrival.day}</div>
-                    <div className="station">{stationTitleIntoUkrainian(t.endStation)}</div>
+                    <div className="station">{stationTitleIntoUkrainian(tripInfo.endStation)}</div>
                 </div>
             </div>
 
@@ -247,8 +242,8 @@ function TrainTripTicketsCard({ train, onRefresh }) {
                     </Button>
                 </div>
                 <div className="full-route">
-                    <strong>{changeTrainRouteIdIntoUkrainian(t.train_route_id)}</strong>{" "}
-                    {stationTitleIntoUkrainian(t.full_route_starting_station_title)} → {stationTitleIntoUkrainian(t.full_route_ending_station_title)}
+                    <strong>{changeTrainRouteIdIntoUkrainian(tripInfo.train_route_id)}</strong>{" "}
+                    {stationTitleIntoUkrainian(tripInfo.full_route_starting_station_title)} → {stationTitleIntoUkrainian(tripInfo.full_route_ending_station_title)}
                 </div>
                 <div>
                     <Button className="train-trip-map-button" type="default" onClick={() => setIsScheduleVisible(true)}>
@@ -258,8 +253,8 @@ function TrainTripTicketsCard({ train, onRefresh }) {
             </div>
 
             <div className="tickets-row">
-                {t.ticket_bookings_list && t.ticket_bookings_list.length > 0 ? (
-                    t.ticket_bookings_list.map((ticket,index) => (
+                {tripInfo.ticket_bookings_list && tripInfo.ticket_bookings_list.length > 0 ? (
+                    tripInfo.ticket_bookings_list.map((ticket,index) => (
                         <SingleTicketLabel key={ticket.full_ticket_id} t={ticket} onClick={() => handleTicketClick(index)}/>
                     ))
                 ) : (
@@ -271,15 +266,15 @@ function TrainTripTicketsCard({ train, onRefresh }) {
                 visible={isScheduleVisible}
                 onClose={() => setIsScheduleVisible(false)}
                 trainStops={fetchedSchedule}
-                trainQualityClass={t.train_route_class}
-                trainRouteId={changeTrainRouteIdIntoUkrainian(t.train_route_id)}
-                startingStationUkrainianTitle={stationTitleIntoUkrainian(t.full_route_starting_station_title)}
-                endingStationUkraininTitle={stationTitleIntoUkrainian(t.full_route_ending_station_title)}
+                trainQualityClass={tripInfo.train_route_class}
+                trainRouteId={changeTrainRouteIdIntoUkrainian(tripInfo.train_route_id)}
+                startingStationUkrainianTitle={stationTitleIntoUkrainian(tripInfo.full_route_starting_station_title)}
+                endingStationUkraininTitle={stationTitleIntoUkrainian(tripInfo.full_route_ending_station_title)}
             />
             <TicketBookingModal
                 visible={isTicketBookingModalVisible}
                 onClose={() => setIsTicketBookingModalVisible(false)}
-                tickets={t.ticket_bookings_list}
+                tickets={tripInfo.ticket_bookings_list}
                 initialIndex={initialTicketBookingIndex}
                 onRefresh = {onRefresh}
             />
@@ -287,3 +282,24 @@ function TrainTripTicketsCard({ train, onRefresh }) {
     );
 }
 export default TrainTripTicketsCard;
+
+
+
+// const handleOpenSchedule = async () => {
+//     setIsScheduleLoading(true);
+//     try {
+//         const url = `https://localhost:7230/Client-API/TrainSearch/get-train-schedule-for-train-race/${t.train_race_id}?starting_station_title=${t.startStation}&ending_station_title=${t.endStation}`;
+//         const response = await fetch(url);
+//
+//         if (!response.ok) throw new Error("Не вдалося завантажити розклад");
+//
+//         const data = await response.json();
+//         setFetchedSchedule(data); // Зберігаємо отриманий масив
+//         setIsScheduleVisible(true); // Відкриваємо модалку
+//     } catch (error) {
+//         console.error(error);
+//         message.error("Помилка при отриманні розкладу руху");
+//     } finally {
+//         setIsScheduleLoading(false);
+//     }
+// };

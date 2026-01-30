@@ -16,8 +16,8 @@ import {
 import {trainSearchService} from "../../../TrainRacesInfoSection/services/TrainTripsSearchService.js";
 import CarriageListLegend from "../../components/CarriageListLegend/CarriageListLegend.jsx";
 import {
-    ticketManagementService
-} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
+    ticketBookingProcessingService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 import {carriageDisplayService} from "../../services/CarriageDisplayService.js";
 
 function CarriageListPage() //January
@@ -99,21 +99,21 @@ function CarriageListPage() //January
 
     //Завантаження актуального кошика з LocalStorage
     useEffect(() => {
-        ticketManagementService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch)
+        ticketBookingProcessingService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch)
     }, []);
     //Синхронізація LocalStorage з актуальним кошиком
     useEffect(() => {
-        ticketManagementService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState)
+        ticketBookingProcessingService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState)
     }, [potentialTicketCartState.potentialTicketsList])
     //Вертає список зайнятих місць в спеціальному форматі
     const selectedPotentialTicketSeats = useMemo(() => {
-        return ticketManagementService.GET_SELECTED_POTENTIAL_TICKET_SEATS(potentialTicketCartState)
+        return ticketBookingProcessingService.GET_SELECTED_POTENTIAL_TICKET_SEATS(potentialTicketCartState)
     }, [potentialTicketCartState.potentialTicketsList])
     //Перевіряє, чи певне місце заброньоване(перевірка на місце, рейс, поїздку між конкретними станціями)
     const isSeatSelectedInPotentialTicketCart = useCallback(
         (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
         {
-            return ticketManagementService.IS_SEAT_SELECTED_IN_POTENTIAL_TICKET_CART(
+            return ticketBookingProcessingService.IS_SEAT_SELECTED_IN_POTENTIAL_TICKET_CART(
                 selectedPotentialTicketSeats,
                 train_race_id,
                 carriage_position_in_squad,
@@ -124,7 +124,7 @@ function CarriageListPage() //January
     //Отримання конкретного квитка з кошику
     const getTicketFromCart = (carriage_position_in_squad, place_in_carriage, trip_starting_station, trip_ending_station) =>
     {
-        return ticketManagementService.GET_TICKET_FROM_CART(
+        return ticketBookingProcessingService.GET_TICKET_FROM_CART(
             potentialTicketCartState,
             train_race_id,
             carriage_position_in_squad,
@@ -136,7 +136,7 @@ function CarriageListPage() //January
     //Обробка натиснення на місце в вагоні
     const onSeatClickAction = (carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) =>
     {
-        const potentialTicket = ticketManagementService.ALLOCATE_SELECTED_YET_NOT_RESERVED_TICKET_FOR_CART({
+        const potentialTicket = ticketBookingProcessingService.ALLOCATE_SELECTED_YET_NOT_RESERVED_TICKET_FOR_CART({
             train_race_id,
             trainRouteClass,
             carriageNumber,
@@ -153,17 +153,17 @@ function CarriageListPage() //January
         });
         if(!isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation))
         {
-            ticketManagementService.ADD_POTENTIAL_NOT_RESERVED_TICKET_TO_CART(potentialTicketCartState, potentialTicketCartDispatch, potentialTicket, messageApi);
+            ticketBookingProcessingService.ADD_POTENTIAL_NOT_RESERVED_TICKET_TO_CART(potentialTicketCartState, potentialTicketCartDispatch, potentialTicket, messageApi);
         }
         else
         {
-            ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
+            ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
         }
     }
     //Прибирання квитка з кошика з скасуванням тимчасової резервації на сервері, якщо вона була розпочата
     const removePotentialTicketFromCart = (potentialTicket) =>
     {
-        ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(potentialTicket, potentialTicketCartDispatch, messageApi)
+        ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(potentialTicket, potentialTicketCartDispatch, messageApi)
     }
 
     const initialSelectedSubtypes = useMemo(() =>

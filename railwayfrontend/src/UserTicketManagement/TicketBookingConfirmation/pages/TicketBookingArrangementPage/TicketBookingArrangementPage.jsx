@@ -6,18 +6,20 @@ import {
 import TicketBookingsCarousel from "../../components/TicketBookingsCarousel/TicketBookingsCarousel.jsx";
 import "./TicketBookingArrangementPage.css";
 import {
-    ticketManagementService
-} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
+    ticketBookingProcessingService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
+
+//January
 function TicketBookingArrangementPage() //January
 {
     const [isLoading, setIsLoading] = useState(true);
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     useEffect(() => {
-        ticketManagementService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch);
+        ticketBookingProcessingService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch);
         setIsLoading(false);
     }, []);
     useEffect(() => {
-        ticketManagementService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState);
+        ticketBookingProcessingService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState);
     }, [potentialTicketCartState.potentialTicketsList]);
     return (
         <div className="booking-background-image">

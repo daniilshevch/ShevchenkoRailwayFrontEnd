@@ -29,8 +29,8 @@ import {
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/CarriagesDictionaries.js";
 import dayjs from 'dayjs';
 import {
-    ticketManagementService
-} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
+    ticketBookingProcessingService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 const { Text, Title, Paragraph } = Typography;
 
 const getClassTagStyle = (qualityClass) => {
@@ -51,6 +51,7 @@ const getClassTagStyle = (qualityClass) => {
     };
 };
 
+//January
 function TicketBookingCompletionResultPage() {
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
     const [bookingProgress, setBookingProgress] = useState(0);
@@ -74,12 +75,12 @@ function TicketBookingCompletionResultPage() {
 
     useEffect(() => {
         const onlyReservedTickets =
-            ticketManagementService.GET_ONLY_RESERVED_TICKETS_FOR_BOOKING_COMPLETION_ON_SERVER(potentialTicketCartDispatch);
+            ticketBookingProcessingService.GET_ONLY_RESERVED_TICKETS_FOR_BOOKING_COMPLETION_ON_SERVER(potentialTicketCartDispatch);
         setSteps(onlyReservedTickets);
         setBookingStatus(onlyReservedTickets?.map(() => "pending"));
     }, []);
     useEffect(() => {
-        ticketManagementService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState);
+        ticketBookingProcessingService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState);
     }, [potentialTicketCartState.potentialTicketsList]);
 
     useEffect(() => {
@@ -108,13 +109,15 @@ function TicketBookingCompletionResultPage() {
         setBookingProgress(40);
         try {
             const ticketBookingCompletionTransactionResult = await
-                ticketManagementService.COMPLETE_MULTIPLE_TICKET_BOOKING_PURCHASE_TRANSACTION_ON_SERVER(steps);
+                ticketBookingProcessingService.COMPLETE_MULTIPLE_TICKET_BOOKING_PURCHASE_TRANSACTION_ON_SERVER(steps);
             if (ticketBookingCompletionTransactionResult.ok) {
                 setBookingProgress(60);
                 setStatusLabel("Встановлюємо зв'язок з банком...");
                 await new Promise(r => setTimeout(r, 1200));
                 setBookingProgress(80);
                 setStatusLabel("Надсилаємо на пошту...");
+                localStorage.removeItem("potentialTicketsCart");
+                window.dispatchEvent(new Event('cartUpdated'));
                 await new Promise(r => setTimeout(r, 1600));
                 setStatusLabel(
                     <>
@@ -126,7 +129,7 @@ function TicketBookingCompletionResultPage() {
                 setBookingProgress(100);
                 messageApi.success("Всі квитки успішно оформлено! Електронні квитки надіслано на пошту.");
                 setTimeout(() => {
-                    ticketManagementService.CLEAR_POTENTIAL_TICKET_CART(potentialTicketCartDispatch);
+                    ticketBookingProcessingService.CLEAR_POTENTIAL_TICKET_CART(potentialTicketCartDispatch);
                 }, 1500);
             } else {
                 const errorData = await ticketBookingCompletionTransactionResult.json().catch(() => ({}));

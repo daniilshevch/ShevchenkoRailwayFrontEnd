@@ -15,7 +15,7 @@ import {
 } from "../UserPotentialTicketCartSystem.js";
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
-import {ticketManagementService} from "../TicketManagementService/TicketManagementService.js";
+import {ticketBookingProcessingService} from "../TicketManagementService/TicketBookingProcessingService.js";
 import {userService} from "../../UserDefinerService/UserDefiner.js";
 
 const { Text } = Typography;
@@ -29,7 +29,7 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         if (!currentUser) {
             setIsLoginModalOpen(true);
         } else {
-            await ticketManagementService.INITIALIZE_TICKET_BOOKING_PROCESS(dispatch);
+            await ticketBookingProcessingService.INITIALIZE_TICKET_BOOKING_PROCESS(dispatch);
             navigate("/ticket-booking");
         }
     };

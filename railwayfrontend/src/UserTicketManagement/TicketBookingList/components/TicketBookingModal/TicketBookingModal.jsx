@@ -34,11 +34,9 @@ export default function TicketBookingModal({ visible, onClose, tickets, initialI
             bodyStyle={{ paddingBottom: 20 }}
         >
             <div style={{ padding: "20px 0" }}>
-
-                {/* ВСТАВЛЯЄМО КОМПОНЕНТ СТОРІНКИ */}
                 {tickets[currentIndex] ? (
                     <SingleTicketBookingProfilePage
-                        t={tickets[currentIndex]}
+                        ticket={tickets[currentIndex]}
                         key={tickets[currentIndex].full_ticket_id}
                         onRefresh={onRefresh}
                         onReturnClose={onClose}
@@ -49,14 +47,13 @@ export default function TicketBookingModal({ visible, onClose, tickets, initialI
                     </div>
                 )}
 
-                {/* НАВІГАЦІЯ (Якщо квитків більше ніж 1) */}
                 {tickets.length > 1 && (
                     <div style={{
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
                         marginTop: "24px",
-                        padding: "0 10px" // Трохи відступів
+                        padding: "0 10px"
                     }}>
                         <Button
                             icon={<LeftOutlined />}

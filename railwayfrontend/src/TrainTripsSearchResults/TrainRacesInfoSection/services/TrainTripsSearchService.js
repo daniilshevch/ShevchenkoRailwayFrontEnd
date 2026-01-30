@@ -85,5 +85,13 @@ class TrainSearchService {
         }
         return {finalTrainData, useCache};
     }
+
+    async GET_TRAIN_SCHEDULE_FROM_SERVER(train)
+    {
+            const response = await fetch(`https://localhost:7230/Client-API/TrainSearch/get-train-schedule-for-train-race/${train.train_race_id}?starting_station_title=${train.startStation}&ending_station_title=${train.endStation}`);
+            if (!response.ok) throw new Error("Не вдалося завантажити розклад");
+            const data = await response.json();
+            return data;
+    }
 }
 export const trainSearchService = new TrainSearchService();
