@@ -215,5 +215,66 @@ class TicketManagementService {
             potentialTicketsList: ticketBookings}));
         window.dispatchEvent(new Event('cartUpdated'));
     }
+    GET_ONLY_RESERVED_TICKETS_FOR_BOOKING_COMPLETION_ON_SERVER(potentialTicketCartDispatch)
+    {
+        try {
+            const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+            if (potentialTicketsCart) {
+                const parsed = JSON.parse(potentialTicketsCart);
+                const list = parsed?.potentialTicketsList ?? parsed?.potentialTickets ?? [];
+                const reservedOnly = list.filter(t => t.ticket_status === "RESERVED");
+                potentialTicketCartDispatch({ type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: {potentialTicketsList: reservedOnly} });
+                return reservedOnly;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        return [];
+    }
+    async COMPLETE_MULTIPLE_TICKET_BOOKING_PURCHASE_TRANSACTION_ON_SERVER(tickets)
+    {
+        const currentUser = userService.getCurrentUser();
+        //НЕОБІХІДНО ВИРІШИТИ ПРОБЛЕМУ з passenger_trip_info, якщо перехід відбувається не централізованим методом
+        const ticket_completion_info_list = tickets.map(ticket => ({
+            mediator_ticket_booking: {
+                id: ticket.id,
+                full_ticket_id: ticket.full_ticket_id,
+                user_id: ticket.user_id,
+                train_route_on_date_id: ticket.train_race_id,
+                passenger_carriage_id: ticket.passenger_carriage_id,
+                passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+                place_in_carriage: ticket.place_in_carriage,
+                starting_station_title: ticket.trip_starting_station,
+                ending_station_title: ticket.trip_ending_station,
+                ticket_status: "Booking_In_Progress",
+                booking_initialization_time: ticket.booking_initialization_time,
+                booking_expiration_time: ticket.booking_expiration_time
+            },
+            passenger_info: {
+                passenger_name: ticket.passenger_trip_info.passenger_name,
+                passenger_surname: ticket.passenger_trip_info.passenger_surname
+            }
+        }));
+        const final_payload = {
+            ticket_completion_info_list: ticket_completion_info_list
+        };
+
+        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Complete-Multiple-Ticket-Bookings-As-Transaction`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser?.token}`
+            },
+            body: JSON.stringify(final_payload)
+        });
+
+        return response;
+    }
+    CLEAR_POTENTIAL_TICKET_CART(potentialTicketCartDispatch)
+    {
+        localStorage.removeItem("potentialTicketsCart");
+        window.dispatchEvent(new Event('cartUpdated'));
+        potentialTicketCartDispatch({ type: "CLEAR_CART" });
+    }
 }
 export const ticketManagementService = new TicketManagementService();

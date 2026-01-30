@@ -7,7 +7,6 @@ import {
     CloseCircleFilled,
     ClockCircleFilled,
     CheckCircleFilled,
-    InfoCircleFilled,
     SearchOutlined,
     ShoppingCartOutlined
 } from '@ant-design/icons';

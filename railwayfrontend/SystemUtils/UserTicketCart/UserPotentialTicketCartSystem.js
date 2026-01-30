@@ -1,6 +1,4 @@
-﻿import {React, useReducer} from "react";
-import {SERVER_URL} from "../ServerConnectionConfiguration/ConnectionConfiguration.js";
-const initialPotentialTicketCartState = {
+﻿const initialPotentialTicketCartState = {
     potentialTicketsList: [],
     isOpen: false,
     totalSum: 0
