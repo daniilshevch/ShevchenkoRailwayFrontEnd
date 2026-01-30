@@ -21,7 +21,9 @@ function formatTimeDate(dateStr) {
 }
 
 function useNormalizedTrain(train) {
-    if (!train) {return null;}
+    if (!train) {
+        return null;
+    }
 
     return useMemo(() => {
         const depISO = train.trip_starting_station_departure_time || train.departure_time;

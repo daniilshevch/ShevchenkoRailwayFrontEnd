@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useReducer} from "react";
 import {useNavigate} from "react-router-dom";
-import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space, Result } from "antd";
+import { Card, Descriptions, Form, Input, Typography, Button, Popconfirm, Space, Result, message } from "antd";
 import {
     stationTitleIntoUkrainian
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/StationsDictionary.js";
@@ -12,13 +12,11 @@ import changeTrainRouteIdIntoUkrainian, {
 } from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
 import {formatDM_HM} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TimeFormaters.js";
 import "./SingleTicketBookingConfirmationInfoComponent.css";
-import {
-    initialPotentialTicketCartState,
-    potentialTicketCartReducer
-} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
-import {SERVER_URL} from "../../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 const { Text, Title } = Typography;
 import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import {
+    ticketManagementService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketManagementService.js";
 function UpperOrLower(number)
 {
     if(number % 2 === 0)
@@ -35,35 +33,17 @@ function UpperOrLower(number)
 function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, namePrefix, potentialTicketCartState, potentialTicketCartDispatch})
 {
     const navigate = useNavigate();
-    async function cancelTicketReservation(ticket)
+    const [messageApi, contextHolder] = message.useMessage();
+    const cancelTicketReservation = async () =>
     {
-        const token = localStorage.getItem("token");
-        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
-        const ticket_info = {
-            id: ticket.id,
-            full_ticket_id: ticket.full_ticket_id,
-            user_id: ticket.user_id,
-            train_route_on_date_id: ticket.train_race_id,
-            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-            passenger_carriage_id: ticket.passenger_carriage_id,
-            starting_station_title: ticket.trip_starting_station,
-            ending_station_title: ticket.trip_ending_station,
-            place_in_carriage: ticket.place_in_carriage,
-            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
-            booking_initialization_time: ticket.booking_initialization_time,
-            booking_expiration_time: ticket.booking_expiration_time
-        };
-        const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Cancel-Ticket-Booking-Reservation`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(ticket_info)
-        });
-        if (!response.ok)
+        try
         {
-            console.log(response);
+            await ticketManagementService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(ticket, potentialTicketCartDispatch, messageApi);
+        }
+        catch(error)
+        {
+            console.error(error);
+            messageApi.error("Не вдалося скасувати бронювання на сервері");
         }
     }
 
@@ -73,6 +53,8 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
     }
     if (ticket.ticket_status === "EXPIRED") {
         return         (
+            <>
+            {contextHolder}
             <Card
                 size="small"
                 title={`Квиток ${index + 1} із ${total}`}
@@ -154,11 +136,14 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                     </div>
                 </div>
             </Card>
+            </>
         )
     }
     if(ticket.ticket_status !== "RESERVED")
     {
         return         (
+            <>
+                {contextHolder}
             <Card
             size="small"
             title={`Квиток ${index + 1} із ${total}`}
@@ -203,12 +188,11 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    padding: '16px', // Збільшено внутрішній відступ
-                    minWidth: '240px' // Збільшено мінімальну ширину
+                    padding: '16px',
+                    minWidth: '240px'
                 }}>
                     <Result
                         style={{ padding: 0, marginTop: -10 }}
-                        // Збільшено розмір іконки до 64px
                         icon={<CloseCircleFilled style={{ color: '#ff4d4f', fontSize: '64px' }} />}
                         title={
                             <Title level={4} style={{ margin: '-20px 0 -5px 0', color: '#cf1322', fontSize: '20px', lineHeight: '1.3' }}>
@@ -238,9 +222,12 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                 </div>
             </div>
         </Card>
+            </>
         )
     }
     return (
+        <>
+            {contextHolder}
         <Card
             size="small"
             title={`Квиток ${index + 1} із ${total}`}
@@ -305,7 +292,40 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                 </div>
             </div>
         </Card>
-
+        </>
     );
 }
 export default SingleTicketBookingConfirmationInfoComponent;
+
+
+// async function cancelTicketReservation(ticket)
+// {
+//     const token = localStorage.getItem("token");
+//     potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+//     const ticket_info = {
+//         id: ticket.id,
+//         full_ticket_id: ticket.full_ticket_id,
+//         user_id: ticket.user_id,
+//         train_route_on_date_id: ticket.train_race_id,
+//         passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+//         passenger_carriage_id: ticket.passenger_carriage_id,
+//         starting_station_title: ticket.trip_starting_station,
+//         ending_station_title: ticket.trip_ending_station,
+//         place_in_carriage: ticket.place_in_carriage,
+//         ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+//         booking_initialization_time: ticket.booking_initialization_time,
+//         booking_expiration_time: ticket.booking_expiration_time
+//     };
+//     const response = await fetch(`${SERVER_URL}/Client-API/CompleteTicketBookingProcessing/Cancel-Ticket-Booking-Reservation`, {
+//         method: 'DELETE',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify(ticket_info)
+//     });
+//     if (!response.ok)
+//     {
+//         console.log(response);
+//     }
+// }
