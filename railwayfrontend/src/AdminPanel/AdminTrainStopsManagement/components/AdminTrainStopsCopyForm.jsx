@@ -1,12 +1,14 @@
-﻿import { DatePicker, Form, Input, message, Modal, Divider, Row, Col, Alert } from "antd";
-import { CopyOutlined, HistoryOutlined, SwapOutlined, WarningOutlined } from '@ant-design/icons';
+﻿import { DatePicker, Form, Input, message, Modal, Divider, Row, Col, Alert, Radio, TimePicker } from "antd";
+import { CopyOutlined, HistoryOutlined, SwapOutlined, WarningOutlined, RetweetOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import React, { useState } from "react";
 import { parseTrainRaceId } from "../../GeneralComponents/TrainRaceIdParser.js";
+import dayjs from "dayjs";
 
 function AdminTrainStopsCopyForm({ train_race_id, fetchTrainStops, isCopyScheduleModalVisible, setIsCopyScheduleModalVisible }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [copyScheduleForm] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const [copyType, setCopyType] = useState('normal'); // 'normal' або 'inverted'
 
     const handleScheduleCopy = async () => {
         try {
@@ -14,23 +16,50 @@ function AdminTrainStopsCopyForm({ train_race_id, fetchTrainStops, isCopySchedul
             setLoading(true);
             const token = localStorage.getItem('token');
 
-            // Оригінальна логіка парсингу ID та дати
-            const prototype_train_route_id = values.prototype_train_route_id;
-            const new_train_route_id = parseTrainRaceId(train_race_id).trainRouteId;
-            const prototype_date = values.prototype_date.format("YYYY-MM-DD");
-            const new_date = parseTrainRaceId(train_race_id).date;
+            // Парсинг цільового рейсу
+            const parsedTarget = parseTrainRaceId(train_race_id);
+            const new_train_route_id = parsedTarget.trainRouteId;
+            const new_date = parsedTarget.date; // "YYYY-MM-DD"
 
-            // Оригінальний URL з вашого коду
-            const url = `https://localhost:7230/Admin-API/TrainAssignment/Copy-Train-With-Schedule?prototype_train_route_id=${prototype_train_route_id}&new_train_route_id=${new_train_route_id}&prototype_date=${prototype_date}&new_date=${new_date}&creation_option=false`;
+            // Дані прототипу
+            const prototype_train_route_id = values.prototype_train_route_id;
+            const prototype_date = values.prototype_date.format("YYYY-MM-DD");
+
+            let url = "";
+
+            if (copyType === 'normal') {
+                // Звичайне копіювання
+                url = `https://localhost:7230/Admin-API/TrainAssignment/Copy-Train-With-Schedule?` +
+                    `prototype_train_route_id=${prototype_train_route_id}&` +
+                    `new_train_route_id=${new_train_route_id}&` +
+                    `prototype_date=${prototype_date}&` +
+                    `new_date=${new_date}&` +
+                    `creation_option=false`;
+            } else {
+                // Інвертоване копіювання
+                // Формуємо DateTime для нового відправлення: дата цільового рейсу + обраний час
+                const departureTime = values.new_departure_time.format("HH:mm:ss");
+                const new_date_and_departure_time = `${new_date}T${departureTime}`;
+
+                url = `https://localhost:7230/Admin-API/TrainAssignment/Copy-Train-With-Inverted-Schedule?` +
+                    `prototype_train_route_id=${prototype_train_route_id}&` +
+                    `new_inverted_train_route_id=${new_train_route_id}&` +
+                    `prototype_date=${prototype_date}&` +
+                    `new_date_and_departure_time=${encodeURIComponent(new_date_and_departure_time)}&` +
+                    `creation_option=false`;
+            }
 
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            if (!response.ok) throw new Error('Помилка при копіюванні складу поїзду');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Помилка при копіюванні розкладу');
+            }
 
-            messageApi.success('Склад поїзда успішно скопійовано');
+            messageApi.success(copyType === 'normal' ? 'Розклад успішно скопійовано' : 'Інвертований розклад успішно створено');
             setIsCopyScheduleModalVisible(false);
             copyScheduleForm.resetFields();
             fetchTrainStops();
@@ -45,21 +74,41 @@ function AdminTrainStopsCopyForm({ train_race_id, fetchTrainStops, isCopySchedul
         <>
             {contextHolder}
             <Modal
-                title={<span><CopyOutlined /> Скопіювати розклад з прототипу</span>}
+                title={
+                    <span>
+                        {copyType === 'normal' ? <CopyOutlined /> : <RetweetOutlined />}
+                        {copyType === 'normal' ? " Скопіювати розклад з прототипу" : " Створити зворотний рейс (Інверсія)"}
+                    </span>
+                }
                 open={isCopyScheduleModalVisible}
                 onCancel={() => setIsCopyScheduleModalVisible(false)}
                 onOk={handleScheduleCopy}
                 confirmLoading={loading}
-                okText="Скопіювати склад"
-                okButtonProps={{ style: { backgroundColor: '#722ed1' } }}
+                okText="Виконати копіювання"
+                okButtonProps={{ style: { backgroundColor: copyType === 'normal' ? '#722ed1' : '#fa8c16' } }}
                 centered
+                width={500}
             >
+                <div style={{ marginBottom: 20, textAlign: 'center' }}>
+                    <Radio.Group
+                        value={copyType}
+                        onChange={(e) => setCopyType(e.target.value)}
+                        buttonStyle="solid"
+                    >
+                        <Radio.Button value="normal">Звичайне</Radio.Button>
+                        <Radio.Button value="inverted">Інвертоване (Зворотний рейс)</Radio.Button>
+                    </Radio.Group>
+                </div>
+
                 <Alert
-                    message="Важлива примітка"
-                    description="Розклад буде скопійовано для маршруту поїзда разом із зупинками. Переконайтеся, що ID прототипу вказано вірно."
-                    type="info"
+                    message={copyType === 'normal' ? "Пряме копіювання" : "Інвертування маршруту"}
+                    description={
+                        copyType === 'normal'
+                            ? "Розклад буде перенесено 1-в-1 з коригуванням дати."
+                            : "Система розгорне станції у зворотному порядку та перерахує час на основі нового часу відправлення."
+                    }
+                    type={copyType === 'normal' ? "info" : "warning"}
                     showIcon
-                    icon={<WarningOutlined />}
                     style={{ marginBottom: 20 }}
                 />
 
@@ -74,15 +123,29 @@ function AdminTrainStopsCopyForm({ train_race_id, fetchTrainStops, isCopySchedul
                                 <Input placeholder="Наприклад: 12SH" />
                             </Form.Item>
                         </Col>
-                        <Col span={24}>
+                        <Col span={12}>
                             <Form.Item
-                                label={<span><HistoryOutlined /> Дата відправлення рейсу-прототипу</span>}
+                                label={<span><HistoryOutlined /> Дата прототипу</span>}
                                 name="prototype_date"
-                                rules={[{ required: true, message: 'Вкажіть дату відправлення рейсу-прототипу' }]}
+                                rules={[{ required: true, message: 'Вкажіть дату' }]}
                             >
                                 <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
+
+                        {/* Поле часу з'являється лише при інверсії */}
+                        {copyType === 'inverted' && (
+                            <Col span={12}>
+                                <Form.Item
+                                    label={<span><ClockCircleOutlined /> Час відправлення</span>}
+                                    name="new_departure_time"
+                                    rules={[{ required: true, message: 'Вкажіть час відправлення' }]}
+                                    initialValue={dayjs('08:00', 'HH:mm')}
+                                >
+                                    <TimePicker format="HH:mm" style={{ width: '100%' }} />
+                                </Form.Item>
+                            </Col>
+                        )}
                     </Row>
                 </Form>
             </Modal>

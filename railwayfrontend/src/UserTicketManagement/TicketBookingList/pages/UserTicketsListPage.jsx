@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState, useCallback, useReducer} from "react";
 import {useParams, useNavigate} from "react-router-dom";
-import { Alert, Divider, Spin, Tabs, Empty, Button, Typography } from "antd"; // Додали Tabs
+import {Alert, Divider, Spin, Tabs, Empty, Button, Typography, message} from "antd";
 import {
     ShoppingCartOutlined,
     HistoryOutlined,
@@ -8,7 +8,6 @@ import {
     LockOutlined
 } from "@ant-design/icons";
 import TrainTripTicketsCard from "../components/TrainTripTicketsCard/TrainTripTicketsCard.jsx";
-import { SERVER_URL } from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
 import ticketsBg from '../../../../public/background_images/tickets.jpg';
 import {
     initialPotentialTicketCartState,
@@ -19,7 +18,10 @@ import {
 } from "../../../../SystemUtils/ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
 import UserPotentialTicketCartPanel
     from "../../../../SystemUtils/UserTicketCart/UserPonentialTicketCartPanel/UserPotentialTicketCartPanel.jsx";
-
+import {
+    ticketBookingProcessingService
+} from "../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
+import {userTicketManagementService} from "../services/UserTicketManagementService.js";
 
 const { Text, Paragraph } = Typography;
 function toDateKey(iso) {
@@ -112,36 +114,17 @@ export default function UserTicketsListPage() {
     const [err, setErr] = useState(null);
     const {status} = useParams();
     const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const activeTab = status || "active";
 
     const [potentialTicketCartState, potentialTicketCartDispatch] = useReducer(potentialTicketCartReducer, initialPotentialTicketCartState);
 
     useEffect(() => {
-        try
-        {
-            const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
-            if (potentialTicketsCart)
-            {
-                potentialTicketCartDispatch({type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: JSON.parse(potentialTicketsCart)});
-            }
-        }
-        catch(error)
-        {
-            console.error(error);
-        }
+        ticketBookingProcessingService.GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch);
     }, []);
     useEffect(() => {
-        try
-        {
-            localStorage.setItem("potentialTicketsCart", JSON.stringify({
-                potentialTicketsList: potentialTicketCartState.potentialTicketsList}));
-            window.dispatchEvent(new Event('cartUpdated'));
-        }
-        catch(error)
-        {
-            console.error(error);
-        }
+        ticketBookingProcessingService.SAVE_POTENTIAL_TICKET_CART_TO_STORAGE(potentialTicketCartState);
     }, [potentialTicketCartState.potentialTicketsList]);
 
     const renderEmptyState = (tab) => {
@@ -166,36 +149,23 @@ export default function UserTicketsListPage() {
         );
     };
     const fetchData = useCallback(async (isSilent = false) => {
-        const token = localStorage.getItem("token");
-        if (!isSilent) setLoading(true);
-        setErr(null);
         if (activeTab === "in-progress") {
             setLoading(false);
             setErr(null);
             return;
         }
-
-        const endpoint = activeTab === "active"
-            ? "get-grouped-active-tickets-for-current-user"
-            : "get-grouped-archieved-tickets-for-current-user";
-
+        if (!isSilent) setLoading(true);
+        setErr(null);
         try {
-            const res = await fetch(`${SERVER_URL}/${endpoint}`, {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const json = await res.json();
-            setData(Array.isArray(json) ? json : []);
+            const tickets = await userTicketManagementService.GET_GROUPED_USER_TICKETS_FROM_SERVER(activeTab);
+            setData(tickets);
         } catch (e) {
             setErr(e);
         } finally {
             if (!isSilent) setLoading(false);
         }
     }, [activeTab]);
+
 
     useEffect(() => {
         fetchData();
@@ -215,10 +185,7 @@ export default function UserTicketsListPage() {
             if (!map.has(key)) map.set(key, []);
             map.get(key).push(trip);
         }
-
         const sortedEntries = Array.from(map.entries());
-
-        // Для архіву логічніше сортувати від нових до старих (reverse)
         return sortedEntries.sort((a, b) => {
             const dateA = new Date(a[0]);
             const dateB = new Date(b[0]);
@@ -226,36 +193,9 @@ export default function UserTicketsListPage() {
         });
     }, [data, activeTab]);
 
-    async function cancelTicketReservation(ticket)
-    {
-        const token = localStorage.getItem("token");
-        potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
-        const ticket_info = {
-            id: ticket.id,
-            full_ticket_id: ticket.full_ticket_id,
-            user_id: ticket.user_id,
-            train_route_on_date_id: ticket.train_race_id,
-            passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
-            passenger_carriage_id: ticket.passenger_carriage_id,
-            starting_station_title: ticket.trip_starting_station,
-            ending_station_title: ticket.trip_ending_station,
-            place_in_carriage: ticket.place_in_carriage,
-            ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
-            booking_initialization_time: ticket.booking_initialization_time,
-            booking_expiration_time: ticket.booking_expiration_time
-        };
-        const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(ticket_info)
-        });
-        if (!response.ok)
-        {
-            console.log(response);
-        }
+    const removePotentialTicketFromCart = async (ticket) => {
+        await ticketBookingProcessingService
+            .REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(ticket, potentialTicketCartDispatch, messageApi);
     }
 
     const backgroundStyle = {
@@ -291,7 +231,7 @@ export default function UserTicketsListPage() {
             }
             return <UserPotentialTicketCartPanel
                 cartState={potentialTicketCartState}
-                removePotentialTicketFromCart={cancelTicketReservation}
+                removePotentialTicketFromCart={removePotentialTicketFromCart}
                 dispatch = {potentialTicketCartDispatch}
             ></UserPotentialTicketCartPanel>
         }
@@ -327,36 +267,130 @@ export default function UserTicketsListPage() {
     };
 
     return (
-        <div style={backgroundStyle}>
-            <div style={{ maxWidth: 1300, margin: "0 auto", paddingLeft: 16, paddingRight: 16,  }}>
-                <div style={contentContainerStyle}>
+        <>
+            {contextHolder}
+            <div style={backgroundStyle}>
+                <div style={{ maxWidth: 1300, margin: "0 auto", paddingLeft: 16, paddingRight: 16,  }}>
+                    <div style={contentContainerStyle}>
 
-                    {/* Секція перемикача */}
-                    <Tabs
-                        activeKey={activeTab}
-                        onChange={handleTabChange}
-                        centered
-                        size="large"
-                        items={[
-                            {
-                                label: 'В процесі бронювання',
-                                key: 'in-progress',
-                            },
-                            {
-                                label: 'Активні квитки',
-                                key: 'active',
-                            },
-                            {
-                                label: 'Архів поїздок',
-                                key: 'archived',
-                            },
-                        ]}
-                        style={{ marginBottom: 20 }}
-                    />
+                        <Tabs
+                            activeKey={activeTab}
+                            onChange={handleTabChange}
+                            centered
+                            size="large"
+                            items={[
+                                {
+                                    label: 'В процесі бронювання',
+                                    key: 'in-progress',
+                                },
+                                {
+                                    label: 'Активні квитки',
+                                    key: 'active',
+                                },
+                                {
+                                    label: 'Архів поїздок',
+                                    key: 'archived',
+                                },
+                            ]}
+                            style={{ marginBottom: 20 }}
+                        />
 
-                    {renderTicketsContent()}
+                        {renderTicketsContent()}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
+
+
+// useEffect(() => {
+//     try
+//     {
+//         const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
+//         if (potentialTicketsCart)
+//         {
+//             potentialTicketCartDispatch({type: "ALLOCATE_FROM_LOCAL_STORAGE", payload: JSON.parse(potentialTicketsCart)});
+//         }
+//     }
+//     catch(error)
+//     {
+//         console.error(error);
+//     }
+// }, []);
+
+// useEffect(() => {
+//     try
+//     {
+//         localStorage.setItem("potentialTicketsCart", JSON.stringify({
+//             potentialTicketsList: potentialTicketCartState.potentialTicketsList}));
+//         window.dispatchEvent(new Event('cartUpdated'));
+//     }
+//     catch(error)
+//     {
+//         console.error(error);
+//     }
+// }, [potentialTicketCartState.potentialTicketsList]);
+
+// const fetchData = useCallback(async (isSilent = false) => {
+//     const token = localStorage.getItem("token");
+//     if (!isSilent) setLoading(true);
+//     setErr(null);
+//     if (activeTab === "in-progress") {
+//         setLoading(false);
+//         setErr(null);
+//         return;
+//     }
+//
+//     const endpoint = activeTab === "active"
+//         ? "get-grouped-active-tickets-for-current-user"
+//         : "get-grouped-archieved-tickets-for-current-user";
+//
+//     try {
+//         const res = await fetch(`${SERVER_URL}/${endpoint}`, {
+//             method: "GET",
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`
+//             }
+//         });
+//         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+//         const json = await res.json();
+//         setData(Array.isArray(json) ? json : []);
+//     } catch (e) {
+//         setErr(e);
+//     } finally {
+//         if (!isSilent) setLoading(false);
+//     }
+// }, [activeTab]);
+// async function cancelTicketReservation(ticket)
+// {
+//     const token = localStorage.getItem("token");
+//     potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
+//     const ticket_info = {
+//         id: ticket.id,
+//         full_ticket_id: ticket.full_ticket_id,
+//         user_id: ticket.user_id,
+//         train_route_on_date_id: ticket.train_race_id,
+//         passenger_carriage_position_in_squad: ticket.carriage_position_in_squad,
+//         passenger_carriage_id: ticket.passenger_carriage_id,
+//         starting_station_title: ticket.trip_starting_station,
+//         ending_station_title: ticket.trip_ending_station,
+//         place_in_carriage: ticket.place_in_carriage,
+//         ticket_status: ticket.ticket_status === "RESERVED" ? "Booking_In_Progress" : null,
+//         booking_initialization_time: ticket.booking_initialization_time,
+//         booking_expiration_time: ticket.booking_expiration_time
+//     };
+//     const response = await fetch(CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE, {
+//         method: 'DELETE',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify(ticket_info)
+//     });
+//     if (!response.ok)
+//     {
+//         console.log(response);
+//     }
+// }

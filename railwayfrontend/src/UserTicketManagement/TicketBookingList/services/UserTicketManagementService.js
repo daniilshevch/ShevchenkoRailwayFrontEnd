@@ -3,6 +3,30 @@ import {userService} from "../../../../SystemUtils/UserDefinerService/UserDefine
 
 class UserTicketManagementService
 {
+    async GET_GROUPED_USER_TICKETS_FROM_SERVER(activeTab)
+    {
+        const currentUser = userService.getCurrentUser();
+        if (!currentUser?.token) {
+            const error = new Error("Unauthorized");
+            error.status = 401;
+            throw error;
+        }
+
+        const endpoint = activeTab === "active"
+            ? "get-grouped-active-tickets-for-current-user"
+            : "get-grouped-archieved-tickets-for-current-user";
+
+        const res = await fetch(`${SERVER_URL}/${endpoint}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser?.token}`
+            }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        return Array.isArray(json) ? json : [];
+    }
     async DOWNLOAD_TICKET_PDF(ticket)
     {
         const currentUser = userService.getCurrentUser();
