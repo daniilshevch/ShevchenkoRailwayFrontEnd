@@ -237,7 +237,6 @@ class TicketBookingProcessingService {
             const passenger_info = values.passengers?.[idx] || {};
             return {
                 ...ticket,
-                status: "RESERVED_WITH_PASSENGER_TRIP_INFO",
                 passenger_trip_info: {
                     passenger_name: passenger_info.firstName || "",
                     passenger_surname: passenger_info.lastName || ""
