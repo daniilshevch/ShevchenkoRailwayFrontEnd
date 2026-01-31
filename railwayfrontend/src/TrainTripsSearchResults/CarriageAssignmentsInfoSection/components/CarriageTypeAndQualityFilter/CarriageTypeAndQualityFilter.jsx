@@ -8,19 +8,19 @@ import "./CarriageTypeAndQualityFilter.css";
 
 const getSubtypeColor = (subtype) => {
     switch (subtype) {
-        case 'A': return '#ff4d4f'; // Яскравий червоний
-        case 'B': return '#52c41a'; // Яскравий зелений
-        case 'C': return '#1677ff'; // Яскравий синій
-        case 'S': return '#722ed1'; // Фіолетовий
+        case 'A': return '#ff4d4f';
+        case 'B': return '#52c41a';
+        case 'C': return '#1677ff';
+        case 'S': return '#722ed1';
         default: return '#8c8c8c';
     }
 };
 const getLightSubtypeColor = (subtype) => {
     switch (subtype) {
-        case 'A': return '#ffccc7'; // Світло-червоний (більш насичений)
-        case 'B': return '#d9f7be'; // Світло-зелений (більш насичений)
-        case 'C': return '#bae7ff'; // Світло-синій (більш насичений)
-        case 'S': return '#efdbff'; // Світло-фіолетовий (більш насичений)
+        case 'A': return '#ffccc7';
+        case 'B': return '#d9f7be';
+        case 'C': return '#bae7ff';
+        case 'S': return '#efdbff';
         default: return '#f5f5f5';
     }
 };
@@ -214,22 +214,33 @@ export default function CarriageTypeAndQualityFilter({
 
     useEffect(() => {
         if (!carriageTypes.length || initiallyLoaded) return;
+
         const nextSub = {};
+        const noInitialTypes = initialSelectedTypes.length === 0;
+
         for (const t of carriageTypes) {
             const init = initialSelectedSubtypes?.[t] ?? [];
-            if (init.length > 0 && init[0] === "All") {
-                nextSub[t] = ["S", "A", "B", "C"]
+
+            if (noInitialTypes) {
+                const allPossibleSubtypesForThisType = getClassEntries(t).map(c => c.key);
+                nextSub[t] = allPossibleSubtypesForThisType;
+            }
+            else if (init.length > 0 && init[0] === "All") {
+                const allPossibleSubtypesForThisType = getClassEntries(t).map(c => c.key);
+                nextSub[t] = allPossibleSubtypesForThisType;
             }
             else {
                 nextSub[t] = Array.isArray(init) ? Array.from(new Set(init)) : [];
             }
         }
+
         const nextTypes = carriageTypes.filter(t => (nextSub[t]?.length ?? 0) > 0);
+
         setSelectedSubtypes(nextSub);
         setSelectedTypes(nextTypes);
-        implementCarriageFilteringChanges(nextTypes, nextSub);
+
         setInitiallyLoaded(true);
-    }, [carriageTypes, initialSelectedSubtypes, initiallyLoaded]);
+    }, [carriageTypes, initialSelectedSubtypes, initialSelectedTypes, initiallyLoaded]);
 
     useEffect(() => {
         setSelectedTypes(previous => previous.filter(type => carriageTypes.includes(type)));
@@ -257,14 +268,29 @@ export default function CarriageTypeAndQualityFilter({
 
     const handleSubtypesChange = (changedCarriageType, changedCarriageTypeSubtypes) => {
         setSelectedSubtypes(previousSubtypes => {
-            const nextSubtypes = { ...previousSubtypes, [changedCarriageType]: changedCarriageTypeSubtypes };
-            setSelectedTypes(previousTypes => {
-                const hasAny = (nextSubtypes[changedCarriageType]?.length ?? 0) > 0;
-                const nextTypes = hasAny ? Array.from(new Set([...previousTypes, changedCarriageType])) : previousTypes.filter(type => type !== changedCarriageType);
+            const nextSubtypes = {
+                ...previousSubtypes,
+                [changedCarriageType]: changedCarriageTypeSubtypes
+            };
+
+            const anySubtypeSelected = Object.values(nextSubtypes).some(subtypes => subtypes.length > 0);
+
+            if (!anySubtypeSelected) {
+                const resetSubtypes = {};
+                for (const type of carriageTypes) {
+                    resetSubtypes[type] = getClassEntries(type).map(c => c.key);
+                }
+                const resetTypes = [...carriageTypes];
+
+                setSelectedTypes(resetTypes);
+                implementCarriageFilteringChanges(resetTypes, resetSubtypes);
+                return resetSubtypes;
+            } else {
+                const nextTypes = carriageTypes.filter(type => (nextSubtypes[type]?.length ?? 0) > 0);
+                setSelectedTypes(nextTypes);
                 implementCarriageFilteringChanges(nextTypes, nextSubtypes);
-                return nextTypes;
-            })
-            return nextSubtypes;
+                return nextSubtypes;
+            }
         });
     };
 
@@ -293,7 +319,39 @@ export default function CarriageTypeAndQualityFilter({
                     boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
                 }}
             />
-            {/* Кнопка видалена звідси */}
         </div>
     );
 }
+
+
+// useEffect(() => {
+//     if (!carriageTypes.length || initiallyLoaded) return;
+//     const nextSub = {};
+//     for (const t of carriageTypes) {
+//         const init = initialSelectedSubtypes?.[t] ?? [];
+//         if (init.length > 0 && init[0] === "All") {
+//             nextSub[t] = ["S", "A", "B", "C"]
+//         }
+//         else {
+//             nextSub[t] = Array.isArray(init) ? Array.from(new Set(init)) : [];
+//         }
+//     }
+//     const nextTypes = carriageTypes.filter(t => (nextSub[t]?.length ?? 0) > 0);
+//     setSelectedSubtypes(nextSub);
+//     setSelectedTypes(nextTypes);
+//     implementCarriageFilteringChanges(nextTypes, nextSub);
+//     setInitiallyLoaded(true);
+// }, [carriageTypes, initialSelectedSubtypes, initiallyLoaded]);
+
+// const handleSubtypesChange = (changedCarriageType, changedCarriageTypeSubtypes) => {
+//     setSelectedSubtypes(previousSubtypes => {
+//         const nextSubtypes = { ...previousSubtypes, [changedCarriageType]: changedCarriageTypeSubtypes };
+//         setSelectedTypes(previousTypes => {
+//             const hasAny = (nextSubtypes[changedCarriageType]?.length ?? 0) > 0;
+//             const nextTypes = hasAny ? Array.from(new Set([...previousTypes, changedCarriageType])) : previousTypes.filter(type => type !== changedCarriageType);
+//             implementCarriageFilteringChanges(nextTypes, nextSubtypes);
+//             return nextTypes;
+//         })
+//         return nextSubtypes;
+//     });
+// };

@@ -11,6 +11,9 @@ import {
     ShoppingCartOutlined
 } from '@ant-design/icons';
 import {TicketTimer} from "../../../../../SystemUtils/UserTicketCart/TicketTimer/TicketTimer.jsx";
+import {
+    ticketBookingProcessingService
+} from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 
 
 const { Title, Text, Paragraph } = Typography;
@@ -73,37 +76,21 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
             )
         };
     });
-    const handleConfirm = () =>
-    {
+
+    const handleConfirm = () => {
         const values = form.getFieldsValue();
-        const completedTicketsWithPassengerTripInfo = tickets.map((ticket, idx) => {
-            const passenger_info = values.passengers?.[idx] || {};
-            return {
-                ...ticket,
-                status: "RESERVED_WITH_PASSENGER_TRIP_INFO",
-                passenger_trip_info: {
-                    passenger_name: passenger_info.firstName || "",
-                    passenger_surname: passenger_info.lastName || ""
-                }
-            };
-        });
-        potentialTicketCartDispatch({type: "CLEAR_CART"});
-        for(const ticket of completedTicketsWithPassengerTripInfo)
-        {
-            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
-        }
-        localStorage.setItem("potentialTicketsCart", JSON.stringify({
-            potentialTicketsList: completedTicketsWithPassengerTripInfo}));
-        console.log(completedTicketsWithPassengerTripInfo);
+        ticketBookingProcessingService.FILL_TICKETS_WITH_PASSENGER_INFO(tickets, values, potentialTicketCartDispatch);
         navigate("/ticket-booking-completion");
     }
-
     useEffect(() => {
-        form.setFieldsValue({
-            passengers: tickets.map(() => ({ firstName: "", lastName: "" })),
-        });
-        setCurrent(0);
-    }, [total, form]);
+        if (tickets.length > 0) {
+            const initialPassengers = tickets.map(t => ({
+                firstName: t.passenger_trip_info?.passenger_name || "",
+                lastName: t.passenger_trip_info?.passenger_surname || ""
+            }));
+            form.setFieldsValue({ passengers: initialPassengers });
+        }
+    }, [tickets, form]);
 
     const handleStepChange = (step) => {
         carouselRef.current?.goTo(step);
@@ -121,7 +108,6 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                     Оформлення квитків
                 </Title>
                 {loading ? (
-                        // 1. Поки йде завантаження - показуємо спінер
                         <div style={{ padding: '80px 0', textAlign: 'center' }}>
                             <Spin size="large" tip="Завантаження квитків..." />
                         </div>
@@ -133,7 +119,7 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                         current={current}
                         onChange={handleStepChange}
                         items={renderStepItems}
-                        type="navigation" // Робить кроки більш схожими на кнопки-вкладки
+                        type="navigation"
                         style={{ padding: '0px 0' }}
                     />
                 </div>
@@ -207,3 +193,36 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
     );
 }
 export default TicketBookingsCarousel;
+
+
+
+// const handleConfirm = () =>
+// {
+//     const values = form.getFieldsValue();
+//     const completedTicketsWithPassengerTripInfo = tickets.map((ticket, idx) => {
+//         const passenger_info = values.passengers?.[idx] || {};
+//         return {
+//             ...ticket,
+//             status: "RESERVED_WITH_PASSENGER_TRIP_INFO",
+//             passenger_trip_info: {
+//                 passenger_name: passenger_info.firstName || "",
+//                 passenger_surname: passenger_info.lastName || ""
+//             }
+//         };
+//     });
+//     potentialTicketCartDispatch({type: "CLEAR_CART"});
+//     for(const ticket of completedTicketsWithPassengerTripInfo)
+//     {
+//         potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+//     }
+//     localStorage.setItem("potentialTicketsCart", JSON.stringify({
+//         potentialTicketsList: completedTicketsWithPassengerTripInfo}));
+//     navigate("/ticket-booking-completion");
+// }
+
+// useEffect(() => {
+//     form.setFieldsValue({
+//         passengers: tickets.map(() => ({ firstName: "", lastName: "" })),
+//     });
+//     setCurrent(0);
+// }, [total, form]);

@@ -15,7 +15,8 @@ import {
     SignatureOutlined,
     SearchOutlined,
     MailOutlined,
-    ShoppingOutlined
+    ShoppingOutlined,
+    LeftOutlined
 } from '@ant-design/icons';
 import "./TicketBookingCompletionResultPage.css";
 import {
@@ -237,7 +238,35 @@ function TicketBookingCompletionResultPage() {
                 </div>
 
                 <div className="booking-tickets-list">
-                    <Title level={4} style={{ marginBottom: 20, paddingLeft: 10 }}>Ваші квитки ({steps.length})</Title>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: 20,
+                        paddingLeft: 10,
+                        paddingRight: 10
+                    }}>
+                        <Title level={4} style={{ margin: 0 }}>
+                            Ваші квитки ({steps.length})
+                        </Title>
+
+                        {bookingProgress < 100 && (
+                            <Button
+                                icon={<LeftOutlined />}
+                                onClick={() => navigate("/ticket-booking")}
+                                disabled={running}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    color: '#0052cc',
+                                    fontWeight: 600,
+                                    fontSize: '14px'
+                                }}
+                            >
+                                Редагувати дані квитків
+                            </Button>
+                        )}
+                    </div>
                     <div className="tickets-scroll-area">
                         {steps.length > 0 ? (
                         steps.map((ticket, idx) => {

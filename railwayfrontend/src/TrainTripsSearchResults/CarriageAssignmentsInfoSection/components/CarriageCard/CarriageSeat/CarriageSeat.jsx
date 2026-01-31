@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 import './CarriageSeat.css';
 import {Modal, Button, Typography} from 'antd';
-import {
-    ticketBookingProcessingService
-} from "../../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 const { Text } = Typography;
 function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, carriageNumber, onClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart})
 {
     const [isBookingCancellationModalOpen, setIsBookingCancellationModalOpen] = useState(false);
     const [isBookingFailedModalOpen, setIsBookingFailedModalOpen] = useState(false);
-    //ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА!
     let ticketInCart = null;
     let ticketStatus = null;
     if(!isFree && isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {

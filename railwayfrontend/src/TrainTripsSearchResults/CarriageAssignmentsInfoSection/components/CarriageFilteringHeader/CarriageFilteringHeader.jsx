@@ -2,7 +2,7 @@
 import CarriageTypeAndQualityFilter from "../CarriageTypeAndQualityFilter/CarriageTypeAndQualityFilter.jsx";
 import { Button, Popover, Checkbox, theme } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
-import { useSearchParams } from 'react-router-dom'; // Додали для безпеки даних
+import { useSearchParams } from 'react-router-dom';
 import "./CarriageFilteringHeader.css";
 
 function CarriageFilteringHeader({groupedSeats, initialSelectedTypes, initialSelectedSubtypes, onChange, onRefresh, isLoading})
@@ -14,9 +14,6 @@ function CarriageFilteringHeader({groupedSeats, initialSelectedTypes, initialSel
     const handleShowCarriagesWithoutFreePlaces = (e) => {
         const isChecked = e.target.checked;
         setShowCarriagesWithoutFreePlaces(isChecked);
-
-        // Щоб не зламати фільтрацію типів у батьківському компоненті,
-        // ми передаємо поточні параметри з URL разом з новим значенням чекбокса
         onChange?.({
             queryParams: searchParams.getAll("type"),
             showCarriagesWithoutFreePlaces: isChecked
@@ -34,10 +31,8 @@ function CarriageFilteringHeader({groupedSeats, initialSelectedTypes, initialSel
                 />
             </div>
 
-            {/* Права частина з Flexbox */}
             <div className="toolbar-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
 
-                {/* --- Кнопка перенесена сюди --- */}
                 <Popover
                     content={
                         <div style={{ padding: '4px 0' }}>

@@ -231,6 +231,27 @@ class TicketBookingProcessingService {
         }
         return [];
     }
+    FILL_TICKETS_WITH_PASSENGER_INFO(tickets, values, potentialTicketCartDispatch)
+    {
+        const completedTicketsWithPassengerTripInfo = tickets.map((ticket, idx) => {
+            const passenger_info = values.passengers?.[idx] || {};
+            return {
+                ...ticket,
+                status: "RESERVED_WITH_PASSENGER_TRIP_INFO",
+                passenger_trip_info: {
+                    passenger_name: passenger_info.firstName || "",
+                    passenger_surname: passenger_info.lastName || ""
+                }
+            };
+        });
+        potentialTicketCartDispatch({type: "CLEAR_CART"});
+        for(const ticket of completedTicketsWithPassengerTripInfo)
+        {
+            potentialTicketCartDispatch({type: "ADD_TICKET", ticket: ticket});
+        }
+        localStorage.setItem("potentialTicketsCart", JSON.stringify({
+            potentialTicketsList: completedTicketsWithPassengerTripInfo}));
+    }
     async COMPLETE_MULTIPLE_TICKET_BOOKING_PURCHASE_TRANSACTION_ON_SERVER(tickets)
     {
         const currentUser = userService.getCurrentUser();
