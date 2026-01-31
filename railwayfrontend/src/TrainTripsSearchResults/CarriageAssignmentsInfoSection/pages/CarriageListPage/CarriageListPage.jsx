@@ -157,7 +157,12 @@ function CarriageListPage() //January
         }
         else
         {
-            ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
+            //Попередня версія методу тільки видаляла квиток з кошику, не скасовуючи резервацію на сервері, якщо така є
+            //ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
+
+            //Нова версія і видаляє квиток з кошику і скасовує тимчасову резервацію на сервері, якщо така була здійснена
+            const existingTicket = getTicketFromCart(carriageNumber, seatNumber, startStation, endStation);
+            ticketBookingProcessingService.REMOVE_POTENTIAL_TICKET_FROM_CART_WITH_SERVER_TEMPORARY_RESERVATION_CANCELLATION(existingTicket, potentialTicketCartDispatch, messageApi);
         }
     }
     //Прибирання квитка з кошика з скасуванням тимчасової резервації на сервері, якщо вона була розпочата
@@ -197,6 +202,8 @@ function CarriageListPage() //January
         [carriages, showCarriagesWithoutFreePlaces]);
 
     return (
+        <>
+        {contextHolder}
         <div className = "main-layout-container">
             {contextHolder}
             <TrainRaceInfoHeader
@@ -252,6 +259,7 @@ function CarriageListPage() //January
                 endingStationUkraininTitle={stationTitleIntoUkrainian(fullRouteEndingStationTitle)}
             />
         </div>
+        </>
     )
 
 }

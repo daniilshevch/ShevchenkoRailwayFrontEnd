@@ -1,17 +1,20 @@
 import React, {useState} from 'react';
 import './CarriageSeat.css';
-import {Modal, Button} from 'antd';
-
+import {Modal, Button, Typography} from 'antd';
+import {
+    ticketBookingProcessingService
+} from "../../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
+const { Text } = Typography;
 function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, carriageNumber, onClick, price, startStation, endStation, isSeatSelectedInPotentialTicketCart, getTicketFromCart})
 {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBookingCancellationModalOpen, setIsBookingCancellationModalOpen] = useState(false);
+    const [isBookingFailedModalOpen, setIsBookingFailedModalOpen] = useState(false);
     //ЕКСПЕРИМЕНТАЛЬНА ЧАСТИНА!
     let ticketInCart = null;
     let ticketStatus = null;
     if(!isFree && isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation)) {
         ticketInCart = getTicketFromCart(carriageNumber, seatNumber, startStation, endStation);
         ticketStatus = ticketInCart?.ticket_status;
-        console.log(ticketInCart);
     }
     const isSelectedInPotentialCart = isSeatSelectedInPotentialTicketCart(carriageNumber, seatNumber, startStation, endStation);
     let baseClass = "";
@@ -38,14 +41,78 @@ function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, 
     const classByType = carriageType ? `seat-type-${carriageType}` : '';
     const classByQuality = carriageQualityClass ? `seat-${carriageQualityClass}` : '';
 
+    const onClickActionDependingOnStatus = () => {
+        if(isFree)
+        {
+            onClick(carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass);
+        }
+        else if(!isFree && isSelectedInPotentialCart && ticketStatus === "BOOKING_FAILED")
+        {
+            setIsBookingFailedModalOpen(true);
+        }
+        else if(!isFree && isSelectedInPotentialCart)
+        {
+            setIsBookingCancellationModalOpen(true);
+        }
+    }
+    const handleConfirmCancellation = () => {
+        setIsBookingCancellationModalOpen(false);
+        setIsBookingFailedModalOpen(false);
+        onClick(carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass);
+    };
     return (
-        <button
-            className={`seat ${baseClass} ${classByQuality} ${classByType}`}
-            disabled={!isFree}
-            onClick={isFree ? () => onClick(carriageNumber, seatNumber, price, startStation, endStation, carriageType, carriageQualityClass) : undefined}
-        >
-            {seatNumber}
-        </button>
+        <>
+            <button
+                className={`seat ${baseClass} ${classByQuality} ${classByType}`}
+                disabled={!isFree && !isSelectedInPotentialCart}
+                onClick={onClickActionDependingOnStatus}
+            >
+                {seatNumber}
+            </button>
+            <Modal
+                title="Бронювання успішне. Бажаєте скасувати?"
+                open={isBookingCancellationModalOpen}
+                onOk={handleConfirmCancellation}
+                onCancel={() => setIsBookingCancellationModalOpen(false)}
+                okText="Так, скасувати"
+                cancelText="Ні, залишити"
+                okButtonProps={{ danger: true }}
+                centered
+            >
+                <div style={{ padding: '10px 0' }}>
+                    <Text strong>
+                        На даний момент місце
+                        <Text strong style = {{color: "blue"}}> {seatNumber}</Text> у вагоні <Text strong style = {{color: "blue"}}>№ {carriageNumber}</Text> <Text>тимчасово зарезервовано за Вами</Text>.
+                        Ви бажаєте скасувати резервацію цього місця?
+                    </Text>
+                    <br />
+                    <Text style={{ fontSize: '13px', color: "gray", fontWeight: 'bold' }}>
+                        * Місце знову стане доступним для інших пасажирів.
+                    </Text>
+                </div>
+            </Modal>
+            <Modal
+                title="Бронювання не вдалось"
+                open={isBookingFailedModalOpen}
+                onOk={handleConfirmCancellation}
+                onCancel={() => setIsBookingFailedModalOpen(false)}
+                okText="ОК"
+                cancelText="Вийти"
+                okButtonProps={{ danger: false }}
+                centered
+            >
+                <div style={{ padding: '10px 0' }}>
+                    <Text strong>
+                        Ваша резервація для місця
+                        <Text strong style = {{color: "red"}}> {seatNumber}</Text> у вагоні <Text strong style = {{color: "red"}}>№ {carriageNumber}</Text> <Text>не вдалась</Text>. Ймовірно, інший пасажир встиг забронювати місце раніше за Вас.
+                    </Text>
+                    <br />
+                    <Text style={{ fontSize: '13px', color: "gray", fontWeight: 'bold' }}>
+                        * Натисніть ОК - і місце буде видалено з Вашого кошику квитків
+                    </Text>
+                </div>
+            </Modal>
+        </>
     );
 }
 export default CarriageSeat;
