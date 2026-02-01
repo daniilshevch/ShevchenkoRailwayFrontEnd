@@ -276,6 +276,44 @@ function TicketBookingCompletionResultPage() {
                             const isFinish = status === "finish";
                             const isError = status === "error";
 
+                            const ticket_status = ticket.ticket_status;
+                            const isExpired = ticket_status === "EXPIRED";
+                            const isFailed = status === "error" && !isExpired;
+
+                            let badgeConfig = {
+                                color: '#d9d9d9',
+                                bg: '#fafafa',
+                                border: '#d9d9d9',
+                                text: '',
+                                icon: <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />
+                            };
+
+                            if (isFinish) {
+                                badgeConfig = {
+                                    color: '#52c41a',
+                                    bg: '#f6ffed',
+                                    border: '#b7eb8f',
+                                    text: 'Покупка успішна',
+                                    icon: <CheckCircleFilled style={{ color: '#52c41a', fontSize: 18 }} />
+                                };
+                            } else if (isExpired) {
+                                badgeConfig = {
+                                    color: '#faad14',
+                                    bg: '#fffbe6',
+                                    border: '#ffe58f',
+                                    text: 'Резервація прострочена',
+                                    icon: <ClockCircleFilled style={{ color: '#faad14', fontSize: 18 }} />
+                                };
+                            } else if (isFailed) {
+                                badgeConfig = {
+                                    color: '#ff4d4f',
+                                    bg: '#fff1f0',
+                                    border: '#ffa39e',
+                                    text: 'Резервація не вдалась',
+                                    icon: <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 18 }} />
+                                };
+                            }
+
                             return (
                                 <div key={ticket.id} className={`ticket-card-item ${status || 'pending'}`}>
                                     <div className="status-stripe"></div>
@@ -292,14 +330,17 @@ function TicketBookingCompletionResultPage() {
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 gap: '10px',
-                                                backgroundColor: status === 'error' ? '#fff1f0' : '#f6ffed',
+                                                backgroundColor: badgeConfig.bg,
                                                 padding: '4px 12px',
                                                 borderRadius: '20px',
-                                                border: `1px solid ${status === 'error' ? '#ffa39e' : '#d9f7be'}`,
-                                                transition: 'all 0.3s ease',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                                                border: `1px solid ${badgeConfig.border}`,
+                                                transition: 'all 0.3s ease'
                                             }}>
-
+                                                {badgeConfig.text && (
+                                                    <Text strong style={{ color: badgeConfig.color, fontSize: '12px', whiteSpace: 'nowrap' }}>
+                                                        {badgeConfig.text}
+                                                    </Text>
+                                                )}
                                                 {bookingProgress < 100 && status !== "error" && (
                                                     <div style={{
                                                         fontVariantNumeric: 'tabular-nums',
@@ -323,21 +364,13 @@ function TicketBookingCompletionResultPage() {
                                                         />
                                                     </div>
                                                 )}
-                                                {status === "error" && (
-                                                    <Text strong style={{ color: '#cf1322', fontSize: '12px', whiteSpace: 'nowrap' }}>
-                                                        Резервація прострочена
-                                                    </Text>
-                                                )}
 
                                                 {bookingProgress < 100 && status !== "error" && (
                                                     <div style={{ width: '1px', height: '14px', backgroundColor: '#d9f7be' }}></div>
                                                 )}
 
                                                 <div className="status-icon" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    {isProcessing && <Spin size="small" />}
-                                                    {isFinish && <CheckCircleFilled style={{ color: '#52c41a', fontSize: 18 }} />}
-                                                    {isError && <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 18 }} />}
-                                                    {status === 'pending' && <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />}
+                                                    {isProcessing ? <Spin size="small" /> : badgeConfig.icon}
                                                 </div>
                                             </div>
                                         </div>
@@ -430,7 +463,7 @@ function TicketBookingCompletionResultPage() {
                                         icon={<SearchOutlined />}
                                         onClick={() => navigate('/')}
                                     >
-                                        Повернутися до пошуку
+                                        <Text strong>Повернутися до пошуку</Text>
                                     </Button>
                                 </Empty>
                             </div>
