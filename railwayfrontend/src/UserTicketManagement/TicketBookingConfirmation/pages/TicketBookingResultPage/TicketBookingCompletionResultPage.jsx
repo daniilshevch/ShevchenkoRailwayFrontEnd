@@ -96,7 +96,6 @@ function TicketBookingCompletionResultPage() {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [running]);
 
-
     const startBooking = async () => {
         setRunning(true);
         setBookingStatus(steps.map(() => "processing"));
@@ -281,10 +280,10 @@ function TicketBookingCompletionResultPage() {
                             const isFailed = status === "error" && !isExpired;
 
                             let badgeConfig = {
-                                color: '#d9d9d9',
+                                color: 'grey',
                                 bg: '#fafafa',
                                 border: '#d9d9d9',
-                                text: '',
+                                text: 'Очікування підтвердження',
                                 icon: <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />
                             };
 
@@ -314,9 +313,17 @@ function TicketBookingCompletionResultPage() {
                                 };
                             }
 
+                            const stripeColor = isFinish ? '#52c41a' : isExpired ? '#faad14' : isFailed ? '#ff4d4f' : '#d9d9d9';
+
                             return (
                                 <div key={ticket.id} className={`ticket-card-item ${status || 'pending'}`}>
-                                    <div className="status-stripe"></div>
+                                    <div
+                                        className="status-stripe"
+                                        style={{
+                                            backgroundColor: stripeColor,
+                                            transition: 'background-color 0.3s ease'
+                                        }}
+                                    ></div>
                                     <div className="ticket-card-content">
                                         <div className="ticket-row header-row">
                                             <div className="passenger-info">
@@ -354,6 +361,10 @@ function TicketBookingCompletionResultPage() {
                                                                     type: "CHANGE_TICKET_STATUS_FOR_CART",
                                                                     ticket: { ...ticket, ticket_status: "EXPIRED" }
                                                                 });
+                                                                setSteps(prevSteps => prevSteps.map(s =>
+                                                                    (s.full_ticket_id === ticket.full_ticket_id)
+                                                                        ? { ...s, ticket_status: "EXPIRED" } : s
+                                                                ));
                                                                 setBookingStatus(prev => {
                                                                     const next = [...prev];
                                                                     next[idx] = "error";
