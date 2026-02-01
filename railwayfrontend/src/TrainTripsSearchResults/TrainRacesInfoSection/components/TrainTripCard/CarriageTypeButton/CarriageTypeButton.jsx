@@ -15,7 +15,10 @@ function CarriageTypeButton({ trainRaceId, startStation, endStation, type, class
     const navigate = useNavigate();
     const handleCarriageTypeClick = (carriageType, trainRaceId) => {
         trainSearchService.SAVE_TRAIN_TRIP_DATA_TO_LOCAL_STORAGE(generalTrainRaceInfo);
-        const url = trainSearchService.GET_CARRIAGE_TYPE_SELECTION_URL(trainRaceId, startStation, endStation, type);
+        let url = trainSearchService.GET_CARRIAGE_TYPE_SELECTION_URL(trainRaceId, startStation, endStation, type);
+        if (classStats.free_places === 0) {
+            url += (url.includes('?') ? '&' : '?') + "showFull=true";
+        }
         navigate(url);
     }
 

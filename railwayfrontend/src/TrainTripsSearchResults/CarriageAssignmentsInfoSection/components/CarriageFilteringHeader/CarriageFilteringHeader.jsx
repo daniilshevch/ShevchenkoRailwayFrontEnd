@@ -9,11 +9,10 @@ function CarriageFilteringHeader({groupedSeats, initialSelectedTypes, initialSel
 {
     const { token } = theme.useToken();
     const [searchParams] = useSearchParams();
-    const [showCarriagesWithoutFreePlaces, setShowCarriagesWithoutFreePlaces] = useState(false);
+    const showCarriagesWithoutFreePlaces = searchParams.get("showFull") === "true";
 
     const handleShowCarriagesWithoutFreePlaces = (e) => {
         const isChecked = e.target.checked;
-        setShowCarriagesWithoutFreePlaces(isChecked);
         onChange?.({
             queryParams: searchParams.getAll("type"),
             showCarriagesWithoutFreePlaces: isChecked

@@ -13,13 +13,16 @@ function CarriageQualityClassButton({ trainRaceId, startStation, endStation, car
     }
     const handleCarriageTypeAndQualityClassClick = (carriageType, qualityClass, trainRaceId) => {
         trainSearchService.SAVE_TRAIN_TRIP_DATA_TO_LOCAL_STORAGE(generalTrainRaceInfo);
-        const url = trainSearchService.GET_CARRIAGE_TYPE_WITH_QUALITY_CLASS_SELECTION_URL(
+        let url = trainSearchService.GET_CARRIAGE_TYPE_WITH_QUALITY_CLASS_SELECTION_URL(
             trainRaceId,
             startStation,
             endStation,
             carriageType,
             qualityClass
         );
+        if (data.free_places === 0) {
+            url += (url.includes('?') ? '&' : '?') + "showFull=true";
+        }
         navigate(url);
     }
     const getColorClass = (qualityClass) => {

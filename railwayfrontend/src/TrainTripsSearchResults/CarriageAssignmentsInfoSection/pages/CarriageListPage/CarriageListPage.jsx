@@ -40,9 +40,12 @@ function CarriageListPage() //January
 
     //Стани UI
     const [isScheduleVisible, setIsScheduleVisible] = useState(false);
-    const [showCarriagesWithoutFreePlaces, setShowCarriagesWithoutFreePlaces] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const showCarriagesWithoutFreePlaces = useMemo(() =>
+            searchParams.get("showFull") === "true",
+        [searchParams]);
 
     //Універсальна функція оновлення станів з отриманого об'єкта
     const applyTrainData = useCallback((data) => {
@@ -175,19 +178,29 @@ function CarriageListPage() //January
         carriageDisplayService.PARSE_INITIAL_SELECTED_SUBTYPES(searchParams), [searchParams]);
     const initialSelectedTypes = useMemo(() => Object.keys(initialSelectedSubtypes), [initialSelectedSubtypes]);
     const handleFilterChange = ({ queryParams, showCarriagesWithoutFreePlaces: showFull }) => {
-        if(showFull !== undefined)
-        {
-            setShowCarriagesWithoutFreePlaces(showFull)
-        }
-        const current = searchParams.getAll("type");
-        const same =
-            current.length === queryParams.length &&
-            current.every((v, i) => v === queryParams[i]);
-        if (same) return;
         const next = new URLSearchParams(searchParams);
-        next.delete("type");
-        for (const t of queryParams) next.append("type", t);
-        setSearchParams(next, { replace: true });
+        let hasChanged = false;
+
+        if (queryParams !== undefined) {
+            const current = searchParams.getAll("type");
+            const sameTypes = current.length === queryParams.length && current.every((v, i) => v === queryParams[i]);
+            if (!sameTypes) {
+                next.delete("type");
+                queryParams.forEach(t => next.append("type", t));
+                hasChanged = true;
+            }
+        }
+
+        if (showFull !== undefined) {
+            const currentShowFull = searchParams.get("showFull") === "true";
+            if (showFull !== currentShowFull) {
+                if (showFull) next.set("showFull", "true");
+                else next.delete("showFull");
+                hasChanged = true;
+            }
+        }
+
+        if (hasChanged) setSearchParams(next, { replace: true });
     };
 
     useEffect(() => {
@@ -195,6 +208,7 @@ function CarriageListPage() //January
         const filteredCarriagesList = carriageDisplayService.FILTER_CARRIAGES_BY_TYPE_AND_QUALITY(fullTrainData, typeParams);
         setCarriages(filteredCarriagesList);
     }, [searchParams, fullTrainData, refreshTrigger]);
+
 
 
     const displayedCarriages = useMemo(() =>
