@@ -283,7 +283,7 @@ function TicketBookingCompletionResultPage() {
                                 color: 'grey',
                                 bg: '#fafafa',
                                 border: '#d9d9d9',
-                                text: 'Очікування підтвердження',
+                                text: 'Очікування підтвердження:',
                                 icon: <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />
                             };
 

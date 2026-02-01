@@ -13,6 +13,7 @@ import changeTrainRouteIdIntoUkrainian, {
 import {formatDM_HM} from "../../../../../SystemUtils/InterpreterMethodsAndDictionaries/TimeFormaters.js";
 import "./SingleTicketBookingConfirmationInfoComponent.css";
 const { Text, Title } = Typography;
+import {LeftOutlined} from "@ant-design/icons";
 import { CloseCircleFilled, ClockCircleOutlined, UndoOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import {
     ticketBookingProcessingService
@@ -29,11 +30,13 @@ function UpperOrLower(number)
     }
 
 }
-
 function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, namePrefix, potentialTicketCartState, potentialTicketCartDispatch})
 {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
+    const returnToTrainTripBooking = (train_race_id, starting_station, ending_station) => {
+        navigate(`/${train_race_id}/${starting_station}/${ending_station}/carriages`);
+    }
     const cancelTicketReservation = async () =>
     {
         try
@@ -59,14 +62,42 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                 size="small"
                 title={`Квиток ${index + 1} із ${total}`}
                 extra={
-                    <Space size={8}>
+                    <Space size={6}>
+                        <Button
+                            icon={<LeftOutlined />}
+                            onClick={() => {returnToTrainTripBooking(ticket.train_race_id, ticket.trip_starting_station, ticket.trip_ending_station)}}
+                            style={{
+                                backgroundColor: '#e6f7ff',
+                                color: '#0052cc',
+                                borderColor: '#91d5ff',
+                                fontWeight: 600,
+                                borderRadius: '6px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            До списку вагонів
+                        </Button>
+
                         <Popconfirm
                             title="Скасувати бронь на цей квиток?"
                             okText="Так"
                             cancelText="Ні"
-                            onConfirm={() => {cancelTicketReservation(ticket)}}
+                            onConfirm={() => cancelTicketReservation(ticket)}
                         >
-                            <Button size="small" danger>Скасувати бронювання</Button>
+                            <Button
+                                danger
+                                icon={<CloseCircleFilled style={{ fontSize: '14px' }} />}
+                                style={{
+                                    backgroundColor: '#fff1f0',
+                                    fontWeight: 600,
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                Скасувати бронь
+                            </Button>
                         </Popconfirm>
                     </Space>
                 }
@@ -124,7 +155,6 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
                                         size="middle"
                                         icon={<ArrowLeftOutlined />}
                                         style={{ borderRadius: '6px', fontSize: '14px', color: '#faad14',
-                                            // Колір рамки
                                             borderColor: '#faad14', }}
                                         onClick={() => navigate(-1)}
                                     >
@@ -148,14 +178,42 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
             size="small"
             title={`Квиток ${index + 1} із ${total}`}
             extra={
-                <Space size={8}>
+                <Space size={6}>
+                    <Button
+                        icon={<LeftOutlined />}
+                        onClick={() => {returnToTrainTripBooking(ticket.train_race_id, ticket.trip_starting_station, ticket.trip_ending_station)}}
+                        style={{
+                            backgroundColor: '#e6f7ff',
+                            color: '#0052cc',
+                            borderColor: '#91d5ff',
+                            fontWeight: 600,
+                            borderRadius: '6px',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        До списку вагонів
+                    </Button>
+
                     <Popconfirm
                         title="Скасувати бронь на цей квиток?"
                         okText="Так"
                         cancelText="Ні"
-                        onConfirm={() => {cancelTicketReservation(ticket)}}
+                        onConfirm={() => cancelTicketReservation(ticket)}
                     >
-                        <Button size="small" danger>Скасувати бронювання</Button>
+                        <Button
+                            danger
+                            icon={<CloseCircleFilled style={{ fontSize: '14px' }} />}
+                            style={{
+                                backgroundColor: '#fff1f0',
+                                fontWeight: 600,
+                                borderRadius: '6px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            Скасувати бронь
+                        </Button>
                     </Popconfirm>
                 </Space>
             }
@@ -232,14 +290,42 @@ function SingleTicketBookingConfirmationInfoComponent({ticket, index, total, nam
             size="small"
             title={`Квиток ${index + 1} із ${total}`}
             extra={
-                <Space size={8}>
+                <Space size={6}>
+                    <Button
+                        icon={<LeftOutlined />}
+                        onClick={() => {returnToTrainTripBooking(ticket.train_race_id, ticket.trip_starting_station, ticket.trip_ending_station)}}
+                        style={{
+                            backgroundColor: '#e6f7ff',
+                            color: '#0052cc',
+                            borderColor: '#91d5ff',
+                            fontWeight: 600,
+                            borderRadius: '6px',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        До списку вагонів
+                    </Button>
+
                     <Popconfirm
                         title="Скасувати бронь на цей квиток?"
                         okText="Так"
                         cancelText="Ні"
-                        onConfirm={() => {cancelTicketReservation(ticket)}}
+                        onConfirm={() => cancelTicketReservation(ticket)}
                     >
-                        <Button size="small" danger>Скасувати бронювання</Button>
+                        <Button
+                            danger
+                            icon={<CloseCircleFilled style={{ fontSize: '14px' }} />}
+                            style={{
+                                backgroundColor: '#fff1f0',
+                                fontWeight: 600,
+                                borderRadius: '6px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            Скасувати бронь
+                        </Button>
                     </Popconfirm>
                 </Space>
             }

@@ -4,6 +4,7 @@
 import {userService} from "../../UserDefinerService/UserDefiner.js";
 import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 
+const maxTicketsInCart = 40;
 class TicketBookingProcessingService {
     GET_POTENTIAL_TICKET_CART_FROM_STORAGE(potentialTicketCartDispatch) {
         try {
@@ -80,13 +81,13 @@ class TicketBookingProcessingService {
     }
     ADD_POTENTIAL_NOT_RESERVED_TICKET_TO_CART(potentialTicketCartState, potentialTicketCartDispatch, potentialTicket, messageApi)
     {
-        if(potentialTicketCartState.potentialTicketsList.length < 4)
+        if(potentialTicketCartState.potentialTicketsList.length < maxTicketsInCart)
         {
             potentialTicketCartDispatch({type: "ADD_TICKET", ticket: potentialTicket});
         }
         else
         {
-            messageApi.info("Максимальна кількість потенційних квитків в кошику - 4")
+            messageApi.info(`Максимальна кількість потенційних квитків в кошику - ${maxTicketsInCart}`)
         }
     }
     REMOVE_POTENTIAL_TICKET_FROM_CART_IF_YET_NOT_RESERVED(potentialTicketCartDispatch, potentialTicket)
