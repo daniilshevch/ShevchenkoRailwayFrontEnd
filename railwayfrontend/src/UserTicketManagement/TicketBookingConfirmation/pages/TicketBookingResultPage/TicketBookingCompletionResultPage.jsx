@@ -32,6 +32,7 @@ import dayjs from 'dayjs';
 import {
     ticketBookingProcessingService
 } from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
+import {TicketTimer} from "../../../../../SystemUtils/UserTicketCart/TicketTimer/TicketTimer.jsx";
 const { Text, Title, Paragraph } = Typography;
 
 const getClassTagStyle = (qualityClass) => {
@@ -286,11 +287,58 @@ function TicketBookingCompletionResultPage() {
                                                     {ticket.passenger_trip_info?.passenger_name} {ticket.passenger_trip_info?.passenger_surname}
                                                 </Text>
                                             </div>
-                                            <div className="status-icon">
-                                                {isProcessing && <Spin size="small" />}
-                                                {isFinish && <CheckCircleFilled style={{ color: '#52c41a', fontSize: 20 }} />}
-                                                {isError && <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 20 }} />}
-                                                {status === 'pending' && <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 20 }} />}
+
+                                            <div className="status-badge" style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                backgroundColor: status === 'error' ? '#fff1f0' : '#f6ffed',
+                                                padding: '4px 12px',
+                                                borderRadius: '20px',
+                                                border: `1px solid ${status === 'error' ? '#ffa39e' : '#d9f7be'}`,
+                                                transition: 'all 0.3s ease',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                                            }}>
+
+                                                {bookingProgress < 100 && status !== "error" && (
+                                                    <div style={{
+                                                        fontVariantNumeric: 'tabular-nums',
+                                                        fontSize: '13px',
+                                                        letterSpacing: '-0.2px'
+                                                    }}>
+                                                        <TicketTimer
+                                                            expirationTime={ticket.booking_expiration_time}
+                                                            onExpire={() => {
+                                                                potentialTicketCartDispatch({
+                                                                    type: "CHANGE_TICKET_STATUS_FOR_CART",
+                                                                    ticket: { ...ticket, ticket_status: "EXPIRED" }
+                                                                });
+                                                                setBookingStatus(prev => {
+                                                                    const next = [...prev];
+                                                                    next[idx] = "error";
+                                                                    return next;
+                                                                });
+                                                                messageApi.warning(`Час резервації місця ${ticket.place_in_carriage} вичерпано`);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
+                                                {status === "error" && (
+                                                    <Text strong style={{ color: '#cf1322', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                                                        Резервація прострочена
+                                                    </Text>
+                                                )}
+
+                                                {bookingProgress < 100 && status !== "error" && (
+                                                    <div style={{ width: '1px', height: '14px', backgroundColor: '#d9f7be' }}></div>
+                                                )}
+
+                                                <div className="status-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    {isProcessing && <Spin size="small" />}
+                                                    {isFinish && <CheckCircleFilled style={{ color: '#52c41a', fontSize: 18 }} />}
+                                                    {isError && <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 18 }} />}
+                                                    {status === 'pending' && <ClockCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />}
+                                                </div>
                                             </div>
                                         </div>
 
