@@ -202,7 +202,7 @@ function TrainTripCard({ train, showWithoutFreePlaces })
 
             <div className="wagon-buttons">
                 {train.grouped_carriage_statistics_list &&
-                    Object.entries(train.grouped_carriage_statistics_list).map(([type, classStats]) => (
+                    Object.entries(train.grouped_carriage_statistics_list).filter(([type, classStats]) => showWithoutFreePlaces || classStats.free_places > 0).map(([type, classStats]) => (
                         <CarriageTypeButton
                             key={type}
                             trainRaceId={train.train_race_id}
