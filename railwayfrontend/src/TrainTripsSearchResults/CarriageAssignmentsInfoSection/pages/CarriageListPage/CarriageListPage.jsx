@@ -1,7 +1,8 @@
 ﻿import React, {useEffect, useReducer, useState, useMemo, useCallback} from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CarriageListLayout from '../../components/CarriageListLayout/CarriageListLayout.jsx';
-import {message, Spin} from 'antd';
+import {message, Spin, Empty, Space, Button, Typography} from 'antd';
+import {ReloadOutlined, EyeOutlined} from '@ant-design/icons';
 import './CarriageListPage.css';
 import {initialPotentialTicketCartState, potentialTicketCartReducer} from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartSystem.js";
 import UserPotentialTicketCartDrawer from "../../../../../SystemUtils/UserTicketCart/UserPotentialTicketCartDrawer/UserPotentialTicketCartDrawer.jsx";
@@ -20,6 +21,7 @@ import {
 } from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
 import {carriageDisplayService} from "../../services/CarriageDisplayService.js";
 
+const { Text } = Typography;
 function CarriageListPage() //January
 {
     const [messageApi, contextHolder] = message.useMessage();
@@ -203,17 +205,13 @@ function CarriageListPage() //January
         if (hasChanged) setSearchParams(next, { replace: true });
     };
 
-    useEffect(() => {
-        const typeParams =  searchParams.getAll("type");
-        const filteredCarriagesList = carriageDisplayService.FILTER_CARRIAGES_BY_TYPE_AND_QUALITY(fullTrainData, typeParams);
-        setCarriages(filteredCarriagesList);
-    }, [searchParams, fullTrainData, refreshTrigger]);
+    const displayedCarriages = useMemo(() => {
+        if (!fullTrainData) return null;
+        const typeParams = searchParams.getAll("type");
+        const filteredByType = carriageDisplayService.FILTER_CARRIAGES_BY_TYPE_AND_QUALITY(fullTrainData, typeParams);
+        return carriageDisplayService.GET_FINAL_DISPLAYED_CARRIAGES(filteredByType, showCarriagesWithoutFreePlaces);
 
-
-
-    const displayedCarriages = useMemo(() =>
-        carriageDisplayService.GET_FINAL_DISPLAYED_CARRIAGES(carriages, showCarriagesWithoutFreePlaces),
-        [carriages, showCarriagesWithoutFreePlaces]);
+    }, [fullTrainData, searchParams, showCarriagesWithoutFreePlaces]);
 
     return (
         <>
@@ -238,11 +236,80 @@ function CarriageListPage() //January
                 isLoading={isLoading}
             ></CarriageFilteringHeader>
             <div className="carriage-list-page">
-                {!carriages ? (
+                {!displayedCarriages ? (
                         <div className="loading-container">
                         <Spin size="large" tip="Завантаження доступних вагонів..." />
                         </div>
-                    )
+                    ) : displayedCarriages.length === 0 ? (
+                        <>
+                    <div style={{
+                        padding: '120px 30px',
+                        background: 'white',
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                        textAlign: 'center',
+                        margin: '0 auto',
+                        width: '95%',
+                    }} className="empty-result-card">
+                        <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={
+                                <div style={{ marginTop: '16px' }}>
+                                    <Text strong style={{ fontSize: '18px', display: 'block', color: '#595959' }}>
+                                        Вагонів не знайдено
+                                    </Text>
+                                    <Text type = "secondary" style = {{fontWeight: 700}}>
+                                        Місць в вагонах за такими критеріями пошуку не знайдено. Спробуйте змінити фільтри для вагонів
+                                    </Text>
+                                </div>
+                            }
+                        >
+                            <Space size="middle" style={{ marginTop: '20px' }}>
+                                <Button
+                                    icon={<ReloadOutlined />}
+                                    onClick={() => handleFilterChange({ queryParams: [] })}
+                                    className="empty-action-btn secondary"
+                                    style={{
+                                        height: '40px',
+                                        borderRadius: '20px',
+                                        padding: '0 20px',
+                                        fontWeight: 600,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px'
+                                    }}
+                                >
+                                    Скинути типи
+                                </Button>
+
+                                {/* Кнопка "Показати без місць" — головна дія */}
+                                {!showCarriagesWithoutFreePlaces && (
+                                    <Button
+                                        type="primary"
+                                        icon={<EyeOutlined />}
+                                        onClick={() => handleFilterChange({ showCarriagesWithoutFreePlaces: true })}
+                                        className="empty-action-btn primary"
+                                        style={{
+                                            height: '40px',
+                                            borderRadius: '20px',
+                                            padding: '0 24px',
+                                            fontWeight: 600,
+                                            backgroundColor: '#1677ff',
+                                            boxShadow: '0 4px 10px rgba(22, 119, 255, 0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px'
+                                        }}
+                                    >
+                                        Показати без місць
+                                    </Button>
+                                )}
+                            </Space>
+                        </Empty>
+                    </div>
+                         <CarriageListLegend></CarriageListLegend>
+                        </>
+                )
                     :(
                     <>
                         <CarriageListLayout
@@ -254,15 +321,15 @@ function CarriageListPage() //January
                             getTicketFromCart = {getTicketFromCart}
                         />
                         <CarriageListLegend/>
-                        <UserPotentialTicketCartDrawer
-                            cartState={potentialTicketCartState}
-                            removePotentialTicketFromCart={removePotentialTicketFromCart}
-                            dispatch = {potentialTicketCartDispatch}
-                        />
                     </>
                 )
             }
             </div>
+            <UserPotentialTicketCartDrawer
+                cartState={potentialTicketCartState}
+                removePotentialTicketFromCart={removePotentialTicketFromCart}
+                dispatch = {potentialTicketCartDispatch}
+            />
             <TrainScheduleModal
                 visible={isScheduleVisible}
                 onClose={() => setIsScheduleVisible(false)}
@@ -491,3 +558,15 @@ export default CarriageListPage;
 //     }
 //     return dict;
 // }, [searchParams]);
+
+// useEffect(() => {
+//     const typeParams =  searchParams.getAll("type");
+//     const filteredCarriagesList = carriageDisplayService.FILTER_CARRIAGES_BY_TYPE_AND_QUALITY(fullTrainData, typeParams);
+//     setCarriages(filteredCarriagesList);
+// }, [searchParams, fullTrainData, refreshTrigger]);
+//
+//
+//
+// const displayedCarriages = useMemo(() =>
+//     carriageDisplayService.GET_FINAL_DISPLAYED_CARRIAGES(carriages, showCarriagesWithoutFreePlaces),
+//     [carriages, showCarriagesWithoutFreePlaces]);

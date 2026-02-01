@@ -83,6 +83,7 @@ const TypeLabel = React.memo(({
             >
                 {allAvailableOptions.map((c) => {
                     const isSelected = currentSelected.includes(c.key);
+                    const isEmpty = c.free_places === 0;
                     return (
                         <div
                             key={c.key}
@@ -91,6 +92,8 @@ const TypeLabel = React.memo(({
                                 padding: '6px 8px',
                                 margin: '0 -4px',
                                 borderRadius: 4,
+                                opacity: isEmpty ? 0.75 : 1,
+                                filter: isEmpty ? 'grayscale(0.4)' : 'none',
                                 transition: 'background-color 0.2s'
                             }}
                         >
@@ -98,7 +101,7 @@ const TypeLabel = React.memo(({
                                 <Space>
                                     <Tag color={getSubtypeColor(c.key)} style={{ margin: 0, width: 24, textAlign: 'center', padding: 0 }}>{c.key}</Tag>
                                     <span style={{ fontSize: 12, fontWeight: 600, color: token.colorTextSecondary }}>
-                                        {getPluralCarriage(c.carriage_statistics_list.length)}, {c.free_places} місць, {c.min_price} грн
+                                        {getPluralCarriage(c.carriage_statistics_list.length)}, {!isEmpty ? `${c.free_places}, місць ${c.min_price} грн` : `місця розпродані`}
                                     </span>
                                 </Space>
                             </Checkbox>
@@ -252,6 +255,26 @@ export default function CarriageTypeAndQualityFilter({
             return nextSubtypes;
         });
     }, [carriageTypes]);
+
+    useEffect(() => {
+        if (initiallyLoaded) {
+            const nextSub = {};
+            const noInitialTypes = initialSelectedTypes.length === 0;
+
+            for (const t of carriageTypes) {
+                const init = initialSelectedSubtypes?.[t] ?? [];
+
+                if (noInitialTypes || (init.length > 0 && init[0] === "All")) {
+                    nextSub[t] = getClassEntries(t).map(c => c.key);
+                } else {
+                    nextSub[t] = Array.isArray(init) ? Array.from(new Set(init)) : [];
+                }
+            }
+
+            setSelectedSubtypes(nextSub);
+            setSelectedTypes(noInitialTypes ? [...carriageTypes] : initialSelectedTypes);
+        }
+    }, [initialSelectedTypes, initialSelectedSubtypes, carriageTypes]);
 
     const getClassEntries = (type) => {
         const statsForCarriageType = groupedSeats[type];

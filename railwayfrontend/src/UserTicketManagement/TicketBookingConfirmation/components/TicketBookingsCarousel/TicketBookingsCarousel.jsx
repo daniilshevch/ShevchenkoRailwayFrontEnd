@@ -103,7 +103,7 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
     };
     return (
         <Card style={{ maxWidth: 1000, margin: "0 auto" }} bodyStyle={{ padding: 16 }}>
-            <Space direction="vertical" size={16} style={{ width: "100%" }}>
+            <Space direction="vertical" size={30} style={{ width: "100%" }}>
                 <Title level={4} style={{ margin: 0 }}>
                     Оформлення квитків
                 </Title>

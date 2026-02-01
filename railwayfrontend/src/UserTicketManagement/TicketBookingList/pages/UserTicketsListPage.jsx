@@ -237,7 +237,8 @@ export default function UserTicketsListPage() {
         }
 
         if (err) {
-            if (err.message.includes("401")) {
+            if (err.message.includes("401") ||
+                err.message?.toLowerCase().includes("unauthorized")) {
                 return renderEmptyState("unauthorized");
             }
             return <Alert type="error" showIcon message="Помилка завантаження" description={err.message} />;
