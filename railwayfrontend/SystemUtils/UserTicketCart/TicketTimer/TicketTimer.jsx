@@ -34,7 +34,7 @@ export const TicketTimer = ({ expirationTime, onExpire }) => {
 
     if (timeLeft <= 0) return <Text type="danger" style={{ marginLeft: '4px', fontWeight:500 }}>(0:00)</Text>;
 
-    const isExpiringSoon = timeLeft < 60000; // менше 1 хвилини
+    const isExpiringSoon = timeLeft < 60000;
 
     return (
         <Text

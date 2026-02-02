@@ -1,5 +1,5 @@
 ﻿import { Button, Space, Typography, Tooltip, Badge, Alert } from "antd";
-import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined, UndoOutlined} from "@ant-design/icons";
+import { ShoppingCartOutlined, InfoCircleOutlined, ArrowRightOutlined, UndoOutlined, ClockCircleOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons";
 import React, { useState } from "react";
 import { stationTitleIntoUkrainian } from "../../InterpreterMethodsAndDictionaries/StationsDictionary.js";
 import changeTrainRouteIdIntoUkrainian, { getTrainRouteIdFromTrainRaceId } from "../../InterpreterMethodsAndDictionaries/TrainRoutesDictionary.js";
@@ -68,16 +68,25 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                         gap: '10px'
                     }}>
                         {tickets.map((potential_ticket, index) => {
+                            const isExpired = potential_ticket.ticket_status === "EXPIRED";
+                            const isReserved = potential_ticket.ticket_status === "RESERVED";
+                            const isFailed = potential_ticket.ticket_status === "BOOKING_FAILED";
                             let statusClass = "status-pending";
-                            if (potential_ticket.ticket_status === "RESERVED") statusClass = "status-reserved";
-                            if (potential_ticket.ticket_status === "BOOKING_FAILED") statusClass = "status-failed";
-                            if (potential_ticket.ticket_status === "EXPIRED") statusClass = "status-expired";
+                            if (isReserved) statusClass = "status-reserved";
+                            if (isFailed) statusClass = "status-failed";
+                            if (isExpired) statusClass = "status-expired";
                             return (
                             <div
                                 key={index}
                                 className={`cart-ticket ticket-status-marker ${statusClass} ${potential_ticket.ticket_status === 'EXPIRED' ? 'ticket-expired' : ''}`}
                                 style={{ margin: 0, width: '100%' }}
                             >
+                                <div className="status-marker-icon">
+                                    {isExpired && <ClockCircleOutlined />}
+                                    {isReserved && <CheckOutlined />}
+                                    {isFailed && <CloseOutlined />}
+                                    {potential_ticket.ticket_status === "SELECTED_YET_NOT_RESERVED" && "..."}
+                                </div>
                                 <div className="cart-ticket-info">
                                     <div className="cart-ticket-header" style = {{marginLeft: 10}}>
                                         <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text><Text className={`train-class-section-${potential_ticket.train_route_quality_class}`}>({potential_ticket.train_route_quality_class})</Text> |&nbsp;
@@ -94,7 +103,6 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
                                                 expirationTime={potential_ticket.booking_expiration_time}
                                                 onExpire={() => {
                                                     markTicketAsExpired(potential_ticket);
-                                                    console.log("Час резерву вийшов для квитка", potential_ticket.id);
                                                     dispatch({
                                                         type: "CHANGE_TICKET_STATUS_FOR_CART",
                                                         ticket: { ...potential_ticket, ticket_status: "EXPIRED" }

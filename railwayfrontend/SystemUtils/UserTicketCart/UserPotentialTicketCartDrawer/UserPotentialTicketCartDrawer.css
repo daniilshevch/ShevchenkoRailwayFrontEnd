@@ -127,62 +127,91 @@
         grid-template-columns: 1fr;
     }
 }
-/* Спільний стиль для маркера */
-.ticket-status-marker::after {
-    position: absolute;
-    top: -8px; /* Виносимо трохи за межі картки зверху */
-    left: -8px; /* Виносимо трохи за межі зліва */
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 900;
-    color: #fff;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+/*!* Спільний стиль для маркера *!*/
+/*.ticket-status-marker::after {*/
+/*    position: absolute;*/
+/*    top: -8px; !* Виносимо трохи за межі картки зверху *!*/
+/*    left: -8px; !* Виносимо трохи за межі зліва *!*/
+/*    width: 25px;*/
+/*    height: 25px;*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid #fff;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    font-size: 12px;*/
+/*    font-weight: 900;*/
+/*    color: #fff;*/
+/*    z-index: 10;*/
+/*    box-shadow: 0 2px 4px rgba(0,0,0,0.2);*/
+/*}*/
 
-/* Успішне бронювання */
-.status-reserved::after {
-    content: '✓';
-    background-color: #52c41a;
-}
+/*!* Успішне бронювання *!*/
+/*.status-reserved::after {*/
+/*    content: '✓';*/
+/*    background-color: #52c41a;*/
+/*}*/
 
-/* Помилка або прострочення */
-.status-failed::after,
-.status-expired::after {
-    content: '✕';
-    background-color: #ff4d4f;
-}
+/*!* Помилка або прострочення *!*/
+/*.status-failed::after,*/
+/*.status-expired::after {*/
+/*    content: '✕';*/
+/*    background-color: #ff4d4f;*/
+/*}*/
 
-/* Стан вибору (синій годинник або крапки) */
-.status-pending::after {
-    content: '...';
-    background-color: #1677ff;
-    font-size: 10px;
-}
-/* Успішне бронювання - Зелена рамка */
+/*!* Стан вибору (синій годинник або крапки) *!*/
+/*.status-pending::after {*/
+/*    content: '...';*/
+/*    background-color: #1677ff;*/
+/*    font-size: 10px;*/
+/*}*/
+/*.status-expired::after {*/
+/*    content: '\23F2';*/
+/*    background-color: #faad14;*/
+/*    font-size: 14px;*/
+/*}*/
+/*!* Успішне бронювання - Зелена рамка *!*/
 .status-reserved {
     border: 2px solid #52c41a !important;
 }
 
 /* Помилка або прострочення - Червона рамка */
-.status-failed,
-.status-expired {
+.status-failed {
     border: 2px solid #ff4d4f !important;
 }
 
+.status-expired {
+    border: 2px solid #faad14 !important;
+}
 /* Стан вибору - Синя рамка */
 .status-pending {
     border: 2px solid #1677ff !important;
 }
 
-/* Оновлюємо маркер, щоб він краще пасував до кольорової рамки */
+
 .ticket-status-marker::after {
-    /* Твій існуючий код залишається, але можна додати: */
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
+
+
+.status-marker-icon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.status-reserved .status-marker-icon { background-color: #52c41a; }
+.status-failed .status-marker-icon { background-color: #ff4d4f; }
+.status-expired .status-marker-icon { background-color: #faad14; }
+.status-pending .status-marker-icon { background-color: #1677ff; font-size: 10px; }
