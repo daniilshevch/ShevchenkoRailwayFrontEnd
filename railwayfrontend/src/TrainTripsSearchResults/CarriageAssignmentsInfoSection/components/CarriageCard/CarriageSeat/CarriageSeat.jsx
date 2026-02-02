@@ -36,7 +36,7 @@ function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, 
         baseClass = "seat-selected-in-potential-cart-and-reserved-but-booking-failed";
         statusIcon = <CloseCircleFilled className="seat-badge-icon failed" />;
     }
-    else if(!isFree && isSelectedInPotentialCart)
+    else if(!isFree && isSelectedInPotentialCart && ticketStatus === "RESERVED")
     {
         baseClass = "seat-selected-in-potential-cart-and-reserved";
         statusIcon = <CheckCircleFilled className="seat-badge-icon success" />;
@@ -62,7 +62,7 @@ function CarriageSeat({ seatNumber, isFree, carriageType, carriageQualityClass, 
         {
             setIsBookingExpiredModalOpen(true);
         }
-        else if(!isFree && isSelectedInPotentialCart)
+        else if(!isFree && isSelectedInPotentialCart && ticketStatus === "RESERVED")
         {
             setIsBookingCancellationModalOpen(true);
         }
