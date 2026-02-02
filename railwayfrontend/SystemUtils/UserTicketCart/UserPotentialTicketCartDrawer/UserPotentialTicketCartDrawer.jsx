@@ -37,6 +37,14 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
         setIsLoginModalOpen(false);
         navigate('/login',{ state: { from: location } });
     };
+    const goToTrainTripBooking = (train_race_id, starting_station, ending_station) => {
+        const targetPath = `/${train_race_id}/${starting_station}/${ending_station}/carriages`;
+        if(location.pathname === targetPath)
+        {
+            return;
+        }
+        navigate(targetPath);
+    }
     const tickets = cartState.potentialTicketsList;
     return (
         <>
@@ -79,7 +87,11 @@ function UserPotentialTicketCartDrawer({cartState, removePotentialTicketFromCart
                                     key={`${potential_ticket.train_race_id}-${potential_ticket.carriage_position_in_squad}-${potential_ticket.place_in_carriage}-${potential_ticket.trip_starting_station}-${potential_ticket.trip_ending_station}-${index}`}
                                     className="cart-ticket"
                                 >
-                                    <div className="cart-ticket-info">
+                                    <div
+                                        className="cart-ticket-info"
+                                        style = {{cursor: "pointer"}}
+                                        onClick = {() => goToTrainTripBooking(potential_ticket.train_race_id, potential_ticket.trip_starting_station, potential_ticket.trip_ending_station)}
+                                    >
                                         <div className="cart-ticket-header">
                                             <b>Поїзд:</b> <Text className="train-route-id">{changeTrainRouteIdIntoUkrainian(getTrainRouteIdFromTrainRaceId(potential_ticket.train_race_id))}</Text> |&nbsp;
                                             <b>Вагон:</b> <Text className="carriage-number">{potential_ticket.carriage_position_in_squad}</Text><Text className="carriage-section">({changeCarriageTypeIntoUkrainian(potential_ticket.carriage_type)}, </Text><Text className={`carriage-class-section-${potential_ticket.carriage_quality_class}`}>{potential_ticket.carriage_quality_class}</Text><Text className="carriage-section">)</Text> |&nbsp;

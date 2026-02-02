@@ -236,7 +236,7 @@ function CarriageListPage() //January
                 isLoading={isLoading}
             ></CarriageFilteringHeader>
             <div className="carriage-list-page">
-                {!displayedCarriages ? (
+                {!displayedCarriages || isLoading ? (
                         <div className="loading-container">
                         <Spin size="large" tip="Завантаження доступних вагонів..." />
                         </div>
@@ -282,7 +282,6 @@ function CarriageListPage() //January
                                     Скинути типи
                                 </Button>
 
-                                {/* Кнопка "Показати без місць" — головна дія */}
                                 {!showCarriagesWithoutFreePlaces && (
                                     <Button
                                         type="primary"

@@ -215,3 +215,8 @@
 .status-failed .status-marker-icon { background-color: #ff4d4f; }
 .status-expired .status-marker-icon { background-color: #faad14; }
 .status-pending .status-marker-icon { background-color: #1677ff; font-size: 10px; }
+
+.cart-ticket-info:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+}
