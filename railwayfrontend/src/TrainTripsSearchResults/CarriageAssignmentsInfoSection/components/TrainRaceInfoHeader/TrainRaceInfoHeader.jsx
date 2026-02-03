@@ -1,4 +1,4 @@
-﻿import {Button, Typography} from "antd";
+﻿import {Button, Typography, Skeleton, Space} from "antd";
 import "./TrainRaceInfoHeader.css";
 import {
     stationTitleIntoUkrainian
@@ -15,15 +15,26 @@ function TrainRaceInfoHeader(
         startingStationDepartureTime,
         endingStationArrivalTime,
         trainRouteQualityClass,
-        setTrainScheduleModalVisible
+        setTrainScheduleModalVisible,
+        isLoading
     })
 {
     return (
         <>
             <div className="train-race-info-toolbar">
                 <div className="toolbar-left">
+                    {isLoading ? (
+                            <Space size="middle">
+                                <Skeleton.Button active size="small" style={{ width: 60, height: 20 }} />
+                                <Skeleton.Input active size="small" style={{ width: 250, height: 20 }} />
+                            </Space>
+                        ) :
+                        (
+                            <>
                     <Typography className="train-route-id">{trainRouteId}</Typography><Typography className={`train-class-section-${trainRouteQualityClass}`}>({trainRouteQualityClass})</Typography>
                     <Typography className="station-title">{stationTitleIntoUkrainian(startingStation)}</Typography><Typography className="station-time">({formatDM_HM(startingStationDepartureTime)})</Typography><Typography className="arrow">→</Typography><Typography className="station-title">{stationTitleIntoUkrainian(endingStation)}</Typography><Typography className="station-time">({formatDM_HM(endingStationArrivalTime)})</Typography>
+                            </>
+                    )}
                 </div>
                 <div className="toolbar-right">
                     <Button className="train-schedule-bar-button" type="text" onClick={() => setTrainScheduleModalVisible(true)}>Розклад руху поїзда</Button>

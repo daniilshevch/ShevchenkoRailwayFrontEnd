@@ -17,12 +17,21 @@ export function getCurrentUser()
         return null;
     }
 }
+const isTokenExpired = (token) => {
+    try {
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        return decoded.exp < currentTime;
+    } catch {
+        return true;
+    }
+};
 class UserService
 {
     getCurrentUser()
     {
         const token = localStorage.getItem('token');
-        if(!token) return null;
+        if(!token || isTokenExpired(token)) return null;
         try {
             const decoded = jwtDecode(token);
             return {

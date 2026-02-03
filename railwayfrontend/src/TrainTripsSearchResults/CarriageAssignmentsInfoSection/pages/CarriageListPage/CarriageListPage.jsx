@@ -226,6 +226,7 @@ function CarriageListPage() //January
                 startingStationDepartureTime={startingStationDepartureTime}
                 endingStationArrivalTime={endingStationArrivalTime}
                 setTrainScheduleModalVisible={setIsScheduleVisible}
+                isLoading={isLoading}
             />
             <CarriageFilteringHeader
                 groupedSeats={carriageStats}
