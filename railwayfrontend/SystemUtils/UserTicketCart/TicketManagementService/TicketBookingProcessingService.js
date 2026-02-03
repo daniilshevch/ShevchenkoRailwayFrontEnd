@@ -1,7 +1,7 @@
 ﻿import {
     CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE
 } from "../../ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
-import {userService} from "../../UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../UserDefinerService/UserDefiner.js";
 import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 
 const maxTicketsInCart = 40;
@@ -96,7 +96,7 @@ class TicketBookingProcessingService {
     }
     async CANCEL_TEMPORARY_TICKET_RESERVATION_ON_SERVER(ticket)
     {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         //potentialTicketCartDispatch({type: "REMOVE_TICKET", ticket: ticket});
         const ticket_info = {
             id: ticket.id,
@@ -145,7 +145,7 @@ class TicketBookingProcessingService {
     async INITIALIZE_TICKET_BOOKING_PROCESS(dispatch)
     {
         const potentialTicketsCart = localStorage.getItem("potentialTicketsCart");
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
 
         let ticketBookings = JSON.parse(potentialTicketsCart)?.potentialTicketsList ?? [];
         ticketBookings = ticketBookings.filter(ticket => ticket.ticket_status !== "BOOKING_FAILED"
@@ -254,7 +254,7 @@ class TicketBookingProcessingService {
     }
     async COMPLETE_MULTIPLE_TICKET_BOOKING_PURCHASE_TRANSACTION_ON_SERVER(tickets)
     {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         //НЕОБІХІДНО ВИРІШИТИ ПРОБЛЕМУ з passenger_trip_info, якщо перехід відбувається не централізованим методом
         const ticket_completion_info_list = tickets.map(ticket => ({
             mediator_ticket_booking: {

@@ -26,7 +26,7 @@ const isTokenExpired = (token) => {
         return true;
     }
 };
-class UserService
+class UserAuthenticationService
 {
     getCurrentUser()
     {
@@ -47,4 +47,4 @@ class UserService
         }
     }
 }
-export const userService = new UserService();
+export const userAuthenticationService = new UserAuthenticationService();

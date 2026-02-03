@@ -14,7 +14,7 @@ import {
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 import {ticketBookingProcessingService} from "../TicketManagementService/TicketBookingProcessingService.js";
-import {userService} from "../../UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../UserDefinerService/UserDefiner.js";
 
 const { Text, Title } = Typography;
 
@@ -24,7 +24,7 @@ function UserPotentialTicketCartPanel({ cartState, removePotentialTicketFromCart
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const handleCheckoutAttempt = async () => {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         if (!currentUser) {
             setIsLoginModalOpen(true);
         } else {

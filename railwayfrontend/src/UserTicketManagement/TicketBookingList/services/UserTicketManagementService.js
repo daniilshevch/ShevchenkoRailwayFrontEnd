@@ -1,11 +1,11 @@
 ﻿import {SERVER_URL} from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
-import {userService} from "../../../../SystemUtils/UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../../../SystemUtils/UserDefinerService/UserDefiner.js";
 
 class UserTicketManagementService
 {
     async GET_GROUPED_USER_TICKETS_FROM_SERVER(activeTab)
     {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         if (!currentUser?.token) {
             const error = new Error("Unauthorized");
             error.status = 401;
@@ -29,7 +29,7 @@ class UserTicketManagementService
     }
     async DOWNLOAD_TICKET_PDF(ticket)
     {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         try
         {
             const response = await fetch(`${SERVER_URL}/download-ticket-pdf`, {
@@ -73,7 +73,7 @@ class UserTicketManagementService
     }
     async RETURN_TICKET_AFTER_PURCHASE(ticket)
     {
-        const currentUser = userService.getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         try {
             const response = await fetch(`${SERVER_URL}/return-ticket-for-current-user/${ticket.full_ticket_id}`, {
                 method: "DELETE",
