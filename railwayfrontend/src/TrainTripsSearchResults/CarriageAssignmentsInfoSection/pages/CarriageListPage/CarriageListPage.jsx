@@ -64,7 +64,9 @@ function CarriageListPage() //January
     }, []);
     //Завантаження даних з сервера
     const loadTrainDataFromServer = async (lazy_load_mode = false,  refresh_mode = false) => {
-        setIsLoading(true);
+        if(!refresh_mode || !fullTrainData) {
+            setIsLoading(true);
+        }
         try {
             const data = await trainSearchService.LOAD_TRAIN_DATA_FROM_SERVER(train_race_id, start, end);
             applyTrainData(data);
