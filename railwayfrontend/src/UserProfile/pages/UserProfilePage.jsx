@@ -1,15 +1,16 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Form, Card, Row, Col, message, Spin } from 'antd';
-import UserSidePanel from '../UserSidePanel.jsx'; // Імпортуємо лівий компонент
+import UserSidePanel from '../UserSidePanel.jsx';
 import UserDataForm from '../UserDataForm.jsx';
-import {getCurrentUser} from "../../../SystemUtils/UserDefinerService/UserDefiner.js";   // Імпортуємо правий компонент
+import {
+    userAuthenticationService
+} from "../../../SystemUtils/UserAuthenticationService/UserAuthenticationService.js";   // Імпортуємо правий компонент
 
 const UserProfilePage = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
     const [imageUrl, setImageUrl] = useState(null);
 
-    // Хардкод статистики
     const stats = {
         kmTraveled: 12450,
         tripsCount: 42,
@@ -17,7 +18,7 @@ const UserProfilePage = () => {
     };
 
     useEffect(() => {
-        const user = getCurrentUser();
+        const user = userAuthenticationService.getCurrentUser();
         const fetchUserData = async () => {
             try {
                 const response = await fetch('https://localhost:7230/Client-API/get-user-profile-info', {

@@ -1,6 +1,8 @@
 ﻿import {Link, useNavigate} from 'react-router-dom';
 import "./Navbar.css";
-import { getCurrentUser } from "../../../SystemUtils/UserDefinerService/UserDefiner.js";
+import {
+    userAuthenticationService
+} from "../../../SystemUtils/UserAuthenticationService/UserAuthenticationService.js";
 import { Dropdown, Badge, Avatar, Typography } from 'antd';
 import { DownOutlined, UserOutlined, IdcardOutlined, LoginOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
@@ -14,52 +16,42 @@ function Navbar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentUser = getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         setUser(currentUser);
 
+        let blobUrl = null;
+        const loadProfileData = async () => {
+            const imageLoadResult = await userAuthenticationService.fetchProfileImage();
+            setProfileImageUrl(imageLoadResult.value);
+            if(imageLoadResult.type === "blob")
+            {
+                blobUrl = imageLoadResult.value;
+            }
+        };
         const updateCartCount = () => {
             const cartData = JSON.parse(localStorage.getItem("potentialTicketsCart"));
             setCartCount(cartData?.potentialTicketsList?.length ?? 0);
         };
 
+
+        loadProfileData();
         updateCartCount();
+
         window.addEventListener('storage', updateCartCount);
         window.addEventListener('cartUpdated', updateCartCount);
-
-        const fetchProfileImage = async () => {
-            if (!localStorage.getItem("token")) {
-                setProfileImageUrl("/unknown.jpg");
-                return;
-            }
-            try {
-                const response = await fetch("https://localhost:7230/Client-API/get-profile-image-for-current-user", {
-                    method: "GET",
-                    headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
-                });
-                if (!response.ok) throw new Error();
-                const contentType = response.headers.get("content-type");
-                if (contentType?.includes("application/json")) {
-                    const data = await response.json();
-                    setProfileImageUrl(data.imageUrl);
-                } else {
-                    const imageBlob = await response.blob();
-                    setProfileImageUrl(URL.createObjectURL(imageBlob));
-                }
-            } catch {
-                setProfileImageUrl("/unknown.jpg");
-            }
-        };
-        fetchProfileImage();
 
         return () => {
             window.removeEventListener('storage', updateCartCount);
             window.removeEventListener('cartUpdated', updateCartCount);
+            if(blobUrl)
+            {
+                URL.revokeObjectURL(blobUrl);
+            }
         };
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        window.location.reload();
+        userAuthenticationService.logout();
     };
 
     const menuItems = [
@@ -71,10 +63,7 @@ function Navbar() {
 
     return (
         <header className="navbar-wrapper">
-            {/* Старий логотип */}
             <img src="/background_images/44.png" alt="railway-logo" className="logo-image" />
-
-            {/* Стара навігація */}
             <nav className="navbar">
                 <ul>
                     <li><Link className="nav-button" to="/">ГОЛОВНА</Link></li>
@@ -83,7 +72,6 @@ function Navbar() {
                 </ul>
             </nav>
 
-            {/* Нова права частина */}
             <div className="profile-area">
                 {cartCount > 0 && (
                     <div className="cart-badge-wrapper">
@@ -114,3 +102,48 @@ function Navbar() {
 }
 
 export default Navbar;
+
+// useEffect(() => {
+//     const currentUser = userAuthenticationService.getCurrentUser();
+//     setUser(currentUser);
+//
+//     const updateCartCount = () => {
+//         const cartData = JSON.parse(localStorage.getItem("potentialTicketsCart"));
+//         setCartCount(cartData?.potentialTicketsList?.length ?? 0);
+//     };
+//
+//     updateCartCount();
+//     window.addEventListener('storage', updateCartCount);
+//     window.addEventListener('cartUpdated', updateCartCount);
+//
+//     const fetchProfileImage = async () => {
+//         if (!localStorage.getItem("token")) {
+//             setProfileImageUrl("/unknown.jpg");
+//             return;
+//         }
+//         try {
+//             const response = await fetch("https://localhost:7230/Client-API/get-profile-image-for-current-user", {
+//                 method: "GET",
+//                 headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+//             });
+//             if (!response.ok) throw new Error();
+//             const contentType = response.headers.get("content-type");
+//             if (contentType?.includes("application/json")) {
+//                 const data = await response.json();
+//                 //console.log(data.imageUrl);
+//                 setProfileImageUrl(data.imageUrl);
+//             } else {
+//                 const imageBlob = await response.blob();
+//                 setProfileImageUrl(URL.createObjectURL(imageBlob));
+//             }
+//         } catch {
+//             setProfileImageUrl("/unknown.jpg");
+//         }
+//     };
+//     fetchProfileImage();
+//
+//     return () => {
+//         window.removeEventListener('storage', updateCartCount);
+//         window.removeEventListener('cartUpdated', updateCartCount);
+//     };
+// }, []);

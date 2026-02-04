@@ -1,7 +1,7 @@
 ﻿import {
     CANCEL_TICKET_BOOKING_RESERVATION_BEFORE_PURCHASE
 } from "../../ServerConnectionConfiguration/Urls/TrainSearchUrls.js";
-import {userAuthenticationService} from "../../UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../UserAuthenticationService/UserAuthenticationService.js";
 import {SERVER_URL} from "../../ServerConnectionConfiguration/ConnectionConfiguration.js";
 
 const maxTicketsInCart = 40;

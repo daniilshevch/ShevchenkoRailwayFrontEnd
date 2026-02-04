@@ -12,7 +12,9 @@ import {
     LoginOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
-import { getCurrentUser } from "../../../SystemUtils/UserDefinerService/UserDefiner.js";
+import {
+    userAuthenticationService
+} from "../../../SystemUtils/UserAuthenticationService/UserAuthenticationService.js";
 
 const { Header, Content, Sider } = Layout;
 const { Title, Text } = Typography;
@@ -25,9 +27,8 @@ const MainAdminLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // 1. Логіка отримання користувача та фото (як у Navbar)
     useEffect(() => {
-        const currentUser = getCurrentUser();
+        const currentUser = userAuthenticationService.getCurrentUser();
         setUser(currentUser);
 
         const fetchProfileImage = async () => {

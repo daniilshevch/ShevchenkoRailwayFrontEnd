@@ -1,0 +1,87 @@
+﻿.services-section {
+    width: 100%;
+    padding: 100px 0;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+}
+
+.services-container {
+    max-width: 1200px;
+    width: 90%;
+    padding-bottom: 40px;
+}
+
+.services-header-clean {
+    text-align: center;
+    margin-bottom: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title-bold {
+    margin: 20px 0 12px 0 !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: #1a1a1a;
+}
+
+.simple-accent-line {
+    width: 60px;
+    height: 4px;
+    background-color: #1890ff;
+    border-radius: 2px;
+    margin-bottom: 24px;
+}
+
+.subtitle-clean {
+    font-size: 17px;
+    max-width: 500px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.service-card-minimal {
+    height: 100%;
+    border-radius: 12px;
+    border: 1px solid #ededed;
+    transition: all 0.3s ease;
+}
+
+.service-card-minimal:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+}
+
+.icon-box-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #fff;
+}
+
+.card-title-text {
+    margin: 0 0 8px 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+.card-desc-text {
+    font-size: 14px;
+    color: #595959;
+}
+
+@media (max-width: 768px) {
+    .services-section {
+        padding: 60px 0;
+    }
+    .main-title-bold {
+        font-size: 26px !important;
+    }
+}

@@ -8,9 +8,3 @@
     flex-direction: column; /* Елементи йдуть один за одним зверху вниз */
 }
 
-/* Якщо ви хочете, щоб табло мало відступи від країв */
-.home-container > :last-child {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    padding: 0 20px; /* Щоб табло не прилипало до країв екрану */
-}

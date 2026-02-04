@@ -14,7 +14,7 @@ import {
 import LoginRequiredModal from "../../LoginRequiredModal/LoginRequiredModal.jsx";
 import {TicketTimer} from "../TicketTimer/TicketTimer.jsx";
 import {ticketBookingProcessingService} from "../TicketManagementService/TicketBookingProcessingService.js";
-import {userAuthenticationService} from "../../UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../UserAuthenticationService/UserAuthenticationService.js";
 
 const { Text, Title } = Typography;
 

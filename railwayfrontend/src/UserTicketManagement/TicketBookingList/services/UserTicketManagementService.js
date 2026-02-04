@@ -1,5 +1,5 @@
 ﻿import {SERVER_URL} from "../../../../SystemUtils/ServerConnectionConfiguration/ConnectionConfiguration.js";
-import {userAuthenticationService} from "../../../../SystemUtils/UserDefinerService/UserDefiner.js";
+import {userAuthenticationService} from "../../../../SystemUtils/UserAuthenticationService/UserAuthenticationService.js";
 
 class UserTicketManagementService
 {
