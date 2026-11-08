@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Carousel, Card, Space, Typography, Form, Button, message, Steps, Empty, Spin } from "antd";
+import { Carousel, ConfigProvider, Typography, Form, Button, message, Steps, Empty, Spin } from "antd";
 import SingleTicketBookingConfirmationInfoComponent
     from "../SingleTicketBookingArrangementInfo/SingleTicketBookingConfirmationInfoComponent.jsx";
 import {useNavigate} from "react-router-dom";
@@ -14,9 +14,25 @@ import {TicketTimer} from "../../../../../SystemUtils/UserTicketCart/TicketTimer
 import {
     ticketBookingProcessingService
 } from "../../../../../SystemUtils/UserTicketCart/TicketManagementService/TicketBookingProcessingService.js";
+import "./TicketBookingsCarousel.css";
 
 
-const { Title, Text, Paragraph } = Typography;
+const { Text } = Typography;
+
+// Кольори каруселі: латунний акцент замість стандартного синього antd
+const bookingTheme = {
+    token: {
+        colorPrimary: "#d9a441",
+        colorError: "#c62828",
+        borderRadius: 6
+    },
+    components: {
+        Button: {
+            primaryColor: "#101f2a"
+        }
+    }
+};
+
 function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCartState, potentialTicketCartDispatch})
 {
     const [form] = Form.useForm();
@@ -30,38 +46,32 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
 
         if (t.ticket_status === "EXPIRED") {
             return {
-                title: <span style={{fontWeight: 500, color: '#faad14' }}>Квиток {idx + 1}</span>,
+                title: <span className="rwb-step__title rwb-step__title--warn">Квиток {idx + 1}</span>,
                 status: 'error',
-                icon: <ClockCircleFilled style={{ color: '#faad14' }} />,
-                description: <span style={{ color: '#faad14', fontSize: '12px', fontWeight: 'bold', marginLeft: '-60px' }}>Резервація прострочена</span>
+                icon: <ClockCircleFilled style={{ color: '#c78a00' }} />,
+                description: <span className="rwb-step__note rwb-step__note--warn">Резервація прострочена</span>
             };
         }
 
         if (t.ticket_status !== "RESERVED") {
             return {
-                title: <span style={{fontWeight: 500, color: '#ff4d4f' }}>Квиток {idx + 1}</span>,
+                title: <span className="rwb-step__title rwb-step__title--error">Квиток {idx + 1}</span>,
                 status: 'error',
-                icon: <CloseCircleFilled style={{ color: '#ff4d4f' }} />,
-                description: <span style={{ color: '#ff4d4f', fontSize: '12px', fontWeight: 'bold', marginLeft: '-30px' }}>Місце зайняте</span>
+                icon: <CloseCircleFilled style={{ color: '#c62828' }} />,
+                description: <span className="rwb-step__note rwb-step__note--error">Місце зайняте</span>
             };
         }
 
         return {
-            title: <span style={{fontWeight: 500, color: isCurrent ? '#1890ff' : '#52c41a' }}>Квиток {idx + 1}</span>,
+            title: <span className={`rwb-step__title rwb-step__title--${isCurrent ? 'current' : 'ok'}`}>Квиток {idx + 1}</span>,
             status: 'finish',
-            icon: <CheckCircleFilled style={{ color: isCurrent ? '#1890ff' : '#52c41a' }} />,
+            icon: <CheckCircleFilled style={{ color: isCurrent ? '#c79227' : '#2e7d4f' }} />,
             description: (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    lineHeight: '1.2',
-                    marginTop: '4px'
-                }}>
-                    <Text style={{ fontSize: '12px',fontWeight: 'bold', color: isCurrent ? '#1890ff' : '#52c41a', marginLeft: '-50px' }}>
+                <>
+                    <span className={`rwb-step__note rwb-step__note--${isCurrent ? 'current' : 'ok'}`}>
                         {'Успішно зарезервовано'}
-                    </Text>
-                    <div style = {{marginLeft: '-40px'}}>
+                    </span>
+                    <span className="rwb-step__timer">
                         <TicketTimer
                             expirationTime={t.booking_expiration_time}
                             onExpire={() => {
@@ -71,8 +81,8 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                                 });
                             }}
                         />
-                    </div>
-                </div>
+                    </span>
+                </>
             )
         };
     });
@@ -102,27 +112,31 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
         setCurrent(target);
     };
     return (
-        <Card style={{ maxWidth: 1000, margin: "0 auto" }} bodyStyle={{ padding: 16 }}>
-            <Space direction="vertical" size={30} style={{ width: "100%" }}>
-                <Title level={4} style={{ margin: 0 }}>
-                    Оформлення квитків
-                </Title>
+        <ConfigProvider theme={bookingTheme}>
+        <section className="rwb">
+            <header className="rwb__board">
+                <div>
+                    <span className="rwb__eyebrow">Shevchenko Railway</span>
+                    <h2 className="rwb__title">Оформлення квитків</h2>
+                </div>
+                {!loading && total > 0 && (
+                    <span className="rwb__count">Квитків у кошику: {total}</span>
+                )}
+            </header>
+            <div className="rwb__body">
                 {loading ? (
-                        <div style={{ padding: '80px 0', textAlign: 'center' }}>
+                        <div className="rwb__state">
                             <Spin size="large" tip="Завантаження квитків..." />
                         </div>
                 ) : total > 0 ? (
                     <>
-                <div style={{ marginBottom: 20 }}>
                     <Steps
                         size="small"
                         current={current}
                         onChange={handleStepChange}
                         items={renderStepItems}
                         type="navigation"
-                        style={{ padding: '0px 0' }}
                     />
-                </div>
                 <Form form={form} layout="vertical">
                     <Carousel
                         ref={carouselRef}
@@ -133,7 +147,7 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                         afterChange={(i) => setCurrent(i)}
                     >
                         {tickets.map((t, idx) => (
-                            <div key={`ticket-slide-${idx}`}>
+                            <div key={`ticket-slide-${idx}`} className="rwb__slide">
                                 <SingleTicketBookingConfirmationInfoComponent
                                     ticket={t}
                                     index={idx}
@@ -146,20 +160,17 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                         ))}
                     </Carousel>
 
-                    <Space
-                        style={{ marginTop: 16, width: "100%", justifyContent: "space-between" }}
-                    >
+                    <div className="rwb__nav">
                         <Button onClick={() => {go(-1)}} disabled={current === 0}>
                             Назад
                         </Button>
 
-                        <Text type="secondary">
+                        <span className="rwb__counter">
                             {current + 1}/{total}
-                        </Text>
+                        </span>
 
-                        <Space>
+                        <div className="rwb__nav-right">
                             <Button
-                                type="primary"
                                 onClick={() => {go(+1)}}
                                 disabled={current === total - 1}
                             >
@@ -168,13 +179,13 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                             <Button type="primary" onClick={() => handleConfirm()}>
                                 Підтвердити
                             </Button>
-                        </Space>
-                    </Space>
+                        </div>
+                    </div>
                 </Form>
                     </>) :(
-                    <div style={{ padding: '40px 0' }}>
+                    <div className="rwb__state">
                         <Empty
-                            image={<ShoppingCartOutlined style={{ fontSize: 64, color: '#d9d9d9' }} />}
+                            image={<ShoppingCartOutlined style={{ fontSize: 64, color: '#a89a78' }} />}
                             description={
                                 <span>
                                     <Text strong style={{ fontSize: '16px', display: 'block', fontWeight: "bold" }}>Ваш кошик квитків порожній</Text>
@@ -188,8 +199,9 @@ function TicketBookingsCarousel({tickets, loading, onSubmit, potentialTicketCart
                         </Empty>
                     </div>
                 )}
-            </Space>
-        </Card>
+            </div>
+        </section>
+        </ConfigProvider>
     );
 }
 export default TicketBookingsCarousel;

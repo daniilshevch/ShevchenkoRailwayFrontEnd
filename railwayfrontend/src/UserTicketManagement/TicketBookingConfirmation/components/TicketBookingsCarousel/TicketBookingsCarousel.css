@@ -1,0 +1,219 @@
+/* Світла панель навколо каруселі квитків.
+   --rwb-surface має збігатися з --rwt-notch у стилях квитка: це колір вирізів на лінії відриву. */
+.rwb {
+    --rwb-surface: #f5f2ea;
+    --rwb-panel: #fffdf8;
+    --rwb-brass: #d9a441;
+    --rwb-brass-text: #8a6012;
+    --rwb-text: #1c2a33;
+    --rwb-muted: #5c6870;
+    --rwb-ok: #2a7048;
+    --rwb-warn: #8a5a00;
+    --rwb-error: #b71c1c;
+    --rwb-mono: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+
+    max-width: 1280px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--rwb-surface);
+    color: var(--rwb-text);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+.rwb__board {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 20px 28px 16px;
+    border-bottom: 3px solid var(--rwb-brass);
+    background: var(--rwb-panel);
+}
+
+.rwb__eyebrow {
+    display: block;
+    font-family: var(--rwb-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rwb-brass-text);
+}
+
+.rwb__title {
+    margin: 2px 0 0;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--rwb-text);
+}
+
+.rwb__count {
+    font-family: var(--rwb-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--rwb-muted);
+}
+
+.rwb__body {
+    padding: 8px 28px 24px;
+}
+
+/* ---------- Кроки ---------- */
+.rwb .ant-steps-navigation {
+    padding: 0;
+    margin-bottom: 18px;
+}
+
+.rwb .ant-steps-navigation .ant-steps-item::after {
+    border-color: rgba(28, 42, 51, 0.35);
+}
+
+.rwb .ant-steps-navigation .ant-steps-item::before {
+    background-color: var(--rwb-brass);
+}
+
+.rwb .ant-steps-item-description {
+    max-width: none !important;
+}
+
+.rwb .ant-steps-item-title {
+    line-height: 20px;
+}
+
+.rwb-step__title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.rwb-step__title--current,
+.rwb-step__note--current { color: var(--rwb-brass-text); }
+.rwb-step__title--ok,
+.rwb-step__note--ok { color: var(--rwb-ok); }
+.rwb-step__title--warn,
+.rwb-step__note--warn { color: var(--rwb-warn); }
+.rwb-step__title--error,
+.rwb-step__note--error { color: var(--rwb-error); }
+
+.rwb-step__note {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+}
+
+.rwb-step__timer {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 0 7px;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    background: var(--rwb-panel);
+    font-size: 12px;
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* TicketTimer задає кольори й відступ inline для темного фону, тому тут потрібен !important.
+   Бурштиновий (менше хвилини) знаходимо за значенням у style, стан 0:00 лишається червоним. */
+.rwb-step__timer .ant-typography {
+    margin-left: 0 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.rwb-step__timer .ant-typography:not(.ant-typography-danger) {
+    color: var(--rwb-ok) !important;
+}
+
+.rwb-step__timer .ant-typography[style*="250, 173, 20"] {
+    color: var(--rwb-warn) !important;
+}
+
+/* ---------- Карусель ---------- */
+/* Запас, щоб slick не обрізав тінь квитка */
+.rwb__slide {
+    padding: 4px 4px 22px;
+}
+
+.rwb .ant-carousel .slick-dots {
+    position: static;
+    margin: 0 0 14px;
+}
+
+.rwb .ant-carousel .slick-dots li button {
+    background: var(--rwb-muted);
+    opacity: 0.35;
+}
+
+.rwb .ant-carousel .slick-dots li.slick-active button,
+.rwb .ant-carousel .slick-dots li.slick-active::after {
+    background: var(--rwb-brass);
+    opacity: 1;
+}
+
+/* ---------- Навігація ---------- */
+.rwb__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.rwb__counter {
+    font-family: var(--rwb-mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--rwb-muted);
+}
+
+.rwb__nav-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.rwb .rwb__nav .ant-btn {
+    height: 40px;
+    padding: 0 18px;
+    font-weight: 700;
+}
+
+.rwb .rwb__nav .ant-btn-default:not(:disabled) {
+    background: var(--rwb-panel);
+    border-color: #b5ad99;
+    color: var(--rwb-text);
+}
+
+.rwb .rwb__nav .ant-btn-default:not(:disabled):hover {
+    border-color: var(--rwb-brass);
+    color: var(--rwb-brass-text);
+}
+
+.rwb .rwb__nav .ant-btn:disabled {
+    background: #ece8dd;
+    border-color: #dcd6c7;
+    color: #8f8c82;
+}
+
+/* ---------- Завантаження й порожній кошик ---------- */
+.rwb__state {
+    margin-top: 16px;
+    padding: 44px 16px;
+    border: 1px solid #e4dbc6;
+    border-radius: 12px;
+    background: var(--rwb-panel);
+    color: var(--rwb-text);
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .rwb__board { padding: 16px; }
+    .rwb__title { font-size: 22px; }
+    .rwb__body { padding: 8px 12px 16px; }
+    .rwb__nav-right { width: 100%; }
+    .rwb__nav-right .ant-btn { flex: 1 1 0; }
+}

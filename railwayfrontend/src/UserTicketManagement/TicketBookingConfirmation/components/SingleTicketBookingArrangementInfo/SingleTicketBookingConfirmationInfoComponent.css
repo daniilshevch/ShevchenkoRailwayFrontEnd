@@ -1,22 +1,441 @@
-/* SingleTicketBookingConfirmationInfoComponent.css */
-.ticket-two-col {
+/* Квиток-бланк. Усі класи мають префікс rwt-, бо station-title, carriage-number тощо
+   вже зайняті глобальними стилями інших компонентів. */
+.rwt {
+    --rwt-notch: #f5f2ea;
+    --rwt-band: #dde8ee;
+    --rwt-band-text: #173446;
+    --rwt-accent: #2a5a74;
+    --rwt-paper: #fffdf8;
+    --rwt-paper-deep: #f8f1e0;
+    --rwt-line: #e4dbc6;
+    --rwt-text: #1c2a33;
+    --rwt-muted: #62604f;
+    --rwt-mono: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+
     display: grid;
-    grid-template-columns: 1fr 360px; /* ліворуч — гнучко, праворуч — фіксована ширина форми */
+    grid-template-columns: minmax(0, 1fr) 280px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--rwt-paper);
+    color: var(--rwt-text);
+    box-shadow: 0 0 0 1px var(--rwt-line), 0 8px 20px rgba(60, 50, 25, 0.14);
+}
+
+.rwt--expired {
+    --rwt-band: #fbeccb;
+    --rwt-band-text: #6f4a05;
+    --rwt-accent: #8a5a00;
+}
+
+.rwt--unavailable {
+    --rwt-band: #fbe3e1;
+    --rwt-band-text: #8e2020;
+    --rwt-accent: #8e2020;
+}
+
+/* ---------- Основна частина ---------- */
+.rwt__main {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.rwt__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 12px 22px;
+    background: var(--rwt-band);
+    color: var(--rwt-band-text);
+}
+
+.rwt__train-number {
+    font-family: var(--rwt-mono);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.rwt__head-route {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 0;
+}
+
+.rwt__head-index {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.85;
+}
+
+/* Значок класу: кольори ті самі, що й на решті сторінок застосунку */
+.rwt-class {
+    display: inline-block;
+    min-width: 24px;
+    padding: 1px 7px;
+    border-radius: 4px;
+    background: #595959;
+    color: #fff;
+    font-family: var(--rwt-mono);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+}
+
+.rwt-class--S { background: #722ed1; }
+.rwt-class--A { background: #cf1322; }
+.rwt-class--B { background: #389e0d; }
+.rwt-class--C { background: #096dd9; }
+
+/* ---------- Маршрут ---------- */
+.rwt__route {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(90px, 1.1fr) minmax(0, 1fr);
+    align-items: center;
     gap: 16px;
-    align-items: start; /* щоб верхні краї були на одному рівні */
+    padding: 20px 22px 16px;
 }
 
-.ticket-two-col__left {
-    min-width: 0; /* щоб Descriptions не вилазив за межі */
+.rwt__stop--to { text-align: right; }
+
+.rwt__time {
+    display: block;
+    font-family: var(--rwt-mono);
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
 }
 
-.ticket-two-col__right {
-    /* вертикальне вирівнювання Form.Item нормально працює за замовчуванням */
+.rwt__station {
+    display: block;
+    margin-top: 4px;
+    font-size: 17px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
 }
 
-/* На планшетах і менше — складай у стовпець */
-@media (max-width: 992px) {
-    .ticket-two-col {
-        grid-template-columns: 1fr;
+.rwt__date {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--rwt-muted);
+}
+
+/* Колія: дві рейки й шпали */
+.rwt__track {
+    position: relative;
+    height: 16px;
+    border-top: 2px solid var(--rwt-text);
+    border-bottom: 2px solid var(--rwt-text);
+    background: repeating-linear-gradient(90deg, #8b7f63 0 3px, transparent 3px 10px);
+}
+
+.rwt__track-train {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--rwt-accent);
+    color: #fff;
+    font-size: 20px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 4px var(--rwt-paper);
+}
+
+/* ---------- Деталі ---------- */
+.rwt__facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0 22px;
+    border-top: 1px solid var(--rwt-line);
+    border-bottom: 1px solid var(--rwt-line);
+}
+
+.rwt__fact {
+    padding: 10px 12px;
+    border-left: 1px solid var(--rwt-line);
+}
+
+.rwt__fact:first-child {
+    padding-left: 0;
+    border-left: 0;
+}
+
+.rwt__label,
+.rwt__passenger .ant-form-item-label > label {
+    display: block;
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--rwt-muted);
+}
+
+.rwt__value {
+    display: block;
+    margin: 2px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* ---------- Поля пасажира: рядки на бланку ---------- */
+.rwt__passenger {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+    padding: 18px 22px 2px;
+}
+
+.rwt__passenger .ant-form-item-label {
+    padding-bottom: 0;
+}
+
+.rwt__passenger .ant-form-item-label > label {
+    display: inline-flex;
+    height: auto;
+}
+
+.rwt__passenger .ant-input-affix-wrapper,
+.rwt__passenger .ant-input-affix-wrapper:hover,
+.rwt__passenger .ant-input-affix-wrapper:focus-within {
+    padding: 4px 2px;
+    background: transparent;
+    border-width: 0 0 2px;
+    border-style: solid;
+    border-color: var(--rwt-text);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.rwt__passenger .ant-input-affix-wrapper:focus-within {
+    border-color: #a97412;
+    background: rgba(217, 164, 65, 0.14);
+}
+
+/* Стан помилки: antd має вищу специфічність, тому селектор довший */
+.rwt__passenger .ant-input-affix-wrapper.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled),
+.rwt__passenger .ant-input-affix-wrapper.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):hover,
+.rwt__passenger .ant-input-affix-wrapper.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):focus-within {
+    background: rgba(207, 19, 34, 0.06);
+    border-width: 0 0 2px;
+    border-style: solid;
+    border-color: #cf1322;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.rwt__passenger .ant-input {
+    background: transparent;
+    font-family: var(--rwt-mono);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--rwt-text);
+}
+
+/* ---------- Прострочений або зайнятий квиток ---------- */
+.rwt--expired .rwt__route,
+.rwt--expired .rwt__facts,
+.rwt--unavailable .rwt__route,
+.rwt--unavailable .rwt__facts {
+    opacity: 0.55;
+}
+
+.rwt__notice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 16px 22px 20px;
+}
+
+.rwt__notice-text {
+    flex: 1 1 300px;
+    min-width: 0;
+}
+
+.rwt__notice-title {
+    margin: 0 0 2px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--rwt-band-text);
+}
+
+.rwt__notice-body {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--rwt-muted);
+}
+
+.rwt__stamp {
+    position: absolute;
+    top: 68px;
+    left: 50%;
+    padding: 5px 14px;
+    border: 3px double currentColor;
+    border-radius: 6px;
+    background: rgba(255, 253, 248, 0.85);
+    font-family: var(--rwt-mono);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    color: var(--rwt-band-text);
+    transform: translateX(-50%) rotate(-7deg);
+    pointer-events: none;
+}
+
+/* ---------- Контрольний талон ---------- */
+.rwt__stub {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--rwt-paper-deep);
+    border-left: 2px dashed #a89a78;
+}
+
+/* Півкруглі вирізи на лінії відриву */
+.rwt__stub::before,
+.rwt__stub::after {
+    content: "";
+    position: absolute;
+    left: -12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--rwt-notch);
+    box-shadow: inset 0 0 0 1px var(--rwt-line);
+}
+
+.rwt__stub::before { top: -11px; }
+.rwt__stub::after { bottom: -11px; }
+
+.rwt__seat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.rwt__seat-number {
+    display: block;
+    font-family: var(--rwt-mono);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--rwt-text);
+}
+
+/* Штрихи декоративні, реального коду не несуть */
+.rwt__bars {
+    flex: 0 1 76px;
+    min-height: 38px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--rwt-text) 0 2px,
+        transparent 2px 5px,
+        var(--rwt-text) 5px 9px,
+        transparent 9px 11px,
+        var(--rwt-text) 11px 12px,
+        transparent 12px 17px
+    );
+}
+
+.rwt--expired .rwt__bars,
+.rwt--unavailable .rwt__bars {
+    opacity: 0.3;
+}
+
+.rwt__stub-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.rwt__stub-actions .ant-btn {
+    width: 100%;
+    font-weight: 600;
+}
+
+/* ---------- Вузькі екрани ---------- */
+@media (max-width: 760px) {
+    .rwt {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rwt__stub {
+        border-left: 0;
+        border-top: 2px dashed #a89a78;
+    }
+
+    .rwt__stub::before,
+    .rwt__stub::after {
+        top: -12px;
+        bottom: auto;
+    }
+
+    .rwt__stub::before { left: -11px; }
+    .rwt__stub::after { left: auto; right: -11px; }
+
+    .rwt__bars { display: none; }
+}
+
+@media (max-width: 560px) {
+    .rwt__head,
+    .rwt__route,
+    .rwt__notice { padding-left: 16px; padding-right: 16px; }
+
+    .rwt__route {
+        grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+        gap: 8px;
+    }
+
+    .rwt__track-train {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .rwt__time { font-size: 26px; }
+    .rwt__station { font-size: 15px; }
+
+    .rwt__facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin: 0 16px;
+    }
+
+    .rwt__fact:nth-child(odd) {
+        padding-left: 0;
+        border-left: 0;
+    }
+
+    .rwt__fact:nth-child(n + 3) {
+        border-top: 1px solid var(--rwt-line);
+    }
+
+    .rwt__passenger {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 16px 16px 0;
+    }
+
+    .rwt__stamp {
+        top: 112px;
+        font-size: 17px;
     }
 }
